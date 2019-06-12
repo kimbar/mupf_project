@@ -1,0 +1,38 @@
+┌─: *first*
+│┌─: *install* ( "core" )
+└┼> {cid="asidjaosasoijasd", ua="Mozilla 7.0"}
+ └> ok
+┌─: *install* ( src="app.js" )
+└> ok
+<─: print ( "Hello" )
+─┬> gimme_length
+┌┼─: print ( "test" )
+└┼> ok
+<┴: 100
+─> user_click ( target=something@F5A )
+
+
+
+0:00:00.001 ┌─: *first*
+0:00:05.313 │┌─: *install* ( src="mupf/core", remove=true )
+0:00:05.323 └┼> {cid="l2kwd1k9Rd2zD1Pwa1CFUA", ua="Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}
+0:00:05.333  └> ok
+0:00:05.333 ┌─: *install* ( src="app.js", remove=true )
+0:00:05.441 └> ok
+0:00:05.442 ┌─: *getcmds*
+0:00:05.443 └> ["*first*", "*last*", "*install*", "*getcmds*", "*get*", "print", "install_css", "input", "sleep"]
+0:00:05.444 ┌─: install_css
+0:00:05.454 └> ok
+0:00:05.454 ┌─: *get* ( @, "document" )
+0:00:05.456 └> @0
+0:00:05.457 ┌─: *get* ( @0, "body" )
+0:00:05.458 └> @1
+0:00:05.458 <─: print ( "Calculation of circle area v.1.0" )
+0:00:05.458 ┌─: input ( "Give me the radius: " )
+0:00:06.499 └> "120"
+0:00:06.499 <─: print ( "Circle area for r = 120.0 is equal to A = 45238.93421169302" )
+0:00:06.499 <─: print ( "Thank you for your cooperation", color="red" )
+0:00:06.499 ┌─: sleep ( 2 )
+0:00:06.499 │┌─: *last*
+0:00:08.494 └┼> 2
+0:00:08.496  └> ok

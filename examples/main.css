@@ -1,0 +1,17 @@
+body {
+    font-size: 20px;
+    font-family: monospace;
+    background: black;
+    color: rgb(45, 227, 0);
+}
+
+input {
+    background: none;
+    border: none;
+    border-bottom: 1px dashed rgb(45, 227, 0);
+    font-size: 1em;
+    padding: 0px 0em;
+    color: inherit;
+    font-family: inherit;
+    width: 600px;
+}
