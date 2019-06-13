@@ -23,12 +23,8 @@ app.register_route('app.js', file='app.js')
 
 client = app.summon_client(frontend=SeleniumClient)
 
-client.install_javascript(src='mupf/core').result
 client.install_commands(src='app.js')
 client.command.install_css().wait
-
-docid = client.command('*get*')(["~",["~@", None],{}], 'document').result
-bodyid = client.command('*get*')(["~",["~@", docid[1]],{}], 'body').result
 
 cprint = client.command.print.run
 cinput = client.command.input
