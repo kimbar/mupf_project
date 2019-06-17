@@ -5,9 +5,9 @@ window.mupf.obj = {
         let id = 0
         for (id in this._byid)
         // #if friendly_obj_names
-            if (Object.is(this._byid[id][0], obj)) return id
+            if (Object.is(this._byid[id][0], obj)) return Number(id)
         // #else
-            if (Object.is(this._byid[id], obj)) return id
+            if (Object.is(this._byid[id], obj)) return Number(id)
         // #endif
         id = this._idcounter
         this._idcounter++
