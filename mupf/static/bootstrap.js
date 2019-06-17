@@ -79,6 +79,7 @@ function main() {
     // command run at the very beginning, setups `window.mupf`
     mupf.cmd['*first*'] = async function(args, kwargs){
         document.head.removeChild(document.getElementById('mupf-bootstrap'))
+        Object.assign(window.mupf.fts, kwargs)
         mupf.cid = window.location.hash.substring(1)                       // client id
         mupf.ws = await new Promise((ok, no) => {                          // web socket
             let ws = new WebSocket("ws://"+window.location.host+"/mupf/ws")
@@ -120,7 +121,9 @@ function main() {
     // the sending of this command is supressed, but somwhere it must be called eventualy. This is
     // here. No other command is ever called like that, only `__first__`.
 
-    mupf.recv([0,0,"*first*",{args:[],kwargs:{}}])
+    mupf.recv([0,0,"*first*",{args:[],kwargs:{
+        _user_feature: (2+2 == 4)
+    }}])
 
     // The `*last*` command is also a special case. This command is symetrical to `*first*` in
     // being special -- it is not in a notification mode, but it cannot send its result

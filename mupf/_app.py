@@ -39,6 +39,7 @@ class App:
         self._port = port
         self._charset = charset
 
+        # these semm to be just one kind of features (sans bootstrap ones)
         self._features = set(reversed(features))
         self._features.update(F.feature_list)
         self._features = set(filter(lambda f: f.state, self._features))

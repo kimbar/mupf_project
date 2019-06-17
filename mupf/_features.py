@@ -47,3 +47,11 @@ test_feature = __Feature('test_feature', True)
 another_test_feat = __Feature('another_test_feat', False)
 
 feature_list = [x for x in globals().values() if isinstance(x, __Feature)]
+
+def __getattr__(name: str):
+    global feature_list
+    if name[:1] != "_":
+        raise ValueError('User defined features names must begin with `_`, got `{}`'.format(name))
+    feature = __Feature(name, True)
+    feature_list.append(feature)
+    return feature
