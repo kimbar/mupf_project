@@ -42,6 +42,7 @@ strict_feature_list = __Feature('strict_feature_list', False)
 verbose_macros = __Feature('verbose_macros', False)
 friendly_obj_names = __Feature('friendly_obj_names', False)
 safe_dunders = __Feature('safe_dunders', True)
+disable_garbage_collection = __Feature('disable_garbage_collection', False)
 
 test_feature = __Feature('test_feature', True)
 another_test_feat = __Feature('another_test_feat', False)

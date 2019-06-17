@@ -19,7 +19,11 @@ window.mupf.obj = {
         return id
     },
     byid: function (id) { return this._byid[id] },
-    del: function (id) { delete this._byid[id] },
+    del: function (id) {
+        // #if ~disable_garbage_collection
+        delete this._byid[id]
+        // #endif
+    },
     // # private
     // #
 // #if friendly_obj_names
