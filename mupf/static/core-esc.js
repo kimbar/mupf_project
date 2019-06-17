@@ -35,11 +35,18 @@ mupf.esc = {
     encode: function(x) {
         if (x === null) return x
         if (typeof(x) === 'object' || typeof(x) === 'function'){
-            let id = mupf.obj.getid(x)
+            let id, ctxid
+            if (x.constructor === mupf.ObjWCntx){
+                id = mupf.obj.getid(x.obj)
+                ctxid = mupf.obj.getid(x.cntx)
+            } else {
+                id = mupf.obj.getid(x)
+                ctxid = null
+            }
         // #if friendly_obj_names
-            return ["~@", id, mupf.obj.byid(id)[1].frn]
+            return ["~@", id, ctxid, mupf.obj.byid(id)[1].frn]
         // #else
-            return ["~@", id]
+            return ["~@", id, ctxid]
         // #endif
         }
         if (typeof(x) === 'undefined') return ["~S", "undefined"]
