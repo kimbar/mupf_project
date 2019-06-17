@@ -7,7 +7,7 @@ class __Feature:
         self._state = None
 
     def __repr__(self):
-        return "[Feature: {}{}]".format(('+' if self.state else '-'), self.internal_name)
+        return "{} mupf.F.{}".format(('+' if self.state else '-'), self.internal_name)
 
     def __eq__(self, other):
         return self.internal_name == other.internal_name
