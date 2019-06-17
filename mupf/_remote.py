@@ -61,10 +61,8 @@ class RemoteObj(metaclass=MetaRemoteObj):
 
     def __call__(self, *args):
         context = self[S.context]
-        if isinstance(context, RemoteObj):
-            context = context[S.json_esc_interface]
-        print('Calling remotely ["~@", {}].call(["~@", {}], {})'.format(self[S.rid], context, ", ".join(map(repr,args))))
-        return None
+        return object.__getattribute__(self, '_command_wr')()('*call*')(*args, objid=self[S.rid], cntx=context).result
+        # print('Calling remotely ["~@", {}].call(["~@", {}], {})'.format(self[S.rid], context, ", ".join(map(repr,args))))
 
     def __del__(self):
         command = object.__getattribute__(self, '_command_wr')()
