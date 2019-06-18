@@ -27,9 +27,9 @@ window.mupf.obj = {
     // # private
     // #
 // #if friendly_obj_names
-    _byid: { null: [window, {frn: "window"}] },
+    _byid: { 0: [window, {frn: "window"}] },
 // #else
-    _byid: { null: window },
+    _byid: { 0: window },
 // #endif
-    _idcounter: 0
+    _idcounter: 1
 }

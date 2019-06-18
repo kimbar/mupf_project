@@ -32,7 +32,7 @@ class Client:
         self._healthy_connection = True
         self._safe_dunders_feature = False
         self.command = create_command_class_for_client(self)
-        self.window = RemoteObj(None, self)
+        self.window = RemoteObj(0, self)
         self._refobjs = weakref.WeakValueDictionary()
         self._first_command = self.command('*first*')()    # ccid=0
 

@@ -69,9 +69,9 @@ class RemoteObj(metaclass=MetaRemoteObj):
     def __del__(self):
         command = object.__getattribute__(self, '_command_wr')()
         # 1. some mutex here? because `command` may dissapear
-        # 2. this still raises `RuntimeError: Last command was already sent`
-        if command is not None:
-            command('*gc*').run(self[S.rid]).result
+        rid = self[S.rid]
+        if command is not None and rid != 0:    # do not try to GC the `window`
+            command('*gc*').run(rid).result
 
     @property
     def _client(self):
