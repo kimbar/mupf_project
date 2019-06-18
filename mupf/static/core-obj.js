@@ -20,7 +20,7 @@ window.mupf.obj = {
     },
     byid: function (id) { return this._byid[id] },
     del: function (id) {
-        // #if ~disable_garbage_collection
+        // #if garbage_collection
         delete this._byid[id]
         // #endif
     },
