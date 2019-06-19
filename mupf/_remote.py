@@ -85,6 +85,8 @@ class RemoteJsonEsc:
         self.rid = rid
     def json_esc(self):
         return '@', self.rid
+    def __repr__(self):
+        return '["~@",{}]'.format(self.rid)
 
 def _make_escapable(value):
     try:
