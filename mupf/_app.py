@@ -40,6 +40,12 @@ class App:
         self._charset = charset
 
         # these semm to be just one kind of features (sans bootstrap ones)
+        try:
+            feat_type_check = any([not isinstance(f, F.__dict__['__Feature']) for f in features])
+        except Exception:
+            raise TypeError("`feature` argumnet of `App` must be a **container** of features")
+        if feat_type_check:
+            raise TypeError("all features must be of `mupf.F.__Feature` type")
         self._features = set(reversed(features))
         self._features.update(F.feature_list)
         self._features = set(filter(lambda f: f.state, self._features))

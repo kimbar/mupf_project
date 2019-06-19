@@ -93,16 +93,16 @@ def create_command_class_for_client(client):
         def __call__(self, *args, **kwargs):
             # TODO: notifications can be send multiple times and commands only once!
             if self._cmd_name not in Command._legal_names:
-                print('*** ostrzegam nie ma komendy {} ***'.format(self._cmd_name))
+                print('*** Warning, there is no `{}` command ***'.format(self._cmd_name))
             if self._is_resolved.is_set():
                 self._result = None
                 self._is_error = False
                 self._is_resolved.clear()
             with Command._global_mutex:
                 if Command._ccid_counter < 0:
-                    raise RuntimeError('Last command was already sent')
+                    raise RuntimeError('`*last*` command was already sent, trying to send `{}`(args={}, kwargs={})'.format(self._cmd_name, args, kwargs))
                 if self._ccid in Command._unresolved:
-                    raise RuntimeError('Reissue impossible right now')    
+                    raise RuntimeError('reissue impossible right now')    
                 self._ccid = Command._ccid_counter
                 if self._notification:
                     self._is_resolved.set()
