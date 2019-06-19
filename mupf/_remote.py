@@ -69,7 +69,7 @@ class RemoteObj(metaclass=MetaRemoteObj):
         command = object.__getattribute__(self, '_command_wr')()
         # 1. some mutex here? because `command` may dissapear
         rid = self[S.rid]
-        if command is not None and rid != 0:    # do not try to GC the `window`
+        if command is not None and rid != 0 and self[S.client_wr]()._healthy_connection:    # do not try to GC the `window`
             command('*gc*').run(rid).result
 
     @property
