@@ -1,7 +1,7 @@
 import mupf
 app = mupf.App(
     features=(
-        + mupf.F.disable_garbage_collection,
+        - mupf.F.garbage_collection,
     )
 )
 client = app.summon_client()
