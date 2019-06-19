@@ -14,7 +14,7 @@ import mupf.exceptions as exceptions
 import time
 from ._macro import MacroByteStream
 from . import _features as F
-from ._enhjson import decode
+from . import _enhjson as enhjson
 
 class App:
     """
@@ -183,7 +183,7 @@ class App:
 
             if mode == 1:   # response for a cmd
                 if pyld.get('esc', False):
-                    pyld['result'] = decode(pyld['result'], client)    # TODO: we must consider where to relocate this, because giving here the `client` is so-so
+                    pyld['result'] = enhjson.decode(pyld['result'], client.enhjson_decoders)
                 client.command.resolve_by_id_mupf(ccid, (
                     pyld['result']
                         if noun==0 else

@@ -328,17 +328,19 @@ class Infinity:
         return b'S', "Infinity"
 
 
-def decode(value, client):
+def decode(value, esc_decoders):
     if isinstance(value, list):
         if len(value) > 1 and isinstance(value[0], str) and value[0][:1] == "~":
-            if value[0] == "~@":
-                return client.get_refobj(*value[1:])
+            if  value[0] == "~-":
+                return value[1]
+            elif value[0] == "~~":
+                return [decode(x, esc_decoders) for x in value[1]]
             else:
-                raise NotImplementedError()
+                return esc_decoders[value[0]](*[decode(x, esc_decoders) for x in value[1:]])
         else:
-            return [decode(x, client) for x in value]
+            return [decode(x, esc_decoders) for x in value]
     elif isinstance(value, dict):
-        return {k: decode(v, client) for k,v in value.items()}
+        return {k: decode(v, esc_decoders) for k,v in value.items()}
     else:
         return value
 

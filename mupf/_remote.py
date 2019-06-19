@@ -60,11 +60,10 @@ class RemoteObj(metaclass=MetaRemoteObj):
         return self[S.command_wr]()('*get*')(self[S.json_esc_interface], key).result
 
     def __call__(self, *args):
-        context = self[S.context]
-        if isinstance(context, RemoteObj):
-            context = context[S.json_esc_interface]
-        print('Calling remotely ["~@", {}].call(["~@", {}], {})'.format(self[S.rid], context, ", ".join(map(repr,args))))
-        return None
+        context = _make_escapable(self[S.context])
+        args = map(_make_escapable, args)
+        return object.__getattribute__(self, '_command_wr')()('*call*')(*args, objid=self[S.rid], cntx=context).result
+        # print('Calling remotely ["~@", {}].call(["~@", {}], {})'.format(self[S.rid], context, ", ".join(map(repr,args))))
 
     def __del__(self):
         command = object.__getattribute__(self, '_command_wr')()
@@ -87,6 +86,11 @@ class RemoteJsonEsc:
     def json_esc(self):
         return '@', self.rid
 
+def _make_escapable(value):
+    try:
+        return value[S.json_esc_interface]
+    except Exception:
+        return value
 
 
 #   `context.method(...)`  == `method.call(context, ...)`

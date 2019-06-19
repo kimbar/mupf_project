@@ -26,6 +26,9 @@ class Client:
         self._websocket = None
         self._user_agent = None
         self.features = set()
+        self.enhjson_decoders = {
+            "~@": self.get_remote_obj,
+        }
         self._preconnection_stash = []
         self._proxys_by_key = {}
         self._keys_by_proxy = {}
@@ -47,16 +50,17 @@ class Client:
         # for `while client:` syntax
         return self._healthy_connection
 
-    def get_refobj(self, *args):
+    def get_remote_obj(self, *args):
         rid = args[0]
+        ctxrid = args[1] if len(args)>1 else None
         if rid is None:
             return self.window
         # here a mutex - or maybe not... because this is always on eventloop anyway?
-        if rid in self._refobjs:
-            return self._refobjs[rid]
+        if (rid, ctxrid) in self._refobjs:
+            return self._refobjs[(rid, ctxrid)]
         else:
-            rem_obj = RemoteObj(rid, self)
-            self._refobjs[rid] = rem_obj
+            rem_obj = RemoteObj(rid, self, self.get_remote_obj(ctxrid))
+            self._refobjs[(rid, ctxrid)] = rem_obj
             return rem_obj
 
     def summoned(self):
