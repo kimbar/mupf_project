@@ -71,8 +71,10 @@ class Client:
     def get_remote_obj(self, *args):
         rid = args[0]
         ctxrid = args[1] if len(args)>1 else None
-        if rid is None:
+        if rid == 0:
             return self.window
+        elif rid is None:
+            return None
         # here a mutex - or maybe not... because this is always on eventloop anyway?
         if (rid, ctxrid) in self._refobjs:
             return self._refobjs[(rid, ctxrid)]
