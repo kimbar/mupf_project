@@ -15,6 +15,7 @@ import time
 from ._macro import MacroByteStream
 from . import _features as F
 from . import _enhjson as enhjson
+from ._client import Client
 
 class App:
     """
@@ -158,9 +159,9 @@ class App:
             pass  # 404
 
     async def _websocket_request(self, new_websocket, path):
-        j = await new_websocket.recv()
-        print('{:.3f} ->'.format(time.time()-self._t0), j)
-        msg = json.loads(j)
+        raw_msg = await new_websocket.recv()
+        print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
+        msg = Client.decode_json(None, raw_msg)
         result = msg[3]['result']
         cid = result['cid']
         client = self._clients_by_cid[cid]
@@ -180,21 +181,23 @@ class App:
                 break
 
             print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
-            msg = json.loads(raw_msg)
+            msg = client.decode_json(raw_msg)
 
             mode = msg[0]
             ccid = msg[1]
-            noun = msg[2]
+            # noun = msg[2]
             pyld = msg[3]
 
             if mode == 1:   # response for a cmd
-                if pyld.get('esc', False):
-                    pyld['result'] = enhjson.decode(pyld['result'], client.enhjson_decoders)
-                client.command.resolve_by_id_mupf(ccid, (
-                    pyld['result']
-                        if noun==0 else
-                    exceptions.create_from_result(pyld['result'])
-                ))
+                client.command.resolve_by_id_mupf(ccid, pyld['result'])
+
+                # if pyld.get('esc', False):
+                #     pyld['result'] = enhjson.decode(pyld['result'], client.enhjson_decoders)
+                # client.command.resolve_by_id_mupf(ccid, (
+                #     pyld['result']
+                #         if noun==0 else
+                #     exceptions.create_from_result(pyld['result'])
+                # ))
             elif mode == 5:
                 pass     # it's a callback
             elif mode == 7:

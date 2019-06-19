@@ -6,6 +6,8 @@ import time
 from ._remote import RemoteObj
 from . import _symbols as S
 from . import _features as F
+import json
+from . import _enhjson as enhjson
 
 async def send_task_body(wbs, json):
     await wbs.send(json)
@@ -39,16 +41,32 @@ class Client:
         self._refobjs = weakref.WeakValueDictionary()
         self._first_command = self.command('*first*')()    # ccid=0
 
-    def _send_json(self, json):
+    def send_json(self, json):
         if not self._websocket:
             self._preconnection_stash.append(json)
         else:
             evl = self.app._event_loop
-            evl.call_soon_threadsafe(create_send_task, evl, self._websocket, json)
+            json[3] = enhjson.EnhancedBlock(json[3]) 
+            evl.call_soon_threadsafe(
+                create_send_task,
+                evl,
+                self._websocket,
+                enhjson.encode(json),
+            )
 
     def __bool__(self):
         # for `while client:` syntax
         return self._healthy_connection
+
+    def decode_json(self, raw_json):
+        if self is None:
+            return json.loads(raw_json)    # called through class for `*first*`
+        msg = json.loads(raw_json)
+        if msg[3].get('esc', False):
+            msg[3]['result'] = enhjson.decode(msg[3]['result'], self.enhjson_decoders)
+        if msg[2] != 0:
+            msg[3]['result'] = exceptions.create_from_result(msg[3]['result'])
+        return msg
 
     def get_remote_obj(self, *args):
         rid = args[0]
@@ -102,7 +120,7 @@ class Client:
                 pass
             self._first_command = None
         for json in self._preconnection_stash:
-            self._send_json(json)
+            self.send_json(json)
         self._preconnection_stash.clear()
         return self
 

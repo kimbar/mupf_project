@@ -115,7 +115,7 @@ def create_command_class_for_client(client):
             j = self._jsonify(args, kwargs)
             print('<- {:.3f}'.format(time.time()-self._client_wr().app._t0), j)
             if self._ccid > 0:    # `cmd_name=="__first__"` cannot be send, only received
-                Command._client_wr()._send_json(j)
+                Command._client_wr().send_json(j)
             if self._ccid in Command._resolved_in_advance:
                 with Command._global_mutex:
                     self.result = None
@@ -132,16 +132,15 @@ def create_command_class_for_client(client):
         # client.command.print.notification('no result value')
 
         def _jsonify(self, args, kwargs):
-            res = encode([
+            return [
                 (2 if self._notification else 0),   # Magic numbers: mode
                 self._ccid,
                 self._cmd_name,
-                EnhancedBlock({
+                {
                     'args': args,
                     'kwargs': kwargs,
-                })
-            ])
-            return res
+                },
+            ]
 
         @property
         def wait(self):
