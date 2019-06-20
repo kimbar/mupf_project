@@ -32,7 +32,7 @@ mupf.esc = {
         }
         return x
     },
-    encode: function(x) {
+    encode: function(x, enhb) {
         if (x === null) return x
         if (typeof(x) === 'object' || typeof(x) === 'function'){
             let id, ctxid
@@ -43,13 +43,17 @@ mupf.esc = {
                 id = mupf.obj.getid(x)
                 ctxid = null
             }
+            enhb.c += 1
         // #if friendly_obj_names
             return ["~@", id, ctxid, mupf.obj.byid(id)[1].frn]
         // #else
             return ["~@", id, ctxid]
         // #endif
         }
-        if (typeof(x) === 'undefined') return ["~S", "undefined"]
+        if (typeof(x) === 'undefined') {
+            enhb.c += 1
+            return ["~S", "undefined"]
+        }
         return x
     }
 }

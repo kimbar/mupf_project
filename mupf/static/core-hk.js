@@ -5,9 +5,10 @@ mupf.hk.ccall = function(f, pyld) {
 
 mupf.hk.presend = function(msg, res, cmd) {
     if (!cmd.noautoesc){
-        res = mupf.esc.encode(res)
-        msg[3].result = res
-        msg[3].esc = 1
+        let enhb = {c: 0}
+        msg[3].result = mupf.esc.encode(res, enhb)
+        if (enhb.c > 0)
+            msg[3] = ["~", msg[3], enhb]
     }
     return [msg, res, cmd]
 }

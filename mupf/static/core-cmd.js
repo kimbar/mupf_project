@@ -5,7 +5,10 @@ mupf.ObjWCntx = function(obj, cntx){this.obj=obj; this.cntx=cntx}
 mupf.cmd['*get*'] = function (args, kwargs) {
     let x = args[0][args[1]]
     if (x === undefined) throw new mupf.MupfError('DOMAttributeError', 'object has no attribute \'' + args[1] + '\'')
-    return new mupf.ObjWCntx(x, args[0])
+    if (x.apply === undefined)
+        return x
+    else
+        return new mupf.ObjWCntx(x, args[0])
 }
 
 mupf.cmd['*set*'] = function(args, kwargs) {
