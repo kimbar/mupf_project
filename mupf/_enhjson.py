@@ -343,24 +343,3 @@ def decode(value, esc_decoders):
         return {k: decode(v, esc_decoders) for k,v in value.items()}
     else:
         return value
-
-
-# class ElementById:
-#     def __init__(self, id):
-#         self._id = id
-#     def json_esc(self):
-#         return b'#', self._id
-#
-# client.install_commands('mupf.cmd.remove = function(a,k){a[0].remove()}')
-# client.install_javascript('mupf.esc["~#"] = ((x) => window.document.getElementById(x))', remove=True)
-# client.command.remove.run(ElementById('button-12'))
-
-
-if __name__ == '__main__':
-
-    e = EnhancedBlock(['a','b',[0,1,2,3,["~S",["~S","NaN"]],5,6]])
-    a = encode(e)
-    print(a)
-    print(e._esc_addreses)
-    print(e._esc_positions)
-    print(e._values_count)

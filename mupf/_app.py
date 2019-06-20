@@ -190,14 +190,6 @@ class App:
 
             if mode == 1:   # response for a cmd
                 client.command.resolve_by_id_mupf(ccid, pyld['result'])
-
-                # if pyld.get('esc', False):
-                #     pyld['result'] = enhjson.decode(pyld['result'], client.enhjson_decoders)
-                # client.command.resolve_by_id_mupf(ccid, (
-                #     pyld['result']
-                #         if noun==0 else
-                #     exceptions.create_from_result(pyld['result'])
-                # ))
             elif mode == 5:
                 pass     # it's a callback
             elif mode == 7:

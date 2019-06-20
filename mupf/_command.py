@@ -177,5 +177,3 @@ def create_command_class_for_client(client):
             return False
 
     return Command
-
-# document = window.document[sym.friendly_name]('document')

@@ -35,7 +35,6 @@ class RemoteObj(metaclass=MetaRemoteObj):
             else:
                 object.__setattr__(self, key.internal_name, value)
         else:
-            # print('Seting remotely ["~@", {}][{}] = {}'.format(self[S.rid], key, value))
             object.__getattribute__(self, '_command_wr')()('*seti*')(self[S.json_esc_interface], key, value).result
 
     def __getitem__(self, key):
@@ -45,25 +44,21 @@ class RemoteObj(metaclass=MetaRemoteObj):
             #     return self[S.command_wr]()('*get*')(self[S.json_esc_interface], "__class__").result
             return object.__getattribute__(self, key.internal_name)
         else:
-            # print('Getting remotely ["~@", {}][{}]'.format(self[S.rid], key))
             return object.__getattribute__(self, '_command_wr')()('*geti*')(self[S.json_esc_interface], key).result
 
     def __setattr__(self, key, value):
         object.__getattribute__(self, '_command_wr')()('*set*')(self[S.json_esc_interface], key, value).wait
-        # print('Seting remotely ["~@", {}].{} = {}'.format(self[S.rid], key, value))
 
     def __getattribute__(self, key):
         if self[S.client_wr]()._safe_dunders_feature and key == "__class__":    # __dict__ __bases__ __name__ __qualname__ __mro__ __subclasses__
             # this allows for `isinstance()` for `RemoteObj`
             return RemoteObj
-        # print('Getting remotely ["~@", {}].{}'.format(self[S.rid], key))
         return self[S.command_wr]()('*get*')(self[S.json_esc_interface], key).result
 
     def __call__(self, *args):
         context = _make_escapable(self[S.context])
         args = map(_make_escapable, args)
         return object.__getattribute__(self, '_command_wr')()('*call*')(*args, objid=self[S.rid], cntx=context).result
-        # print('Calling remotely ["~@", {}].call(["~@", {}], {})'.format(self[S.rid], context, ", ".join(map(repr,args))))
 
     def __del__(self):
         command = object.__getattribute__(self, '_command_wr')()
@@ -93,11 +88,3 @@ def _make_escapable(value):
         return value[S.json_esc_interface]
     except Exception:
         return value
-
-
-#   `context.method(...)`  == `method.call(context, ...)`
-
-#    client.window.document.body[S.force_remote].innerHTML.substring(0,5)
-
-#    x = client.window.document.body[S.force_remote].innerHTML
-#    print(x[S.fetch_remote])
