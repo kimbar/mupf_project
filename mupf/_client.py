@@ -62,9 +62,9 @@ class Client:
         if self is None:
             return json.loads(raw_json)    # called through class for `*first*`
         msg = json.loads(raw_json)
-        if msg[3].get('esc', False):
+        if msg[0] == 1 and msg[3].get('esc', False):
             msg[3]['result'] = enhjson.decode(msg[3]['result'], self.enhjson_decoders)
-        if msg[2] != 0:
+        if msg[0] == 1 and msg[2] != 0:
             msg[3]['result'] = exceptions.create_from_result(msg[3]['result'])
         return msg
 
