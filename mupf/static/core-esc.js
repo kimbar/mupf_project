@@ -33,21 +33,32 @@ mupf.esc = {
         return x
     },
     encode: function(x, enhb) {
+        if (enhb.noautoesc){
+            if (Array.isArray(x) && (x.length > 1) && (typeof(x[0])==="string") && (x[0].substr(0,1)==="~")) {
+                enhb.c += 1
+                return ["~-", x]    // This is simple, but `noautoesc=true` commands cannot have complex objects in result
+            }
+            else
+                return x
+        }
         if (x === null) return x
         if (typeof(x) === 'object' || typeof(x) === 'function'){
-            let id, ctxid
-            if (x.constructor === mupf.ObjWCntx){
+            let id, thisid
+            if (x.constructor === mupf.esc.Any){
                 id = mupf.obj.getid(x.obj)
-                ctxid = mupf.obj.getid(x.cntx)
+                if (x.obj.apply === undefined)
+                    thisid = null
+                else
+                    thisid = mupf.obj.getid(x.this_)
             } else {
                 id = mupf.obj.getid(x)
-                ctxid = null
+                thisid = null
             }
             enhb.c += 1
         // #if friendly_obj_names
-            return ["~@", id, ctxid, mupf.obj.byid(id)[1].frn]
+            return ["~@", id, thisid, mupf.obj.byid(id)[1].frn]
         // #else
-            return ["~@", id, ctxid]
+            return ["~@", id, thisid]
         // #endif
         }
         if (typeof(x) === 'undefined') {
@@ -55,5 +66,11 @@ mupf.esc = {
             return ["~S", "undefined"]
         }
         return x
+    },
+    Any: class {
+        constructor(obj, this_) {
+            this.obj = obj
+            this.this_ = this_
+        }
     }
 }

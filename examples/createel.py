@@ -10,11 +10,18 @@ client.install_javascript("""
         console.log(ev.data)
         return JSON.parse(ev.data)
     }
+    mupf.cmd.echo = function(args, kwargs){
+        return args
+    }
+    mupf.cmd.echo.noautoesc = true
 """, remove=True)
 
 document = client.window.document
 span = document.createElement('span')
 span.innerHTML = "SPAM!!! span"
 document.body.appendChild(span)
+
+print(client.command.echo("nice", "args").result)
+print(client.command.echo("~~~~", "nasty", "set", "of", "args").result)
 
 client.close()

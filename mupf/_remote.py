@@ -21,11 +21,11 @@ class MetaRemoteObj(type):
 
 class RemoteObj(metaclass=MetaRemoteObj):
     
-    def __init__(self, rid, client, context=None):
+    def __init__(self, rid, client, this=None):
         object.__setattr__(self, '_client_wr', weakref.ref(client))
         object.__setattr__(self, '_command_wr', weakref.ref(client.command))
         object.__setattr__(self, '_rid', rid)
-        object.__setattr__(self, '_context', context)
+        object.__setattr__(self, '_this', this)
         object.__setattr__(self, '_json_esc_interface', RemoteJsonEsc(rid))
 
     def __setitem__(self, key, value):
@@ -56,9 +56,9 @@ class RemoteObj(metaclass=MetaRemoteObj):
         return self[S.command_wr]()('*get*')(self[S.json_esc_interface], key).result
 
     def __call__(self, *args):
-        context = _make_escapable(self[S.context])
+        this = _make_escapable(self[S.this])
         args = map(_make_escapable, args)
-        return object.__getattribute__(self, '_command_wr')()('*call*')(*args, objid=self[S.rid], cntx=context).result
+        return object.__getattribute__(self, '_command_wr')()('*call*')(*args, id=self[S.rid], this_=this).result
 
     def __del__(self):
         command = object.__getattribute__(self, '_command_wr')()

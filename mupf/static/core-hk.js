@@ -4,11 +4,11 @@ mupf.hk.ccall = function(f, pyld) {
 }
 
 mupf.hk.presend = function(msg, res, cmd) {
-    if (!cmd.noautoesc){
-        let enhb = {c: 0}
-        msg[3].result = mupf.esc.encode(res, enhb)
-        if (enhb.c > 0)
-            msg[3] = ["~", msg[3], enhb]
+    let enhb = {c: 0, noautoesc: cmd.noautoesc}
+    msg[3].result = mupf.esc.encode(res, enhb)
+    if (enhb.c > 0){
+        delete enhb.noautoesc
+        msg[3] = ["~", msg[3], enhb]
     }
     return [msg, res, cmd]
 }

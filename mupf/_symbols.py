@@ -13,7 +13,7 @@ class _Symbol:
         return "[Symbol: {}]".format(self.internal_name.lstrip('_'))
 
 
-context = _Symbol("_context", readonly=True)
+this = _Symbol("_this", readonly=True)
 rid = _Symbol("_rid", readonly=True)
 client = _Symbol("_client", readonly=True)
 json_esc_interface = _Symbol("_json_esc_interface", readonly=True)
