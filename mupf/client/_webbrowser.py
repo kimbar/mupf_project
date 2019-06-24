@@ -1,6 +1,6 @@
 
 import webbrowser
-from ._base import Client
+from . import Client
 
 class WebBrowserClient(Client):
     """

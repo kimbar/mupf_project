@@ -1,4 +1,4 @@
-from ._client import WebBrowserClient
+from . import client
 import base64
 import uuid
 import threading
@@ -15,7 +15,6 @@ import time
 from ._macro import MacroByteStream
 from . import _features as F
 from . import _enhjson as enhjson
-from ._client import Client
 
 class App:
     """
@@ -60,7 +59,7 @@ class App:
     def get_unique_client_id(self):
         return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
 
-    def summon_client(self, frontend=WebBrowserClient):
+    def summon_client(self, frontend=client.WebBrowserClient):
         cid = self.get_unique_client_id()
         client = frontend(self, cid)
         self._clients_by_cid[cid] = client
@@ -161,17 +160,17 @@ class App:
     async def _websocket_request(self, new_websocket, path):
         raw_msg = await new_websocket.recv()
         print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
-        msg = Client.decode_json(None, raw_msg)
+        msg = client.Client.decode_json(None, raw_msg)
         result = msg[3]['result']
         cid = result['cid']
-        client = self._clients_by_cid[cid]
-        client._websocket = new_websocket
-        client._user_agent = result['ua']
+        the_client = self._clients_by_cid[cid]
+        the_client._websocket = new_websocket
+        the_client._user_agent = result['ua']
         
         # this line accepts a response from  `command('*first*')` because if the websocket is
         # open then the `*first` have been just executed
-        client.command.resolve_by_id_mupf(ccid=0, result=None)
-        client.await_connection()
+        the_client.command.resolve_by_id_mupf(ccid=0, result=None)
+        the_client.await_connection()
         break_reason = None
         while True:
             try:
@@ -181,7 +180,7 @@ class App:
                 break
 
             print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
-            msg = client.decode_json(raw_msg)
+            msg = the_client.decode_json(raw_msg)
 
             mode = msg[0]
             ccid = msg[1]
@@ -189,7 +188,7 @@ class App:
             pyld = msg[3]
 
             if mode == 1:   # response for a cmd
-                client.command.resolve_by_id_mupf(ccid, pyld['result'])
+                the_client.command.resolve_by_id_mupf(ccid, pyld['result'])
             elif mode == 5:
                 pass     # it's a callback
             elif mode == 7:
@@ -199,6 +198,6 @@ class App:
 
         # here we are after communication breakdown
         if break_reason == '*last*':
-            client.command.resolve_all_mupf(exceptions.ClientClosedNormally())    # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*` didn't close them
+            the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())    # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*` didn't close them
         else:
-            client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
+            the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))

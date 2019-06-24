@@ -5,7 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import mupf
 import time
 
-class SeleniumClient(mupf.Client):
+class SeleniumClient(mupf.client.Client):
     
     def __init__(self, app, client_id):
         super().__init__(app, client_id)
