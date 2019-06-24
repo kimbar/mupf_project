@@ -2,7 +2,7 @@
 import webbrowser
 from . import Client
 
-class WebBrowserClient(Client):
+class WebBrowser(Client):
     """
     `Client` that utilizes the `webbrowser` module interface.
     """

@@ -59,7 +59,7 @@ class App:
     def get_unique_client_id(self):
         return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
 
-    def summon_client(self, frontend=client.WebBrowserClient):
+    def summon_client(self, frontend=client.WebBrowser):
         cid = self.get_unique_client_id()
         client = frontend(self, cid)
         self._clients_by_cid[cid] = client
