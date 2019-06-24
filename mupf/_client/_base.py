@@ -1,13 +1,12 @@
 import weakref
-from ._command import create_command_class_for_client
-import webbrowser
+from .._command import create_command_class_for_client
 import mupf.exceptions as exceptions
 import time
-from ._remote import RemoteObj
-from . import _symbols as S
-from . import _features as F
+from .._remote import RemoteObj
+from .. import _symbols as S
+from .. import _features as F
 import json
-from . import _enhjson as enhjson
+from .. import _enhjson as enhjson
 
 async def send_task_body(wbs, json):
     await wbs.send(json)
@@ -149,12 +148,4 @@ class Client:
                 cid = self.cid,
             )
 
-
-class WebBrowserClient(Client):
-    """
-    `Client` that utilizes the `webbrowser` module interface.
-    """
-    def __init__(self, app, client_id):
-        super().__init__(app, client_id)
-        webbrowser.open(self.url)
         
