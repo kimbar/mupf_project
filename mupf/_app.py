@@ -53,15 +53,15 @@ class App:
         self._event_loop = None
         self._clients_by_cid = {}
         self._file_routes = {}
-        self._server_thread = threading.Thread(target=self._server_thread_body, daemon=True, name="mupfapp-{}:{}".format(host, port))
+        self._server_thread = threading.Thread(target=self._server_thread_body, daemon=False, name="mupfapp-{}:{}".format(host, port))
         self._server_thread.start()
 
     def get_unique_client_id(self):
         return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
 
-    def summon_client(self, frontend=client.WebBrowser):
+    def summon_client(self, frontend=client.WebBrowser, **kwargs):
         cid = self.get_unique_client_id()
-        client = frontend(self, cid)
+        client = frontend(self, cid, **kwargs)
         self._clients_by_cid[cid] = client
         client.install_javascript(src='mupf/core').result
         for feat, state in client.command('*features*')().result.items():
@@ -82,20 +82,22 @@ class App:
             port = self._port,
             process_request = self._process_HTTP_request,
         )
-        self._event_loop.run_until_complete(start_server)
-        self._event_loop.run_forever()
-        print('Clean end of mupf thread')
-        # TODO: If the thread is non-daemonic this line is printing, but with it two tasks from
-        # module `websockets` are destroyed -- `WebSocketServerProtocol.handler()` and
-        # `WebSocketCommonProtocol.close_connection()` This means that we need to cancel them
-        # gently beforehand somehow.
+        try:
+            self._event_loop.run_until_complete(start_server)
+            self._event_loop.run_forever()
+        finally:
+            self._event_loop.run_until_complete(asyncio.all_tasks(self._event_loop))
+            self._event_loop.close()
+        print('****************** Clean end of mupf thread', flush=True)
+
 
     def close(self):
         for cl in self._clients_by_cid.values():
             cl.close(dont_wait=False)   # TODO: tu jednak `True` a potem zaczekać dopiero
         self._event_loop.stop()
+        
         # TODO: we need to wait for stop (?), because next line errors:
-        # self._event_loop.close()
+        
 
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))

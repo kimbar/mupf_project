@@ -4,7 +4,7 @@ app = mupf.App(
         - mupf.F.garbage_collection,
     )
 )
-client = app.summon_client()
+client = app.summon_client(frontend=mupf.client.Selenium)
 client.install_javascript("""
     mupf.hk.getmsg = (ev) => {
         console.log(ev.data)
