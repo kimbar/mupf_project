@@ -20,7 +20,7 @@ class Client:
     Object represents a window of a browser.
 
     It is not called "Window", because `window` is already a top-level object of the JavaSript side, and this object is
-    a little more than that. A `Proxy` of `window` can be easily obtained by `client.window`.
+    a little more than that. A `RemoteObj` of `window` can be easily obtained by `client.window`.
     """
     def __init__(self, app, client_id):
         self._app_wr = weakref.ref(app)
@@ -32,13 +32,11 @@ class Client:
             "~@": self.get_remote_obj,
         }
         self._preconnection_stash = []
-        self._proxys_by_key = {}
-        self._keys_by_proxy = {}
         self._healthy_connection = True
         self._safe_dunders_feature = False
         self.command = create_command_class_for_client(self)
         self.window = RemoteObj(0, self)
-        self._refobjs = weakref.WeakValueDictionary()
+        self._remote_obj_byid = weakref.WeakValueDictionary()
         self._first_command = self.command('*first*')()    # ccid=0
 
     def send_json(self, json):
@@ -76,21 +74,17 @@ class Client:
         elif rid is None:
             return None
         # here a mutex - or maybe not... because this is always on eventloop anyway?
-        if (rid, ctxrid) in self._refobjs:
-            return self._refobjs[(rid, ctxrid)]
+        if (rid, ctxrid) in self._remote_obj_byid:
+            return self._remote_obj_byid[(rid, ctxrid)]
         else:
             rem_obj = RemoteObj(rid, self, self.get_remote_obj(ctxrid))
-            self._refobjs[(rid, ctxrid)] = rem_obj
+            self._remote_obj_byid[(rid, ctxrid)] = rem_obj
             return rem_obj
 
     def summoned(self):
         self._safe_dunders_feature = (F.safe_dunders in self.features)
         if F.strict_feature_list in self.features and self.features != self.app._features:
             raise ValueError('features computed {} different from requested {} while `strict_feature_list` feature turned on'.format(self.features, self.app._features))
-
-    def _register_proxy(self, key, proxy):
-        self._proxys_by_key[key] = proxy
-        self._keys_by_proxy[proxy] = key
 
     def _command_hnd(self, data):
         if data['error']:

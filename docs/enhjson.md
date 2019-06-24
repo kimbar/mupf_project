@@ -53,12 +53,13 @@ this is the only practical (albeit rare) use-case for this **escape handler**.
 It is a functional equivalent of the `"\\"` escape sequence in strings, which
 encodes a single `\`.
 
-The most common **escape handler** is `"O"` which references JS object by id.
-For example `["~O",562]` is escaped to `mupf.obj.byid[562]`. Appropriate
+The most common **escape handler** is `"@"` which references JS object by id.
+For example `["~@",562]` is escaped to `mupf.obj.byid(562)`. Appropriate
 object must be stored under `562` beforehand.
 
 Special values handler `"S"` provides for passing values such as `undefined` or
-`NaN` which cannot be directly represented in JSON. Values returned by this handler can be easily added by extending the `mupf.esc.special` object.
+`NaN` which cannot be directly represented in JSON. Values returned by this
+handler can be easily added by extending the `mupf.esc.special` object.
 
 Exception handler `"?"` is produced if encoded object could not provide
 appropriate handler name and argument for the handler. The value for the
@@ -78,12 +79,12 @@ resolution for optimization. For example, resolution of:
 
 ```JSON
 ["~",
-    [100, ["~O",23], ["~O",30], 23, 23, 100, 32],
+    [100, ["~@",23], ["~@",30], 23, 23, 100, 32],
     {"c":2}
 ]
 ```
 
-is finished right after `["~O",30]` because `"c":2` informs the transformation
+is finished right after `["~@",30]` because `"c":2` informs the transformation
 engine that there are only two **escape structures** inside and all subsequent
 values can be copied as-are. The optimization information <span
 style="font-size:90%; border: 1px solid; border-radius:1em; padding: 0
@@ -101,4 +102,4 @@ in `mupf.tr` on the JS side. On the Python side they should be implemented as
 objects which implement `.json_esc()` method. Only a single argument (two
 element **escape structure**) is supported for custom handlers. Transport in
 the other direction is not supported − all uncommon objects should be stored in
-`mupf.obj` and referenced on the Python side by `Proxy`.
+`mupf.obj` and referenced on the Python side by `RemoteObj`.
