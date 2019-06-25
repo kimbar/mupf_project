@@ -3,44 +3,42 @@ import time
 
 print(mupf.F.feature_list)
 
-app = mupf.App(
-    host='127.0.0.1',
-    features = (
-        - mupf.F.test_feature,
-        + mupf.F.friendly_obj_names,
-        + mupf.F.verbose_macros,
-    )
-)
-app.register_route('main.css', file='main.css')
-app.register_route('app.js', file='app.js')
-# app.register_route('jquery.js', file='jquery-3.4.1.min.js')
+with mupf.App(
+        host='127.0.0.1',
+        features = (
+            - mupf.F.test_feature,
+            + mupf.F.friendly_obj_names,
+            + mupf.F.verbose_macros,
+        )
+    ) as app:
 
-client = app.summon_client()
+    app.register_route('main.css', file='main.css')
+    app.register_route('app.js', file='app.js')
+    # app.register_route('jquery.js', file='jquery-3.4.1.min.js')
 
-# client.install_javascript(src='jquery.js').result
-client.install_commands(src='app.js')
-client.command.install_css().wait
+    client = app.summon_client()
 
-# time.sleep(20)
+    # client.install_javascript(src='jquery.js').result
+    client.install_commands(src='app.js')
+    client.command.install_css().wait
 
-#client.command('*setfrn*').run(PseudoGhost(docid[1]), 'documento')
+    # time.sleep(20)
 
-cprint = client.command.print.run
-cinput = client.command.input
+    #client.command('*setfrn*').run(PseudoGhost(docid[1]), 'documento')
 
-cprint('Calculation of circle area v.1.0')
+    cprint = client.command.print.run
+    cinput = client.command.input
 
-h = client.window.document.body.innerHTML
-print(repr(h))
-client.window.mupf.test = client.window.document.body.innerHTML
+    cprint('Calculation of circle area v.1.0')
 
-print(isinstance(client.window.document, str))
+    h = client.window.document.body.innerHTML
+    print(repr(h))
+    client.window.mupf.test = client.window.document.body.innerHTML
 
-r = float(cinput("Give me the radius: ").result)
-cprint(f'Circle area for r = {r} is equal to A = {3.141592653589793*r*r}')
-cprint('Thank you for your cooperation', color='red')
+    print(isinstance(client.window.document, str))
 
-client.command.sleep(1)
+    r = float(cinput("Give me the radius: ").result)
+    cprint(f'Circle area for r = {r} is equal to A = {3.141592653589793*r*r}')
+    cprint('Thank you for your cooperation', color='red')
 
-client.close()
-app.close()
+    client.command.sleep(1)

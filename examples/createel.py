@@ -4,7 +4,9 @@ app = mupf.App(
         - mupf.F.garbage_collection,
     )
 )
-client = app.summon_client(frontend=mupf.client.Selenium)
+app.open()
+
+client = app.summon_client()
 client.install_javascript("""
     mupf.hk.getmsg = (ev) => {
         console.log(ev.data)
@@ -24,4 +26,4 @@ document.body.appendChild(span)
 print(client.command.echo("nice", "args").result)
 print(client.command.echo("~~~~", "nasty", "set", "of", "args").result)
 
-client.close()
+app.close()

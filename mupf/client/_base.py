@@ -97,7 +97,7 @@ class Client:
     def _callback_hnd(self, data):
         pass
 
-    def close(self, dont_wait=False):   # TODO: dont_wait not implemented
+    def close(self, dont_wait=False, _dont_remove_from_app=False):   # TODO: dont_wait not implemented
         # Mutex here to set this and issue `*last*` atomicly?
         self._healthy_connection = False
         # wait for previous commands (or maybe this is not needed since we're waiting for `*last*.result` anyway?)
@@ -105,8 +105,9 @@ class Client:
             c = self.command('*last*')()  # to consider: can an exception be rised in this line or only in next one? what consequences this have? and for other commands than `*last*`?
             c.result    # TODO: maybe here as a parameter should the number of hanging commands been passed?, but obtaining their count... heavy mutexing needed...
         except exceptions.ClientClosedNormally:   # TODO: this exception change for a timeout
-            print('{:.3f} ->'.format(time.time()-self.app._t0), '[1,*last*@{0},1,{{"result":null}}]'.format(c._ccid))
-            del self.app._clients_by_cid[self._cid]
+            print('{:.3f} ->'.format(time.time()-self.app._t0), '[1,{0},1,{{"result":null}}]'.format(c._ccid))
+            if not _dont_remove_from_app:
+                del self.app._clients_by_cid[self._cid]
 
     def await_connection(self):
         if self._first_command:
