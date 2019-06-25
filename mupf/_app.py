@@ -222,13 +222,13 @@ class App:
 
             mode = msg[0]
             ccid = msg[1]
-            # noun = msg[2]
+            noun = msg[2]
             pyld = msg[3]
 
             if mode == 1:   # response for a cmd
                 the_client.command.resolve_by_id_mupf(ccid, pyld['result'])
             elif mode == 5:
-                pass     # it's a callback
+                the_client.send_json([6, ccid, noun, pyld])
             elif mode == 7:
                 pass     # it's a notification
             else:

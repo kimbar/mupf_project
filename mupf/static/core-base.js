@@ -9,6 +9,7 @@
 // #else
     // #include static/core-obj.js
     // #include static/core-cmd.js
+    // #include static/core-clb.js
     // #include static/core-esc.js
     // #include static/core-hk.js
 // #endif core_features

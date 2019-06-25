@@ -69,7 +69,7 @@ function main() {
             return
 
         } else if (mode === 6){
-            // ans for clb
+            mupf.clb.waiting[msg[1]](msg[3])
         } else {
             // unknown mode
         }

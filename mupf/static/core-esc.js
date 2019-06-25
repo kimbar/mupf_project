@@ -1,5 +1,13 @@
 mupf.esc = {
-    "~": function(x, opt){ this._enhb.push(opt); let r =  this.decode(x); this._enhb.pop(); return r },
+    "~": function(x, opt){
+        this._enhb.push(opt)
+        let r =  this.decode(x)
+        opt = this._enhb.pop()
+        if (opt.proms !== undefined){
+            console.log(opt.proms)
+        }
+        return r
+    },
     "~~": function(x){ for(let i=0; i<x.length; i++) x[i] =  this.decode(x[i]); return x },
     "~-": (x) => x,
 // #if friendly_obj_names
@@ -11,8 +19,22 @@ mupf.esc = {
         let cmd = mupf.hk.fndcmd(name)
         if (cmd===undefined) throw new mupf.MupfError('CommandUnknownError', name)
         let result = mupf.hk.ccall(cmd, a)
-        if (result instanceof Promise) result = result   // FIXME - commands returning a `Promise` ashould be forbidden here or everything should be rebuild
-        return result
+        if (result instanceof Promise) {
+            let fulfilled = false
+            let resultvalue = undefined
+            result.then((v) => {
+                fulfilled = true
+                resultvalue = v
+            })
+            if (fulfilled) return resultvalue
+            else {
+                throw mupf.MupfError('CompoundCommandForbiddenError', 'value expected, got Promise')
+                // let curropt = this._enhb[this._enhb.length - 1]
+                // if (curropt.proms === undefined) curropt.proms = []
+                // curropt.proms.push(result)
+            }
+        }
+        else return result
     },
     "~S": (x) => special[ mupf.esc.decode(x)],
     special: {'undefined': undefined, 'NaN': NaN, 'Infinity': Infinity, '-Infinity': -Infinity},
