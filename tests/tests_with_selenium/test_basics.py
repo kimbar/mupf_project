@@ -7,7 +7,7 @@ import time
 @istest
 def hello_world():
     print("######################## start #########################")
-    app = mupf.App(port = 57111)
+    app = mupf.App(port = 57116)
     time.sleep(2)
     if not app._event_loop or not app._event_loop.is_running():
         app.close()

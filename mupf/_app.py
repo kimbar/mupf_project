@@ -53,7 +53,7 @@ class App:
         self._event_loop = None
         self._clients_by_cid = {}
         self._file_routes = {}
-        self._server_thread = threading.Thread(target=self._server_thread_body, daemon=True, name="mupfapp-{}:{}".format(host, port))
+        self._server_thread = threading.Thread(target=self._server_thread_body, daemon=False, name="mupfapp-{}:{}".format(host, port))
         self._server_thread.start()
 
     def get_unique_client_id(self):
@@ -86,12 +86,14 @@ class App:
         try:
             server = self._event_loop.run_until_complete(start_server)
             self._event_loop.run_forever()
+            print("********************* end of forever")
         except OSError:
-            print("********************* no server")
+            print("********************* OSError")
         finally:
             if server is None:
                 print("********************* no server")
             else:
+                print("********************* closing server")
                 # print('#####1', "\n".join(map(str,asyncio.all_tasks(self._event_loop))))
                 server.close()
                 self._event_loop.run_until_complete(server.wait_closed())
@@ -104,9 +106,10 @@ class App:
         print('****************** Clean end of mupf thread', flush=True)
 
     def close(self):
-        for cl in self._clients_by_cid.values():
-            cl.close(dont_wait=False)   # TODO: tu jednak `True` a potem zaczekać dopiero
-        self._event_loop.stop()     
+        # for cl in self._clients_by_cid.values():
+        #     cl.close(dont_wait=False)   # TODO: tu jednak `True` a potem zaczekać dopiero
+        print("********************* stop order")
+        self._event_loop.call_soon_threadsafe(self._event_loop.stop)   
 
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))

@@ -16,8 +16,8 @@ class Selenium(Client):
             self.driver = driver
         self.driver.get(self.url)
 
-    def close(self):
-        super().close()
+    def close(self, dont_wait=False):
+        super().close(dont_wait)
         self.driver.close()
 
     def send_keys(self, text):
