@@ -22,14 +22,14 @@ class KK:
 
 @istest
 def basic():
-    """enhjson: Encode superbasic input
+    """enhjson: Simple input -> Encoded string
     """
     a = j.encode("basic")
     assert a == '"basic"'
 
 @istest
 def complex():
-    """enhjson: Encode some complex input
+    """enhjson: Complex inputs -> Encoded strings
     """
     #
     a = j.encode(j.EnhancedBlock([7, "a", j.EnhancedBlock([3,5,6])]) )
@@ -49,14 +49,14 @@ def complex():
 
 @istest
 def no_api_object():
-    """enhjson: Encode object (`print` function) with no API
+    """enhjson: Object (`print` function) with no API as an input -> encoded string with `~?` escape
     """
     a = j.encode(j.EnhancedBlock(print)) 
     assert a == '["~",["~?","NoEnhJSONAPIError","<built-in function print>"],{"c":1}]'
 
 @istest
 def simple_opt_policies():
-    """enhjson: Encode some input with different optimization policies
+    """enhjson: Inputs with different optimization policies -> Encoded strings
     """
     a = j.encode(j.EnhancedBlock([7, "a", [3,5,6]], opt=j.OptPolicy.always_count) )
     assert a == '["~",[7,"a",[3,5,6]],{"c":0}]'

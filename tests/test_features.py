@@ -8,7 +8,7 @@ import mupf
 
 @istest
 def name_consistency():
-    """features: variable names and internal names consistent
+    """features: Module -> Variable names and internal names consistent
     """
     ok = []
     for var_name in dir(F):
@@ -19,7 +19,7 @@ def name_consistency():
 
 @istest
 def repr_consistency():
-    """features: `__repr__` consistent with module names
+    """features: Module -> `__repr__` of features consistent with module name
     """
     feature = F.feature_list[0] 
     assert feature == eval(repr(feature), {'mupf': mupf})

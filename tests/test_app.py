@@ -9,6 +9,8 @@ import mupf
 
 @istest
 def not_a_feature_type():
+    """app: `App` given illegal object as feature list -> Fail with `TypeError` exception
+    """
     with assert_raises(TypeError) as cm:
         app = mupf.App(
             features = (30, 50)

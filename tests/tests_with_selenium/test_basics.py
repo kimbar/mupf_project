@@ -6,7 +6,7 @@ import mupf
 
 @istest
 def hello_world():
-    """with_selenium/basics: Hello world example
+    """with_selenium/basics: None -> Display "Hello, World!" example
     """
     with mupf.App() as app:
         client = app.summon_client(frontend=mupf.client.Selenium)
@@ -14,7 +14,7 @@ def hello_world():
 
 @istest
 def port_unavailable():
-    """with_selenium/basics: Fail to open on used port
+    """with_selenium/basics: Port already used -> Fail with `OSError` exception
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.bind(('127.0.0.1', mupf.App.default_port))
