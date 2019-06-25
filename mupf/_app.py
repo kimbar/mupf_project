@@ -53,7 +53,7 @@ class App:
         self._event_loop = None
         self._clients_by_cid = {}
         self._file_routes = {}
-        self._server_thread = threading.Thread(target=self._server_thread_body, daemon=False, name="mupfapp-{}:{}".format(host, port))
+        self._server_thread = threading.Thread(target=self._server_thread_body, daemon=True, name="mupfapp-{}:{}".format(host, port))
         self._server_thread.start()
 
     def get_unique_client_id(self):
@@ -82,22 +82,31 @@ class App:
             port = self._port,
             process_request = self._process_HTTP_request,
         )
+        server = None
         try:
-            self._event_loop.run_until_complete(start_server)
+            server = self._event_loop.run_until_complete(start_server)
             self._event_loop.run_forever()
+        except OSError:
+            print("********************* no server")
         finally:
-            self._event_loop.run_until_complete(asyncio.all_tasks(self._event_loop))
-            self._event_loop.close()
+            if server is None:
+                print("********************* no server")
+            else:
+                # print('#####1', "\n".join(map(str,asyncio.all_tasks(self._event_loop))))
+                server.close()
+                self._event_loop.run_until_complete(server.wait_closed())
+                print("********************* server stopped")
+                # self._event_loop.run_until_complete(asyncio.sleep(0))
+                # print('#####2', "\n".join(map(str,asyncio.all_tasks(self._event_loop))))
+                # self._event_loop.run_until_complete(asyncio.all_tasks(self._event_loop))
+                self._event_loop.close()
+                # print('#####3', "\n".join(map(str,asyncio.all_tasks(self._event_loop))))
         print('****************** Clean end of mupf thread', flush=True)
-
 
     def close(self):
         for cl in self._clients_by_cid.values():
             cl.close(dont_wait=False)   # TODO: tu jednak `True` a potem zaczekać dopiero
-        self._event_loop.stop()
-        
-        # TODO: we need to wait for stop (?), because next line errors:
-        
+        self._event_loop.stop()     
 
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))
