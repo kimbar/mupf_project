@@ -39,6 +39,9 @@ class App:
         self._port = port
         self._charset = charset
 
+        self._server_opened_mutex = threading.Event()
+        self._server_closed_mutex = threading.Event()
+
         # these semm to be just one kind of features (sans bootstrap ones)
         try:
             feat_type_check = any([not isinstance(f, F.__dict__['__Feature']) for f in features])
@@ -50,11 +53,9 @@ class App:
         self._features.update(F.feature_list)
         self._features = set(filter(lambda f: f.state, self._features))
 
-        self._event_loop = None
+        self._event_loop = None    # if event-loop cannot be done this holds an offending exception
         self._clients_by_cid = {}
         self._file_routes = {}
-        self._server_thread = threading.Thread(target=self._server_thread_body, daemon=False, name="mupfapp-{}:{}".format(host, port))
-        self._server_thread.start()
 
     def get_unique_client_id(self):
         return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
@@ -82,22 +83,57 @@ class App:
             port = self._port,
             process_request = self._process_HTTP_request,
         )
+        server = None
         try:
-            self._event_loop.run_until_complete(start_server)
+            server = self._event_loop.run_until_complete(start_server)
+            self._server_opened_mutex.set()
             self._event_loop.run_forever()
+        except OSError as err:
+            self._event_loop = err
         finally:
-            self._event_loop.run_until_complete(asyncio.all_tasks(self._event_loop))
-            self._event_loop.close()
-        print('****************** Clean end of mupf thread', flush=True)
+            if server is None:
+                self._server_opened_mutex.set()
+            else:
+                server.close()
+                self._event_loop.run_until_complete(server.wait_closed())
+                self._event_loop.close()
+                self._server_closed_mutex.set()
 
+    def __enter__(self):
+        self.open()
+        if not self.is_opened():
+            raise self._event_loop    # if event-loop is not opened this is an exception
+        return self
 
-    def close(self):
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
+
+    def open(self):
+        self._server_thread = threading.Thread(
+            target = self._server_thread_body,
+            daemon = False,
+            name = "mupfapp-{}:{}".format(self._host, self._port)
+        )
+        self._server_thread.start()
+        self._server_opened_mutex.wait()
+        return self
+
+    def is_opened(self, get_culprit=False):
+        if get_culprit:
+            if self.is_opened():
+                return None
+            else:
+                return self._event_loop # if event-loop is not opened this is an exception
+        else:
+            return isinstance(self._event_loop, asyncio.events.AbstractEventLoop)
+
+    def close(self, wait=False):
         for cl in self._clients_by_cid.values():
-            cl.close(dont_wait=False)   # TODO: tu jednak `True` a potem zaczekać dopiero
-        self._event_loop.stop()
-        
-        # TODO: we need to wait for stop (?), because next line errors:
-        
+            cl.close(_dont_remove_from_app=True)
+        self._clients_by_cid.clear()
+        self._event_loop.call_soon_threadsafe(self._event_loop.stop)
+        if wait:
+            self._server_closed_mutex.wait()
 
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))

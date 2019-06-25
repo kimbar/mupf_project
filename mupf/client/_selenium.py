@@ -16,8 +16,8 @@ class Selenium(Client):
             self.driver = driver
         self.driver.get(self.url)
 
-    def close(self):
-        super().close()
+    def close(self, *args, **kwargs):
+        super().close(*args, **kwargs)
         self.driver.close()
 
     def send_keys(self, text):

@@ -12,10 +12,10 @@ It is as easy as:
 
 ```Python
 import mupf
-app = mupf.App()
+app = mupf.App().open()
 client = app.summon_client()
 client.window.document.body.innerHTML = "Hello, World!"
-client.close()
+app.close()
 ```
 
 ![Hello world example result](./docs/hello_example.png)
