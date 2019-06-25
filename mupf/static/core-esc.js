@@ -18,6 +18,9 @@ mupf.esc = {
     "~$": function(ccid, name, a){ // This is almost exactly the same as `mupf.recv()`
         let cmd = mupf.hk.fndcmd(name)
         if (cmd===undefined) throw new mupf.MupfError('CommandUnknownError', name)
+        if (a === undefined)
+            return cmd  // Function as an object
+        // ↓ Function as its return value ↓
         let result = mupf.hk.ccall(cmd, a)
         if (result instanceof Promise) {
             let fulfilled = false

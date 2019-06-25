@@ -44,11 +44,13 @@ class Client:
         else:
             evl = self.app._event_loop
             json[3] = enhjson.EnhancedBlock(json[3]) 
+            json = enhjson.encode(json)
+            print('<- {:.3f}'.format(time.time()-self.app._t0), json)
             evl.call_soon_threadsafe(
                 create_send_task,
                 evl,
                 self._websocket,
-                enhjson.encode(json),
+                json,
             )
 
     def __bool__(self):

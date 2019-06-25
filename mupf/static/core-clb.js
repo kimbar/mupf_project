@@ -8,7 +8,7 @@ mupf.clb = {
 mupf.hk.fndcmd = (n) => {
     if (typeof(n)==="string")
         return mupf.cmd[n]
-    else
+    else if (typeof(n)==="number")
     {
         return async function(arg){
             let clbid = mupf.clb.newid()

@@ -16,6 +16,8 @@ from ._macro import MacroByteStream
 from . import _features as F
 from . import _enhjson as enhjson
 
+import hashlib # TEMPORARY - DELETE ME
+
 class App:
     """
     Class for an app. Object represents a server and port, and a thread with an event-loop.
@@ -228,13 +230,16 @@ class App:
             if mode == 1:   # response for a cmd
                 the_client.command.resolve_by_id_mupf(ccid, pyld['result'])
             elif mode == 5:
-                the_client.send_json([6, ccid, noun, pyld])
+                the_client.send_json([6, ccid, noun, hashlib.sha256(pyld.encode('utf-8')).hexdigest()])  # TEMPORARY SHA256 ECHO
             elif mode == 7:
-                pass     # it's a notification
+                if noun == '*close*':
+                    break_reason = noun
+                    break
             else:
                 pass
 
         # here we are after communication breakdown
+        the_client._healthy_connection = False
         if break_reason == '*last*':
             the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())    # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*` didn't close them
         else:
