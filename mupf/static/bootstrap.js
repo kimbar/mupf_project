@@ -28,16 +28,16 @@ function main() {
     mupf.hk.ccall = (f, pyld) => f.call(window, pyld.args, pyld.kwargs)
     mupf.hk.getmsg = (ev) => JSON.parse(ev.data)
     // chainable:
-    mupf.hk.presend = (msg, res, cmd) => [msg, res, cmd]
-    mupf.hk.postntf = (msg, res, cmd) => [msg, res, cmd]  // TODO: temporarily removed - recreate
-    mupf.hk.postcmd = (msg, res, cmd) => [msg, res, cmd]
+    mupf.hk.presend = (msg, cmd) => [msg, cmd]
+    mupf.hk.postntf = (msg, cmd) => [msg, cmd]  // TODO: temporarily removed - recreate
+    mupf.hk.postcmd = (msg, cmd) => [msg, cmd]
     mupf.hk.preclose = () => undefined
     
     mupf.res = function(msg, result, cmd) {
         if (result === undefined) result = null
-        let msgrescmd = mupf.hk.presend([1,msg[1],0,{result:result}], result, cmd)
-        mupf.send(msgrescmd[0])
-        mupf.hk.postcmd(msgrescmd[0], msgrescmd[1], msgrescmd[2]) // this line tries to execute when the cmd does not exist
+        let msgcmd = mupf.hk.presend([1,msg[1],0,{result:result}], cmd)
+        mupf.send(msgcmd[0])
+        mupf.hk.postcmd(msgcmd[0], msgcmd[1]) // this line tries to execute when the cmd does not exist
     }
 
     mupf.recv = function(msg){

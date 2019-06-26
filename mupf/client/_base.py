@@ -153,7 +153,9 @@ class Client:
 
     def shedule_callback(self, ccid, noun, pyld):
         func = self._callbacks_by_clbid[noun]
-        res = func(pyld)
+        res = func(*pyld['args'])
+        # this is really temporary, functions MUST be properly sheduled
+        # otherwise you cant issue any commands from them (deadlock)
         self.send_json([6, ccid, 0, res])
         
         

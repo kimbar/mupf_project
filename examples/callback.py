@@ -2,9 +2,9 @@ import mupf
 import time
 import hashlib
 
-def callback_function(arg):
+def callback_function(event):
     global client
-    print('Py side side-effect, arg = {}'.format(repr(arg)))
+    print(event)
     # return hashlib.sha256(arg.encode('utf-8')).hexdigest()
 
 with mupf.App() as app:
