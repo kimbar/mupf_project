@@ -85,18 +85,6 @@ class Client:
         if F.strict_feature_list in self.features and self.features != self.app._features:
             raise ValueError('features computed {} different from requested {} while `strict_feature_list` feature turned on'.format(self.features, self.app._features))
 
-    def _command_hnd(self, data):
-        if data['error']:
-            self.command.resolve_by_id_mupf(ccid=data['ccid'], result=exceptions.create_from_result(data['result']))
-        else:    
-            self.command.resolve_by_id_mupf(ccid=data['ccid'], result=data['result'])
-
-    def _notification_hnd(self, data):
-        pass
-
-    def _callback_hnd(self, data):
-        pass
-
     def close(self, dont_wait=False, _dont_remove_from_app=False):   # TODO: dont_wait not implemented
         # Mutex here to set this and issue `*last*` atomicly?
         self._healthy_connection = False
