@@ -15,29 +15,13 @@ mupf.esc = {
 // #else
     "~@": (x) => mupf.obj.byid(mupf.esc.decode(x)),
 // #endif
-    "~$": function(ccid, name, a){ // This is almost exactly the same as `mupf.recv()`
+    "~$": function(ccid, name, argskwargs){ // This is almost exactly the same as `mupf.recv()`
         let cmd = mupf.hk.fndcmd(name)
         if (cmd===undefined) throw new mupf.MupfError('CommandUnknownError', name)
-        if (a === undefined)
-            return cmd  // Function as an object
-        // ↓ Function as its return value ↓
-        let result = mupf.hk.ccall(cmd, a)
-        if (result instanceof Promise) {
-            let fulfilled = false
-            let resultvalue = undefined
-            result.then((v) => {
-                fulfilled = true
-                resultvalue = v
-            })
-            if (fulfilled) return resultvalue
-            else {
-                throw mupf.MupfError('CompoundCommandForbiddenError', 'value expected, got Promise')
-                // let curropt = this._enhb[this._enhb.length - 1]
-                // if (curropt.proms === undefined) curropt.proms = []
-                // curropt.proms.push(result)
-            }
-        }
-        else return result
+        if (argskwargs === undefined)
+            return cmd
+        else
+            throw new mupf.MupfError('NotImplementedError', "compound commands")
     },
     "~S": (x) => special[ mupf.esc.decode(x)],
     special: {'undefined': undefined, 'NaN': NaN, 'Infinity': Infinity, '-Infinity': -Infinity},
