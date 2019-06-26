@@ -100,10 +100,13 @@ class App:
                 self._server_closed_mutex.set()
 
     def __enter__(self):
-        self.open()
-        if not self.is_opened():
-            raise self._event_loop    # if event-loop is not opened this is an exception
-        return self
+        if self.is_opened():
+            return self._clients_by_cid[list(self._clients_by_cid.keys())[0]]
+        else:
+            self.open()
+            if not self.is_opened():
+                raise self._event_loop    # if event-loop is not opened this is an exception
+            return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
@@ -116,6 +119,11 @@ class App:
         )
         self._server_thread.start()
         self._server_opened_mutex.wait()
+        return self
+
+    def open_with_client(self, frontend=client.WebBrowser, **kwargs):
+        self.__enter__()
+        self.summon_client(frontend, **kwargs)
         return self
 
     def is_opened(self, get_culprit=False):
