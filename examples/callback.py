@@ -1,20 +1,17 @@
 import mupf
 import time
+import hashlib
 
-class FakeCallback:
-    def __init__(self, number):
-        self.number = number
-    def json_esc(self):
-        return "$", None, self.number
+def callback_function(arg):
+    print('Py side side-effect, arg = {}'.format(repr(arg)))
+    return hashlib.sha256(arg.encode('utf-8')).hexdigest()
 
 with mupf.App() as app:
     client = app.summon_client()
     app.register_route('callback.js', file='callback.js')
     client.install_javascript(src='callback.js').wait
 
-    client.window.testfunc = FakeCallback(384)
+    client.window.testfunc = callback_function
 
-    while True:
-        time.sleep(0.5)
-        if not client._healthy_connection:
-            break
+    while client:
+        time.sleep(0.1)

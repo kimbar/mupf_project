@@ -2,7 +2,7 @@ import weakref
 from .._command import create_command_class_for_client
 import mupf.exceptions as exceptions
 import time
-from .._remote import RemoteObj
+from .._remote import RemoteObj, CallbackJsonEsc
 from .. import _symbols as S
 from .. import _features as F
 import json
@@ -36,6 +36,9 @@ class Client:
         self.command = create_command_class_for_client(self)
         self.window = RemoteObj(0, self)
         self._remote_obj_byid = weakref.WeakValueDictionary()
+        self._clbid_by_callbacks = {}
+        self._callbacks_by_clbid = {}
+        self._callback_free_id = 0
         self._first_command = self.command('*first*')()    # ccid=0
 
     def send_json(self, json):
@@ -137,6 +140,23 @@ class Client:
         if F.core_features in self.features:
             self.command._legal_names = self.command('*getcmds*')().result
 
+    def _wrap_callback(self, func):
+        if func in self._clbid_by_callbacks:
+            return CallbackJsonEsc(self._clbid_by_callbacks[func])
+        
+        self._clbid_by_callbacks[func] = self._callback_free_id
+        self._callbacks_by_clbid[self._callback_free_id] = func
+        
+        res = CallbackJsonEsc(self._callback_free_id)
+        self._callback_free_id += 1
+        return res
+
+    def shedule_callback(self, ccid, noun, pyld):
+        func = self._callbacks_by_clbid[noun]
+        res = func(pyld)
+        self.send_json([6, ccid, 0, res])
+        
+        
     @property
     def app(self):
         return self._app_wr()

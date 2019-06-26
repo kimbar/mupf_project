@@ -47,6 +47,8 @@ class RemoteObj(metaclass=MetaRemoteObj):
             return object.__getattribute__(self, '_command_wr')()('*geti*')(self[S.json_esc_interface], key).result
 
     def __setattr__(self, key, value):
+        if not isinstance(value, RemoteObj) and callable(value):
+            value = object.__getattribute__(self, '_client_wr')()._wrap_callback(value)
         object.__getattribute__(self, '_command_wr')()('*set*')(self[S.json_esc_interface], key, value).wait
 
     def __getattribute__(self, key):
@@ -82,6 +84,16 @@ class RemoteJsonEsc:
         return '@', self.rid
     def __repr__(self):
         return '["~@",{}]'.format(self.rid)
+
+
+class CallbackJsonEsc:
+    def __init__(self, clbid):
+        self.clbid = clbid
+    def json_esc(self):
+        return '$', None, self.clbid
+    def __repr__(self):
+        return '["~$",null,{}]'.format(self.clbid)
+
 
 def _make_escapable(value):
     try:
