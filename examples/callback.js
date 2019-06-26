@@ -4,9 +4,9 @@ document.body.appendChild(input)
 document.body.appendChild(button)
 document.body.appendChild(document.createElement('br'))
 button.textContent = 'SHA256'
-button.onclick = async function(ev){
-    mupf.cmd.print([await window.testfunc(window.input.value)],{})
-}
+// button.onclick = async function(ev){
+//     mupf.cmd.print([await window.testfunc(window.input.value)],{})
+// }
 
 mupf.cmd.print = function(args, kwargs){ 
     let h = args.join(kwargs.sep || " ")

@@ -12,3 +12,18 @@ mupf.hk.presend = function(msg, res, cmd) {
     }
     return [msg, res, cmd]
 }
+
+mupf.hk.fndcmd = (n) => {
+    if (typeof(n)==="string")
+        return mupf.cmd[n]
+    else if (typeof(n)==="number")
+    {
+        return async function(...args) {
+            let clbid = mupf.clb.newid()
+            let p = new Promise((ok, no) => { mupf.clb.waiting[clbid] = ok })
+            let msgrescmd = mupf.hk.presend([5, clbid, n, {args: args}], args, {})
+            mupf.send(msgrescmd[0])
+            return await p
+        }
+    }
+}
