@@ -24,12 +24,15 @@ mupf.hk.fndcmd = (n) => {
         return mupf.cmd[n]
     else if (typeof(n)==="number")
     {
-        return async function(...args) {
-            let clbid = mupf.clb.newid()
-            let p = new Promise((ok, no) => { mupf.clb.waiting[clbid] = ok })
-            let msgrescmd = mupf.hk.presend([5, clbid, n, {args: args}], args, {})
-            mupf.send(msgrescmd[0])
-            return await p
+        if (mupf.clb._byid[n]===undefined){
+            mupf.clb._byid[n] = async function(...args) {
+                let clbid = mupf.clb.newid()
+                let p = new Promise((ok, no) => { mupf.clb.waiting[clbid] = ok })
+                let msgrescmd = mupf.hk.presend([5, clbid, n, {args: args}], mupf.clb._byid[n])
+                mupf.send(msgrescmd[0])
+                return await p
+            }
         }
+        return mupf.clb._byid[n]
     }
 }

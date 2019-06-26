@@ -1,5 +1,6 @@
 mupf.clb = {
     newid: function() { return this._idcounter++ },
     waiting: {},
-    _idcounter: 0
+    _idcounter: 0,
+    _byid: {}
 }
