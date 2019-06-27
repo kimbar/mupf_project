@@ -5,7 +5,7 @@ import hashlib
 def button_click(event):
     """ Calculate SHA256 of the input and print it below
     """
-    global client, input_, bodyAppendChild, createElement
+    global input_, bodyAppendChild, createElement
     value = input_.value
     hash_ = hashlib.sha256(value.encode('utf-8')).hexdigest()
     span = createElement('span')

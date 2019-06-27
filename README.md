@@ -29,7 +29,7 @@ import hashlib
 def button_click(event):
     """ Calculate SHA256 of the input and print it below
     """
-    global client, input_, bodyAppendChild, createElement
+    global input_, bodyAppendChild, createElement
     value = input_.value
     hash_ = hashlib.sha256(value.encode('utf-8')).hexdigest()
     span = createElement('span')
@@ -58,3 +58,14 @@ with mupf.App() as app:
     while client:
         client.run_one_callback_blocking()
 ```
+
+![Interactive example result](./docs/sha256_example.png)
+
+A little verbose? Sure, but that's because it's all done in pure Python. Not
+just these two lines that do the actual work, but also all the GUI building,
+event handling etc. This allows for crude prototyping of applications in single
+language, and to split them later among "model" (Python) and "view" (Java
+Script) parts as they mature. You can decide then, after they prove themselves
+to work, what to keep on the "model" side and what to move to the Java Script
+side for performance and clarity. You can also use any frontend framework
+(since mupf is as low-level as it gets) from the get-go.
