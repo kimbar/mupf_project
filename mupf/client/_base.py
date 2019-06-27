@@ -2,11 +2,12 @@ import weakref
 from .._command import create_command_class_for_client
 import mupf.exceptions as exceptions
 import time
-from .._remote import RemoteObj
+from .._remote import RemoteObj, CallbackJsonEsc, CallbackTask
 from .. import _symbols as S
 from .. import _features as F
 import json
 from .. import _enhjson as enhjson
+import queue
 
 async def send_task_body(wbs, json):
     await wbs.send(json)
@@ -30,12 +31,16 @@ class Client:
         self.enhjson_decoders = {
             "~@": self.get_remote_obj,
         }
+        self._callback_queue = queue.Queue()
         self._preconnection_stash = []
         self._healthy_connection = True
         self._safe_dunders_feature = False
         self.command = create_command_class_for_client(self)
         self.window = RemoteObj(0, self)
         self._remote_obj_byid = weakref.WeakValueDictionary()
+        self._clbid_by_callbacks = {}
+        self._callbacks_by_clbid = {}
+        self._callback_free_id = 0
         self._first_command = self.command('*first*')()    # ccid=0
 
     def send_json(self, json):
@@ -44,11 +49,13 @@ class Client:
         else:
             evl = self.app._event_loop
             json[3] = enhjson.EnhancedBlock(json[3]) 
+            json = enhjson.encode(json)
+            print('<- {:.3f}'.format(time.time()-self.app._t0), json)
             evl.call_soon_threadsafe(
                 create_send_task,
                 evl,
                 self._websocket,
-                enhjson.encode(json),
+                json,
             )
 
     def __bool__(self):
@@ -87,15 +94,17 @@ class Client:
 
     def close(self, dont_wait=False, _dont_remove_from_app=False):   # TODO: dont_wait not implemented
         # Mutex here to set this and issue `*last*` atomicly?
-        self._healthy_connection = False
-        # wait for previous commands (or maybe this is not needed since we're waiting for `*last*.result` anyway?)
-        try:
-            c = self.command('*last*')()  # to consider: can an exception be rised in this line or only in next one? what consequences this have? and for other commands than `*last*`?
-            c.result    # TODO: maybe here as a parameter should the number of hanging commands been passed?, but obtaining their count... heavy mutexing needed...
-        except exceptions.ClientClosedNormally:   # TODO: this exception change for a timeout
-            print('{:.3f} ->'.format(time.time()-self.app._t0), '[1,{0},1,{{"result":null}}]'.format(c._ccid))
-            if not _dont_remove_from_app:
-                del self.app._clients_by_cid[self._cid]
+        if self._healthy_connection:
+            self._healthy_connection = False
+            # wait for previous commands (or maybe this is not needed since we're waiting for `*last*.result` anyway?)
+            try:
+                c = self.command('*last*')()  # to consider: can an exception be rised in this line or only in next one? what consequences this have? and for other commands than `*last*`?
+                c.result    # TODO: maybe here as a parameter should the number of hanging commands been passed?, but obtaining their count... heavy mutexing needed...
+            except exceptions.ClientClosedNormally:   # TODO: this exception change for a timeout
+                print('{:.3f} ->'.format(time.time()-self.app._t0), '[1,{0},1,{{"result":null}}]'.format(c._ccid))
+
+        if not _dont_remove_from_app:
+            del self.app._clients_by_cid[self._cid]
 
     def await_connection(self):
         if self._first_command:
@@ -120,6 +129,26 @@ class Client:
         self.install_javascript(code, src, remove=True).result
         if F.core_features in self.features:
             self.command._legal_names = self.command('*getcmds*')().result
+
+    def _wrap_callback(self, func):
+        if func in self._clbid_by_callbacks:
+            return CallbackJsonEsc(self._clbid_by_callbacks[func])
+        
+        self._clbid_by_callbacks[func] = self._callback_free_id
+        self._callbacks_by_clbid[self._callback_free_id] = func
+        
+        res = CallbackJsonEsc(self._callback_free_id)
+        self._callback_free_id += 1
+        return res
+
+    def shedule_callback(self, ccid, noun, pyld):
+        self._callback_queue.put(CallbackTask(self, ccid, noun, pyld))
+    
+    def run_one_callback_blocking(self):
+        if not self._healthy_connection:
+            return
+        callback_task = self._callback_queue.get(block=True)
+        callback_task.run()
 
     @property
     def app(self):

@@ -1,5 +1,13 @@
 mupf.esc = {
-    "~": function(x, opt){ this._enhb.push(opt); let r =  this.decode(x); this._enhb.pop(); return r },
+    "~": function(x, opt){
+        this._enhb.push(opt)
+        let r =  this.decode(x)
+        opt = this._enhb.pop()
+        if (opt.proms !== undefined){
+            console.log(opt.proms)
+        }
+        return r
+    },
     "~~": function(x){ for(let i=0; i<x.length; i++) x[i] =  this.decode(x[i]); return x },
     "~-": (x) => x,
 // #if friendly_obj_names
@@ -7,12 +15,13 @@ mupf.esc = {
 // #else
     "~@": (x) => mupf.obj.byid(mupf.esc.decode(x)),
 // #endif
-    "~$": function(ccid, name, a){ // This is almost exactly the same as `mupf.recv()`
+    "~$": function(ccid, name, argskwargs){ // This is almost exactly the same as `mupf.recv()`
         let cmd = mupf.hk.fndcmd(name)
         if (cmd===undefined) throw new mupf.MupfError('CommandUnknownError', name)
-        let result = mupf.hk.ccall(cmd, a)
-        if (result instanceof Promise) result = result   // FIXME - commands returning a `Promise` ashould be forbidden here or everything should be rebuild
-        return result
+        if (argskwargs === undefined)
+            return cmd
+        else
+            throw new mupf.MupfError('NotImplementedError', "compound commands")
     },
     "~S": (x) => special[ mupf.esc.decode(x)],
     special: {'undefined': undefined, 'NaN': NaN, 'Infinity': Infinity, '-Infinity': -Infinity},

@@ -113,7 +113,7 @@ def create_command_class_for_client(client):
                 else:
                     Command._ccid_counter = -1
             j = self._jsonify(args, kwargs)
-            print('<- {:.3f}'.format(time.time()-self._client_wr().app._t0), j)
+            # print('<- {:.3f}'.format(time.time()-self._client_wr().app._t0), j)
             if self._ccid > 0:    # `cmd_name=="__first__"` cannot be send, only received
                 Command._client_wr().send_json(j)
             if self._ccid in Command._resolved_in_advance:

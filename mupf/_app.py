@@ -230,19 +230,23 @@ class App:
 
             mode = msg[0]
             ccid = msg[1]
-            # noun = msg[2]
+            noun = msg[2]
             pyld = msg[3]
 
             if mode == 1:   # response for a cmd
                 the_client.command.resolve_by_id_mupf(ccid, pyld['result'])
             elif mode == 5:
-                pass     # it's a callback
+                the_client.shedule_callback(ccid, noun, pyld)
             elif mode == 7:
-                pass     # it's a notification
+                the_client.shedule_callback(ccid, noun, pyld)
+                if noun == '*close*':
+                    break_reason = noun
+                    break
             else:
                 pass
 
         # here we are after communication breakdown
+        the_client._healthy_connection = False
         if break_reason == '*last*':
             the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())    # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*` didn't close them
         else:
