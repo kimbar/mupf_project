@@ -230,6 +230,7 @@ class App:
             elif mode == 5:
                 the_client.shedule_callback(ccid, noun, pyld)
             elif mode == 7:
+                the_client.shedule_callback(ccid, noun, pyld)
                 if noun == '*close*':
                     break_reason = noun
                     break

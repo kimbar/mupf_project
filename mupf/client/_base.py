@@ -154,20 +154,14 @@ class Client:
         return res
 
     def shedule_callback(self, ccid, noun, pyld):
-        self._callback_queue.put(
-            CallbackTask(
-                self,
-                ccid,
-                self._callbacks_by_clbid[noun],
-                pyld['args'],
-            )
-        )
+        self._callback_queue.put(CallbackTask(self, ccid, noun, pyld))
     
     def run_one_callback_blocking(self):
+        if not self._healthy_connection:
+            return
         callback_task = self._callback_queue.get(block=True)
         callback_task.run()
 
-        
     @property
     def app(self):
         return self._app_wr()

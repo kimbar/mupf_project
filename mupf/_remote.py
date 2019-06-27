@@ -87,16 +87,26 @@ class RemoteJsonEsc:
 
 
 class CallbackTask:
+    # TODO: this is very much a work in progress, serious rethinking
+    # of this class is needed
 
-    def __init__(self, client, ccid, func, args):
+    def __init__(self, client, ccid, noun, pyld):
         self._client = client
         self._ccid = ccid
-        self._func = func
-        self._args = args
+        self._noun = noun
+        self._args = None
+        if isinstance(noun, int):
+            self._func = client._callbacks_by_clbid[noun]
+            self._noun = None
+            self._args = pyld['args']
 
     def run(self):
-        answer = self._func(*self._args)
-        self._client.send_json([6, self._ccid, 0, answer])
+        if self._noun is None:
+            answer = self._func(*self._args)
+            self._client.send_json([6, self._ccid, 0, answer])
+            return
+        if self._noun == '*close*':
+            return
 
 
 class CallbackJsonEsc:
