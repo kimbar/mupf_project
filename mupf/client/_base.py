@@ -2,11 +2,12 @@ import weakref
 from .._command import create_command_class_for_client
 import mupf.exceptions as exceptions
 import time
-from .._remote import RemoteObj, CallbackJsonEsc
+from .._remote import RemoteObj, CallbackJsonEsc, CallbackTask
 from .. import _symbols as S
 from .. import _features as F
 import json
 from .. import _enhjson as enhjson
+import queue
 
 async def send_task_body(wbs, json):
     await wbs.send(json)
@@ -30,6 +31,7 @@ class Client:
         self.enhjson_decoders = {
             "~@": self.get_remote_obj,
         }
+        self._callback_queue = queue.Queue()
         self._preconnection_stash = []
         self._healthy_connection = True
         self._safe_dunders_feature = False
@@ -152,12 +154,19 @@ class Client:
         return res
 
     def shedule_callback(self, ccid, noun, pyld):
-        func = self._callbacks_by_clbid[noun]
-        res = func(*pyld['args'])
-        # this is really temporary, functions MUST be properly sheduled
-        # otherwise you cant issue any commands from them (deadlock)
-        self.send_json([6, ccid, 0, res])
-        
+        self._callback_queue.put(
+            CallbackTask(
+                self,
+                ccid,
+                self._callbacks_by_clbid[noun],
+                pyld['args'],
+            )
+        )
+    
+    def run_one_callback_blocking(self):
+        callback_task = self._callback_queue.get(block=True)
+        callback_task.run()
+
         
     @property
     def app(self):

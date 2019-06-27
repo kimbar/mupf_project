@@ -86,6 +86,19 @@ class RemoteJsonEsc:
         return '["~@",{}]'.format(self.rid)
 
 
+class CallbackTask:
+
+    def __init__(self, client, ccid, func, args):
+        self._client = client
+        self._ccid = ccid
+        self._func = func
+        self._args = args
+
+    def run(self):
+        answer = self._func(*self._args)
+        self._client.send_json([6, self._ccid, 0, answer])
+
+
 class CallbackJsonEsc:
     def __init__(self, clbid):
         self.clbid = clbid
