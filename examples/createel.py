@@ -26,4 +26,6 @@ document.body.appendChild(span)
 print(client.command.echo("nice", "args").result)
 print(client.command.echo("~~~~", "nasty", "set", "of", "args").result)
 
+print(span.innerHTML)
+
 app.close()

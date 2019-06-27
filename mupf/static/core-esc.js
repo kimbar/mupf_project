@@ -32,9 +32,12 @@ mupf.esc = {
         }
         return x
     },
+    _isesc: function(x){
+        return (Array.isArray(x) && (x.length > 1) && (typeof(x[0])==="string") && (x[0].substr(0,1)==="~"))
+    },
     encode: function(x, enhb) {
         if (enhb.noautoesc){
-            if (Array.isArray(x) && (x.length > 1) && (typeof(x[0])==="string") && (x[0].substr(0,1)==="~")) {
+            if  (mupf.esc._isesc(x)) {
                 enhb.c += 1
                 return ["~-", x]    // This is simple, but `noautoesc=true` commands cannot have complex objects in result
             }
@@ -43,23 +46,19 @@ mupf.esc = {
         }
         if (x === null) return x
         if (typeof(x) === 'object' || typeof(x) === 'function'){
-            let id, thisid
+            let out
             if (x.constructor === mupf.esc.Any){
-                id = mupf.obj.getid(x.obj)
-                if (x.obj.apply === undefined)
-                    thisid = null
-                else
-                    thisid = mupf.obj.getid(x.this_)
+                out = mupf.esc.encode(x.obj, enhb)
+                if (mupf.esc._isesc(out) && out[0]==="~@" && x.obj.apply !== undefined) out[2] = mupf.obj.getid(x.this_)
             } else {
-                id = mupf.obj.getid(x)
-                thisid = null
+            // #if friendly_obj_names
+                out = ["~@", mupf.obj.getid(x), null, mupf.obj.byid(id)[1].frn]
+            // #else
+                out = ["~@", mupf.obj.getid(x), null]
+            // #endif
+                enhb.c += 1
             }
-            enhb.c += 1
-        // #if friendly_obj_names
-            return ["~@", id, thisid, mupf.obj.byid(id)[1].frn]
-        // #else
-            return ["~@", id, thisid]
-        // #endif
+            return out
         }
         if (typeof(x) === 'undefined') {
             enhb.c += 1
