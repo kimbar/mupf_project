@@ -1,8 +1,16 @@
 import nose
 from nose.tools import istest, nottest, assert_raises
 import socket
+from selenium import webdriver
 
 import mupf
+
+@istest
+def selenium():
+    """with_selenium/basics: None -> Invoke Selenium browser
+    """
+    driver = webdriver.Firefox()
+    driver.close()
 
 @istest
 def hello_world():
