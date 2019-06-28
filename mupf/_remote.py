@@ -6,18 +6,6 @@ class MetaRemoteObj(type):
     def __init__(cls, name, bases, dict_):
         super().__init__(name, bases, dict_)
 
-    def __instancecheck__(self, instance):
-        try:
-            return instance[S.remote_obj_class]
-        except Exception:
-            return False
-
-    def __subclasscheck__(self, instance):
-        try:
-            return instance[S.remote_obj_class]
-        except Exception:
-            return False      
-
 
 class RemoteObj(metaclass=MetaRemoteObj):
     
@@ -53,7 +41,7 @@ class RemoteObj(metaclass=MetaRemoteObj):
 
     def __getattribute__(self, key):
         if self[S.client_wr]()._safe_dunders_feature and key == "__class__":    # __dict__ __bases__ __name__ __qualname__ __mro__ __subclasses__
-            # this allows for `isinstance()` for `RemoteObj`
+            # this allows for `isinstance(self, <not RemoteObj>)` for `RemoteObj`
             return RemoteObj
         return self[S.command_wr]()('*get*')(self[S.json_esc_interface], key).result
 
@@ -71,10 +59,7 @@ class RemoteObj(metaclass=MetaRemoteObj):
 
     @property
     def _client(self):
-        return  self[S.client_wr]()
-
-    def _remote_obj_class(self):
-        return True
+        return self[S.client_wr]()
 
 
 class RemoteJsonEsc:

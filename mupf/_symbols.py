@@ -18,7 +18,6 @@ rid = _Symbol("_rid", readonly=True)
 client = _Symbol("_client", readonly=True)
 json_esc_interface = _Symbol("_json_esc_interface", readonly=True)
 dunder_class = _Symbol("")
-remote_obj_class = _Symbol("remote_obj_class", readonly=True)
 
 def __getattr__(name: str) -> _Symbol:
     return _Symbol('_'+name)
