@@ -1,5 +1,6 @@
 import nose
 from nose.tools import istest, nottest, assert_raises
+from nose.plugins.skip import SkipTest
 import socket
 from selenium import webdriver
 import time
@@ -58,7 +59,7 @@ def user_close():
 
 @istest
 def trigger_event():
-    """
+    """with_selenium/basics: None -> Userlike triggering of a click event
     """
     sentinel = False
     def event_handler(event):
@@ -89,13 +90,13 @@ def port_unavailable():
     """with_selenium/basics: Port already used -> Fail with `OSError` exception
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.bind(('127.0.0.1', mupf.App.default_port))
+    try:
+        sock.bind(('127.0.0.1', mupf.App.default_port))
+    except OSError:
+        raise SkipTest('Required port was unavaliable in the first place')
 
     with assert_raises(OSError):
         with mupf.App():
             pass
             
     sock.close()
-
-
-
