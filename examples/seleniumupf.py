@@ -2,6 +2,7 @@ import mupf
 import time
 
 app = mupf.App()
+app.open()
 app.register_route('main.css', file='main.css')
 app.register_route('app.js', file='app.js')
 

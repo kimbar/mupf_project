@@ -16,9 +16,13 @@ def selenium():
 def hello_world():
     """with_selenium/basics: None -> Display "Hello, World!" example
     """
+    text = "Hello, World!"
     with mupf.App() as app:
         client = app.summon_client(frontend=mupf.client.Selenium)
-        client.window.document.body.innerHTML = "Hello, World!"
+        client.window.document.body.innerHTML = text
+
+        body = client.selenium.find_element_by_tag_name('body')
+        assert body.text == text
 
 @istest
 def port_unavailable():

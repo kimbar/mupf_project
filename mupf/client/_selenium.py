@@ -10,18 +10,20 @@ class Selenium(Client):
     
     def __init__(self, app, client_id, driver=webdriver.Firefox):
         super().__init__(app, client_id)
+
+        self.selenium: webdriver.remote.webdriver.WebDriver
         if type(driver) == type:
-            self.driver = driver()
+            self.selenium = driver()
         else:
-            self.driver = driver
-        self.driver.get(self.url)
+            self.selenium = driver
+        self.selenium.get(self.url)
 
     def close(self, *args, **kwargs):
         super().close(*args, **kwargs)
-        self.driver.close()
+        self.selenium.close()
 
     def send_keys(self, text):
-        actions = ActionChains(self.driver)
+        actions = ActionChains(self.selenium)
         text = text.split('\n')
         first = True
         for part in text:
