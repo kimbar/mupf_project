@@ -5,6 +5,7 @@ from selenium import webdriver
 import time
 
 import mupf
+import mupf.exceptions
 
 @istest
 def selenium():
@@ -43,16 +44,17 @@ def append_element():
 def user_close():
     """with_selenium/basics: None -> Userlike close of client waiting on a callback
     """
-    
     def userlike_action(client):
-        client.selenium.close()
-    print("START")
+        client.selenium.quit()
+
     with mupf.App() as app:
         client = app.summon_client(frontend=mupf.client.Selenium)
+    try:
         app.piggyback_call(userlike_action, client)
-    while client:
-        client.run_one_callback_blocking()
-    print("THE END")
+        while client:
+            client.run_one_callback_blocking()
+    except mupf.exceptions.ClientClosedUnexpectedly:
+        pass
 
 @istest
 def trigger_event():
