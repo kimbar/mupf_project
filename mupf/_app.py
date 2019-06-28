@@ -251,3 +251,6 @@ class App:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())    # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*` didn't close them
         else:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
+    
+    def piggyback_call(self, function, *args):
+        self._event_loop.call_soon_threadsafe(function, *args)
