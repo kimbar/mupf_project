@@ -5,12 +5,12 @@ app = mupf.App(
     )
 )
 client = app.summon_client()
-# client.install_javascript("""
-#     mupf.hk.getmsg = (ev) => {
-#         console.log(ev.data)
-#         return JSON.parse(ev.data)
-#     }
-# """, remove=True)
+client.install_javascript("""
+    mupf.hk.getmsg = (ev) => {
+        console.log(ev.data)
+        return JSON.parse(ev.data)
+    }
+""", remove=True)
 
 document = client.window.document
 span = document.createElement('span')

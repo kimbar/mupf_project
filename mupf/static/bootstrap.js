@@ -104,11 +104,14 @@ function main() {
     mupf.cmd['*install*'] = async function(args, kwargs){
         let sc = document.createElement('script')
         await new Promise((ok, no) => {
-            sc.addEventListener('load', () => {ok()})
-            sc.addEventListener('error', (e) => {no(new mupf.MupfError('MupfError','Unable to load script src="'+e.target.src+'"'))})
-            if (kwargs.hasOwnProperty('src')) sc.src = kwargs['src']
             if (args.length == 1) sc.innerHTML = args[0]
             document.head.appendChild(sc)
+            if (kwargs.hasOwnProperty('src')) {
+                sc.addEventListener('load', () => {ok()})
+                sc.addEventListener('error', (e) => {no(new mupf.MupfError('MupfError','Unable to load script src="'+e.target.src+'"'))})
+                sc.src = kwargs['src']
+            }
+            else ok()
         })
         if (kwargs.remove) document.head.removeChild(sc)
     }
