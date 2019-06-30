@@ -1,5 +1,9 @@
 import logging
-logging.basicConfig(filename='callback.log', filemode='w', level=logging.INFO)
+
+logging.basicConfig(level=logging.INFO)
+hand = logging.FileHandler(filename='callback.log', mode='w', encoding='utf-8')
+hand.setFormatter(logging.Formatter(fmt='%(asctime)s %(message)s'))
+logging.getLogger('mupf').addHandler(hand)
 
 import mupf
 import hashlib

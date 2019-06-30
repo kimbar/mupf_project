@@ -155,7 +155,6 @@ class App:
         if wait:
             self._server_closed_mutex.wait()
 
-    @logged
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))
         if url == ('', ''):
@@ -271,3 +270,6 @@ class App:
     @logged
     def piggyback_call(self, function, *args):
         self._event_loop.call_soon_threadsafe(function, *args)
+
+    def __repr__(self):
+        return "<App>"

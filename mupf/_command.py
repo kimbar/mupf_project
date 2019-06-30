@@ -24,7 +24,7 @@ class MetaCommand(type):
     works fine for an object, but here we want it to act for the class `X`, not its instance. Therefore a metaclass is
     needed. Its `__getattr__` is called when the `X.go` is approached, and it simply invokes constructor `X("go")`.
     """
-    @logged
+    
     def __init__(cls, name, bases, dict_):
         super().__init__(name, bases, dict_)
 
@@ -191,5 +191,8 @@ def create_command_class_for_client(client):
             if self._is_error:
                 return self._result
             return False
+
+        def __repr__(self):
+            return "<Command {} {}>".format(getattr(self, '_cmd_name', '?'), getattr(self, '_ccid', '?'))
 
     return Command

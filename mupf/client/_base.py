@@ -52,10 +52,10 @@ class Client:
         if not self._websocket:
             self._preconnection_stash.append(json)
         else:
-            evl = self.app._event_loop
+            evl = self._app_wr()._event_loop
             json[3] = enhjson.EnhancedBlock(json[3]) 
             json = enhjson.encode(json)
-            print('<- {:.3f}'.format(time.time()-self.app._t0), json)
+            print('<- {:.3f}'.format(time.time()-self._app_wr()._t0), json)
             evl.call_soon_threadsafe(
                 create_send_task,
                 evl,
