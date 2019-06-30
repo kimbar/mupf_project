@@ -3,6 +3,7 @@ import threading
 from ._enhjson import EnhancedBlock, encode
 import time
 from ._remote import RemoteObj
+from ._logging import logged
 
 class MetaCommand(type):
     """
@@ -23,12 +24,15 @@ class MetaCommand(type):
     works fine for an object, but here we want it to act for the class `X`, not its instance. Therefore a metaclass is
     needed. Its `__getattr__` is called when the `X.go` is approached, and it simply invokes constructor `X("go")`.
     """
+    @logged
     def __init__(cls, name, bases, dict_):
         super().__init__(name, bases, dict_)
 
+    @logged
     def __getattr__(cls, name):
         return cls(name)    #pylint: disable=no-value-for-parameter
 
+    @logged
     def resolve_all_mupf(cls, result):
         unres = []
         with cls._global_mutex:
@@ -43,9 +47,11 @@ class MetaCommand(type):
             for cmd in unres:
                 cmd._is_resolved.set()
 
+    @logged
     def await_all_mupf(command_cls):
         pass
 
+    @logged
     def resolve_by_id_mupf(cls, ccid, result):
         with cls._global_mutex:
             if cls._is_from_future_mupf(ccid):  #pylint: disable=no-value-for-parameter
@@ -55,10 +61,12 @@ class MetaCommand(type):
             else:
                 cls._unresolved[ccid].result = result
 
+    @logged
     def _is_from_future_mupf(cls, ccid):
         return (ccid not in cls._unresolved)   # this should be compared with `cls._ccid_counter`
 
 
+@logged
 def create_command_class_for_client(client):
     """
     Return a class "binded" to the `client`.
@@ -82,6 +90,7 @@ def create_command_class_for_client(client):
         _ccid_counter = 0
         _legal_names = ['*first*', '*last*', '*install*', '*features*']
 
+        @logged
         def __init__(self, cmd_name, notification=False):
             self._ccid = None
             self._cmd_name = cmd_name
@@ -90,6 +99,7 @@ def create_command_class_for_client(client):
             self._result = None
             self._is_error = False
 
+        @logged
         def __call__(self, *args, **kwargs):
             # TODO: notifications can be send multiple times and commands only once!
             if self._cmd_name not in Command._legal_names:
@@ -122,6 +132,7 @@ def create_command_class_for_client(client):
                     del Command._resolved_in_advance[self._ccid]
             return self
 
+        @logged
         def run(self, *args, **kwargs):
             ntf = self._notification
             self._notification = True
@@ -131,6 +142,7 @@ def create_command_class_for_client(client):
 
         # client.command.print.notification('no result value')
 
+        @logged
         def _jsonify(self, args, kwargs):
             return [
                 (2 if self._notification else 0),   # Magic numbers: mode
@@ -143,11 +155,13 @@ def create_command_class_for_client(client):
             ]
 
         @property
+        @logged
         def wait(self):
             self._is_resolved.wait()
             return self
 
         @property
+        @logged
         def result(self):
             self.wait
             if self._is_error:
@@ -155,6 +169,7 @@ def create_command_class_for_client(client):
             return self._result
 
         @result.setter
+        @logged
         def result(self, result):
             if self._notification:
                 raise RuntimeError('cannot resolve notification')
@@ -169,6 +184,7 @@ def create_command_class_for_client(client):
                 del Command._unresolved[self._ccid]
                 self._is_resolved.set()
 
+        @logged
         def is_in_bad_state(self):
             if not self._is_resolved.is_set():
                 return True

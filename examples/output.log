@@ -1,0 +1,206 @@
+INFO:mupf:,-< _app.py/__init__:0 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:'-> _app.py/__init__:0 => None
+INFO:mupf:,-< _app.py/open_with_client:1 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:|,-< _app.py/__enter__:2 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:||,-< _app.py/is_opened:3 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:||'-> _app.py/is_opened:3 => False
+INFO:mupf:||,-< _app.py/open:4 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:|||,-< _app.py/_server_thread_body:5 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:||'-> _app.py/open:4 => <mupf._app.App object at 0x000002C5FFFAFE80>
+INFO:mupf:|||,-< _app.py/is_opened:6 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:|||'-> _app.py/is_opened:6 => True
+INFO:mupf:|'-> _app.py/__enter__:2 => <mupf._app.App object at 0x000002C5FFFAFE80>
+INFO:mupf:||,-< _app.py/summon_client:7 ((<mupf._app.App object at 0x000002C5FFFAFE80>, <class 'mupf.client._webbrowser.WebBrowser'>),{})
+INFO:mupf:|||,-< _app.py/get_unique_client_id:8 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:|||'-> _app.py/get_unique_client_id:8 => 'ljIaYC7gSmG-IP7rHxt0rA'
+INFO:mupf:|||,-< client/_base.py/__init__:9 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, <mupf._app.App object at 0x000002C5FFFAFE80>, 'ljIaYC7gSmG-IP7rHxt0rA'),{})
+INFO:mupf:||||,-< _command.py/create_command_class_for_client:10 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>,),{})
+INFO:mupf:|||||,-< _command.py/__init__:11 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 'Command', (), {'__module__': 'mupf._command', '__qualname__': 'create_command_class_for_client.<locals>.Command', '__doc__': '\n        Class of all possible commands for a specific client. Object represents a specific (named) command.\n\n        For details of the class structure see description of `MetaCommand`.\n\n        The object is a callable. Its call executes the command. The `result` property holds the result of the command,\n        however if it is attempted to read the `result` when it is not already known, the current thread will be blocked\n        until the result is known. If an error occured during execution, attempt to read the `result` will rise an\n        appropriate exception.\n        ', '_client_wr': <weakref at 0x000002C582929278; to 'WebBrowser' at 0x000002C582910B00>, '_unresolved': {}, '_resolved_in_advance': [], '_global_mutex': <unlocked _thread.RLock object owner=0 count=0 at 0x000002C581A365A8>, '_ccid_counter': 0, '_legal_names': ['*first*', '*last*', '*install*', '*features*'], '__init__': <function logged.<locals>.wrap at 0x000002C58291FB70>, '__call__': <function logged.<locals>.wrap at 0x000002C58291FC80>, 'run': <function logged.<locals>.wrap at 0x000002C58291FD90>, '_jsonify': <function logged.<locals>.wrap at 0x000002C58291FEA0>, 'wait': <property object at 0x000002C5829292C8>, 'result': <property object at 0x000002C582929368>, 'is_in_bad_state': <function logged.<locals>.wrap at 0x000002C58292E1E0>}),{})
+INFO:mupf:|||||'-> _command.py/__init__:11 => None
+INFO:mupf:||||'-> _command.py/create_command_class_for_client:10 => <class 'mupf._command.create_command_class_for_client.<locals>.Command'>
+INFO:mupf:||||,-< _command.py/__init__:12 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291D828>, '*first*'),{})
+INFO:mupf:||||'-> _command.py/__init__:12 => None
+INFO:mupf:||||,-< _command.py/__call__:13 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291D828>,),{})
+INFO:mupf:|||||,-< _command.py/_jsonify:14 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291D828>, (), {}),{})
+INFO:mupf:|||||'-> _command.py/_jsonify:14 => [0, 0, '*first*', {'args': (), 'kwargs': {}}]
+INFO:mupf:||||'-> _command.py/__call__:13 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291D828>
+INFO:mupf:|||'-> client/_base.py/__init__:9 => None
+INFO:mupf:|||,-< client/_base.py/install_javascript:15 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>,),{'src': 'mupf/core'})
+INFO:mupf:||||,-< _command.py/__init__:16 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>, '*install*'),{})
+INFO:mupf:||||'-> _command.py/__init__:16 => None
+INFO:mupf:||||,-< _command.py/__call__:17 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>,),{'src': 'mupf/core', 'remove': True})
+INFO:mupf:|||||,-< _command.py/_jsonify:18 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>, (), {'src': 'mupf/core', 'remove': True}),{})
+INFO:mupf:|||||'-> _command.py/_jsonify:18 => [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
+INFO:mupf:|||||,-< client/_base.py/send_json:19 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]),{})
+INFO:mupf:|||||'-> client/_base.py/send_json:19 => None
+INFO:mupf:||||'-> _command.py/__call__:17 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>
+INFO:mupf:|||'-> client/_base.py/install_javascript:15 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>
+INFO:mupf:|||,-< _app.py/_process_HTTP_request:20 ((<mupf._app.App object at 0x000002C5FFFAFE80>, '/', Headers([('Host', '127.0.0.1:57107'), ('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'), ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), ('Accept-Language', 'pl,en-US;q=0.7,en;q=0.3'), ('Accept-Encoding', 'gzip, deflate'), ('Connection', 'keep-alive'), ('Upgrade-Insecure-Requests', '1')])),{})
+INFO:mupf:|||'-> _app.py/_process_HTTP_request:20 => (<HTTPStatus.OK: 200>, Headers([('Content-Type', 'text/html; charset=utf-8')]), b'<!DOCTYPE html>\n<html>\n    <head>\n        <script id="mupf-bootstrap" src="/mupf/bootstrap" async></script>\n    </head>\n    <body></body>\n</html>\n')
+INFO:mupf:|||,-< _app.py/_process_HTTP_request:21 ((<mupf._app.App object at 0x000002C5FFFAFE80>, '/mupf/bootstrap', Headers([('Host', '127.0.0.1:57107'), ('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'), ('Accept', '*/*'), ('Accept-Language', 'pl,en-US;q=0.7,en;q=0.3'), ('Accept-Encoding', 'gzip, deflate'), ('Referer', 'http://127.0.0.1:57107/'), ('Connection', 'keep-alive')])),{})
+INFO:mupf:|||'-> _app.py/_process_HTTP_request:21 => (<HTTPStatus.OK: 200>, Headers([('Content-Type', 'application/javascript')]), b'(() => {    // This is unnamed function to prevent scope pollution\n"use strict"\n// Main script run after the documnet is loaded\nfunction main() {\n\n    // Main library object (skeleton)\n    window.mupf = {cmd: {}, hk:{}, pending: 0, fts: {}}\n\n    // sends a data packet to the Python side\n    mupf.send = function(msg) {\n        mupf.ws.send(JSON.stringify(msg))\n        if (msg[0]==1){    // mode=res\n            mupf.pending--\n            if (mupf.last_resolve && mupf.pending == 1)\n                mupf.last_resolve()\n        }\n    }\n\n    class MupfError extends Error {\n        constructor(mn, ...params){\n            super(...params)\n            this.mupfname = mn\n    }}\n\n    mupf.MupfError = MupfError\n\n    mupf.hk.fndcmd = (n) => mupf.cmd[n]\n    mupf.hk.ccall = (f, pyld) => f.call(window, pyld.args, pyld.kwargs)\n    mupf.hk.getmsg = (ev) => JSON.parse(ev.data)\n    // chainable:\n    mupf.hk.presend = (msg, cmd) => [msg, cmd]\n    mupf.hk.postntf = (msg, cmd) => [msg, cmd]  // TODO: temporarily removed - recreate\n    mupf.hk.postcmd = (msg, cmd) => [msg, cmd]\n    mupf.hk.preclose = () => undefined\n    \n    mupf.res = function(msg, result, cmd) {\n        if (result === undefined) result = null\n        let msgcmd = mupf.hk.presend([1,msg[1],0,{result:result}], cmd)\n        mupf.send(msgcmd[0])\n        mupf.hk.postcmd(msgcmd[0], msgcmd[1]) // this line tries to execute when the cmd does not exist\n    }\n\n    mupf.recv = function(msg){\n        let mode = msg[0]\n        if (mode === 0){\n            mupf.pending++\n            let result = null\n            let cmd = mupf.hk.fndcmd(msg[2])\n            try {\n                if (cmd===undefined) throw new MupfError(\'CommandUnknownError\', msg[2])\n                result = mupf.hk.ccall(cmd, msg[3])\n                if (result instanceof Promise)\n                    result.then((r) => mupf.res(msg, r, cmd))\n                else\n                    mupf.res(msg,result,cmd)\n            } catch (err) {\n                let errname = err.constructor.name\n                if (errname==\'MupfError\') errname = err.mupfname\n                mupf.send([1, msg[1], 1, {result:[errname, err.message, err.fileName, err.lineNumber, err.columnNumber]}])   // this is not good, becouse "Error/nMupfError/nUnable to load script" will be send\n                return\n            }\n            return\n\n        } else if (mode === 2){\n            let cmd = mupf.hk.fndcmd(msg[2])\n            if (cmd === undefined) return  // maybe postntf should be called when there is no cmd?\n            mupf.hk.ccall(cmd, msg[3])\n            // here `postntf`\n            return\n\n        } else if (mode === 6){\n            mupf.clb.waiting[msg[1]](msg[3])\n        } else {\n            // unknown mode\n        }\n    }\n\n\n    // command run at the very beginning, setups `window.mupf`\n    mupf.cmd[\'*first*\'] = async function(args, kwargs){\n        document.head.removeChild(document.getElementById(\'mupf-bootstrap\'))\n        Object.assign(window.mupf.fts, kwargs)\n        mupf.cid = window.location.hash.substring(1)                       // client id\n        mupf.ws = await new Promise((ok, no) => {                          // web socket\n            let ws = new WebSocket("ws://"+window.location.host+"/mupf/ws")\n            ws.onopen = () => { ok(ws) }\n            ws.onerror = (e) => { no(e) }   // co z tym errorerm?\n            ws.onmessage = (ev) => {mupf.recv(mupf.hk.getmsg(ev)) }\n            ws.onclose = (e) => {}\n        })\n        window.addEventListener(\'unload\',async function(e){await mupf.send([7,0,\'*close*\',{result:null}])}) // TODO: this send as ntf\n        return {cid: mupf.cid, ua: navigator.userAgent}\n    }\n\n    mupf.cmd[\'*last*\'] = async function(args, kwargs){\n        // Not so fast, what if commands are still hanging?\n        if (mupf.pending > 1) await new Promise((ok, no) => {mupf.last_resolve = ok})\n        mupf.hk.preclose()\n        window.mupf.ws.close(1000, "*last*")\n        // This command returns `null` through a closed websocket. Is this a problem?\n    }\n\n    //*install* a script, any script in particular, more commands may be installed this way\n    mupf.cmd[\'*install*\'] = async function(args, kwargs){\n        let sc = document.createElement(\'script\')\n        await new Promise((ok, no) => {\n            if (args.length == 1) sc.innerHTML = args[0]\n            document.head.appendChild(sc)\n            if (kwargs.hasOwnProperty(\'src\')) {\n                sc.addEventListener(\'load\', () => {ok()})\n                sc.addEventListener(\'error\', (e) => {no(new mupf.MupfError(\'MupfError\',\'Unable to load script src="\'+e.target.src+\'"\'))})\n                sc.src = kwargs[\'src\']\n            }\n            else ok()\n        })\n        if (kwargs.remove) document.head.removeChild(sc)\n    }\n\n    mupf.cmd[\'*features*\'] = function(){return mupf.fts}\n\n    // The `*first*` command is a special case. In all respects it is a normal command except for\n    // that it cannot be sent from Python, because when it is called there is no websocket present\n    // yet. This is due to the fact, that `__first__` creates this websocket. On the Python side\n    // the sending of this command is supressed, but somwhere it must be called eventualy. This is\n    // here. No other command is ever called like that, only `__first__`.\n\n    mupf.recv([0,0,"*first*",{args:[],kwargs:{\n        _user_feature: (2+2 == 4)\n    }}])\n\n    // The `*last*` command is also a special case. This command is symetrical to `*first*` in\n    // being special -- it is not in a notification mode, but it cannot send its result\n    // because it closes the websocket. But the \n    \n}   // end of `main()`\n\n// This part is taken from jQuery - it ensures that `main()` is run exactly once after the document\n// is fully loaded\nfunction run_main() {\n    document.removeEventListener("DOMContentLoaded", run_main)\n    window.removeEventListener("load", run_main)\n    main()\n}\n\nif (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll))\n    window.setTimeout(main)\nelse {\n    document.addEventListener("DOMContentLoaded", run_main)\n    window.addEventListener("load", run_main)\n}\n\n})()   // run the anonymous function\n')
+INFO:mupf:|||,-< _app.py/_process_HTTP_request:22 ((<mupf._app.App object at 0x000002C5FFFAFE80>, '/mupf/ws', Headers([('Host', '127.0.0.1:57107'), ('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'), ('Accept', 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'), ('Accept-Language', 'pl,en-US;q=0.7,en;q=0.3'), ('Accept-Encoding', 'gzip, deflate'), ('Sec-WebSocket-Version', '13'), ('Origin', 'http://127.0.0.1:57107'), ('Sec-WebSocket-Extensions', 'permessage-deflate'), ('Sec-WebSocket-Key', 'rMcRySNoM0mnjwWnfIo6Sw=='), ('Connection', 'keep-alive, Upgrade'), ('Pragma', 'no-cache'), ('Cache-Control', 'no-cache'), ('Upgrade', 'websocket')])),{})
+INFO:mupf:|||'-> _app.py/_process_HTTP_request:22 => None
+INFO:mupf:|||,-< _app.py/_websocket_request:23 ((<mupf._app.App object at 0x000002C5FFFAFE80>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '/mupf/ws'),{})
+INFO:mupf:|||'-> _app.py/_websocket_request:23 => <coroutine object App._websocket_request at 0x000002C582A741C8>
+INFO:mupf:|||,-< client/_base.py/decode_json:24 ((None, '[1,0,0,{"result":{"cid":"ljIaYC7gSmG-IP7rHxt0rA","ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]'),{})
+INFO:mupf:|||'-> client/_base.py/decode_json:24 => [1, 0, 0, {'result': {'cid': 'ljIaYC7gSmG-IP7rHxt0rA', 'ua': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'}}]
+INFO:mupf:|||,-< _command.py/resolve_by_id_mupf:25 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>,),{'ccid': 0, 'result': None})
+INFO:mupf:||||,-< _command.py/_is_from_future_mupf:26 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 0),{})
+INFO:mupf:||||'-> _command.py/_is_from_future_mupf:26 => False
+INFO:mupf:|||'-> _command.py/resolve_by_id_mupf:25 => None
+INFO:mupf:|||,-< client/_base.py/await_connection:27 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>,),{})
+INFO:mupf:||||,-< _command.py/is_in_bad_state:28 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291D828>,),{})
+INFO:mupf:||||'-> _command.py/is_in_bad_state:28 => False
+INFO:mupf:||||,-< client/_base.py/send_json:29 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]),{})
+INFO:mupf:||||'-> client/_base.py/send_json:29 => None
+INFO:mupf:|||'-> client/_base.py/await_connection:27 => <mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>
+INFO:mupf:|||,-< client/_base.py/create_send_task:30 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]'),{})
+INFO:mupf:|||'-> client/_base.py/create_send_task:30 => None
+INFO:mupf:|||,-< _app.py/_process_HTTP_request:31 ((<mupf._app.App object at 0x000002C5FFFAFE80>, '/mupf/core', Headers([('Host', '127.0.0.1:57107'), ('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'), ('Accept', '*/*'), ('Accept-Language', 'pl,en-US;q=0.7,en;q=0.3'), ('Accept-Encoding', 'gzip, deflate'), ('Referer', 'http://127.0.0.1:57107/'), ('Connection', 'keep-alive')])),{})
+INFO:mupf:|||'-> _app.py/_process_HTTP_request:31 => (<HTTPStatus.OK: 200>, Headers([('Content-Type', 'application/javascript')]), b'"use strict"\nObject.freeze(Object.assign(window.mupf.fts, {\n    core_features:true, strict_feature_list:false, verbose_macros:false, friendly_obj_names:false, safe_dunders:true, garbage_collection:true, test_feature:true, another_test_feat:false\n}))\nwindow.mupf.obj = {\n    getid: function (obj) {\n        let id = 0\n        for (id in this._byid)\n            if (Object.is(this._byid[id], obj)) return Number(id)\n        id = this._idcounter\n        this._idcounter++\n        this._byid[id] = obj\n        return id\n    },\n    byid: function (id) { return this._byid[id] },\n    del: function (id) {\n        delete this._byid[id]\n    },\n    _byid: { 0: window },\n    _idcounter: 1\n}\nObject.keys(mupf.cmd).forEach((c) => mupf.cmd[c].noautoesc=true)\n\nmupf.cmd[\'*get*\'] = function (args, kwargs) {\n    let x = args[0][args[1]]\n    if (x === undefined) throw new mupf.MupfError(\'DOMAttributeError\', \'object has no attribute \\\'\' + args[1] + \'\\\'\')\n    return new mupf.esc.Any(x, args[0])\n}\n\nmupf.cmd[\'*set*\'] = function(args, kwargs) {\n    args[0][args[1]] = args[2]\n}\n\nmupf.cmd[\'*call*\'] = function(args, kwargs) {\n    let f = mupf.obj.byid(kwargs.id)\n    return f.apply(kwargs.this_, args)\n}\n\nmupf.cmd[\'*gc*\'] = function(args, kwargs) { mupf.obj.del(args[0]) }\nmupf.cmd[\'*gc*\'] .noautoesc = true\n\n\nmupf.cmd[\'*getcmds*\'] = function(){return Object.keys(mupf.cmd)}\nmupf.cmd[\'*getcmds*\'].noautoesc = true\nmupf.clb = {\n    newid: function() { return this._idcounter++ },\n    waiting: {},\n    _idcounter: 0,\n    _byid: {}\n}\nmupf.esc = {\n    "~": function(x, opt){\n        this._enhb.push(opt)\n        let r =  this.decode(x)\n        opt = this._enhb.pop()\n        if (opt.proms !== undefined){\n            console.log(opt.proms)\n        }\n        return r\n    },\n    "~~": function(x){ for(let i=0; i<x.length; i++) x[i] =  this.decode(x[i]); return x },\n    "~-": (x) => x,\n    "~@": (x) => mupf.obj.byid(mupf.esc.decode(x)),\n    "~$": function(ccid, name, argskwargs){ // This is almost exactly the same as `mupf.recv()`\n        let cmd = mupf.hk.fndcmd(name)\n        if (cmd===undefined) throw new mupf.MupfError(\'CommandUnknownError\', name)\n        if (argskwargs === undefined)\n            return cmd\n        else\n            throw new mupf.MupfError(\'NotImplementedError\', "compound commands")\n    },\n    "~S": (x) => special[ mupf.esc.decode(x)],\n    special: {\'undefined\': undefined, \'NaN\': NaN, \'Infinity\': Infinity, \'-Infinity\': -Infinity},\n    _enhb: [],\n    decode: function(x) {\n        if (Array.isArray(x)) {\n            if ((x.length > 1) && (typeof(x[0])==="string") && (x[0].substr(0,1)==="~") && (x[0]==="~" || mupf.esc._enhb.length > 0)) {\n                return mupf.esc[x[0]].apply(mupf.esc, x.slice(1))\n            }\n            for (let i=0; i<x.length; i++) x[i] = mupf.esc.decode(x[i])\n            return x\n        }\n        else if (x===null) return x\n        else if (typeof(x) === \'object\') {\n            for (let k of Object.keys(x)) x[k] = mupf.esc.decode(x[k])\n            return x\n        }\n        return x\n    },\n    _isesc: function(x){\n        return (Array.isArray(x) && (x.length > 1) && (typeof(x[0])==="string") && (x[0].substr(0,1)==="~"))\n    },\n    encode: function(x, enhb) {\n        if (enhb.noautoesc){\n            if  (mupf.esc._isesc(x)) {\n                enhb.c += 1\n                return ["~-", x]    // This is simple, but `noautoesc=true` commands cannot have complex objects in result\n            }\n            else\n                return x\n        }\n        if (x === null) return x\n        if (typeof(x) === \'object\' || typeof(x) === \'function\'){\n            let out\n            if (x.constructor === mupf.esc.Any){\n                out = mupf.esc.encode(x.obj, enhb)\n                if (mupf.esc._isesc(out) && out[0]==="~@" && x.obj.apply !== undefined) out[2] = mupf.obj.getid(x.this_)\n            } else {\n                out = ["~@", mupf.obj.getid(x), null]\n                enhb.c += 1\n            }\n            return out\n        }\n        if (typeof(x) === \'undefined\') {\n            enhb.c += 1\n            return ["~S", "undefined"]\n        }\n        return x\n    },\n    Any: class {\n        constructor(obj, this_) {\n            this.obj = obj\n            this.this_ = this_\n        }\n    }\n}\nmupf.hk.ccall = function(f, pyld) {\n    pyld = mupf.esc.decode(pyld)\n    return f.call(window, pyld.args, pyld.kwargs)  // this line is a bootstrap version of `ccall`\n}\n\nmupf.hk.presend = function(msg, cmd) {\n    let enhb = {c: 0, noautoesc: cmd.noautoesc}\n    if (msg[0] == 1)\n        msg[3].result = mupf.esc.encode(msg[3].result, enhb)\n    else if (msg[0] == 5) {\n        for (let i=0; i<msg[3].args.length; i++)\n            msg[3].args[i] = mupf.esc.encode(msg[3].args[i], enhb)\n    }\n\n    if (enhb.c > 0){\n        delete enhb.noautoesc\n        msg[3] = ["~", msg[3], enhb]\n    }\n    return [msg, cmd]\n}\n\nmupf.hk.fndcmd = (n) => {\n    if (typeof(n)==="string")\n        return mupf.cmd[n]\n    else if (typeof(n)==="number")\n    {\n        if (mupf.clb._byid[n]===undefined){\n            mupf.clb._byid[n] = async function(...args) {\n                let clbid = mupf.clb.newid()\n                let p = new Promise((ok, no) => { mupf.clb.waiting[clbid] = ok })\n                let msgrescmd = mupf.hk.presend([5, clbid, n, {args: args}], mupf.clb._byid[n])\n                mupf.send(msgrescmd[0])\n                return await p\n            }\n        }\n        return mupf.clb._byid[n]\n    }\n}\n')
+INFO:mupf:|||,-< client/_base.py/decode_json:32 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, '[1,1,0,{"result":null}]'),{})
+INFO:mupf:|||'-> client/_base.py/decode_json:32 => [1, 1, 0, {'result': None}]
+INFO:mupf:|||,-< _command.py/resolve_by_id_mupf:33 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 1, None),{})
+INFO:mupf:||||,-< _command.py/_is_from_future_mupf:34 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 1),{})
+INFO:mupf:||||'-> _command.py/_is_from_future_mupf:34 => False
+INFO:mupf:|||'-> _command.py/resolve_by_id_mupf:33 => None
+INFO:mupf:|||,-< _command.py/__init__:35 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>, '*features*'),{})
+INFO:mupf:|||'-> _command.py/__init__:35 => None
+INFO:mupf:|||,-< _command.py/__call__:36 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>,),{})
+INFO:mupf:||||,-< _command.py/_jsonify:37 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>, (), {}),{})
+INFO:mupf:||||'-> _command.py/_jsonify:37 => [0, 2, '*features*', {'args': (), 'kwargs': {}}]
+INFO:mupf:||||,-< client/_base.py/send_json:38 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 2, '*features*', {'args': (), 'kwargs': {}}]),{})
+INFO:mupf:|||||,-< client/_base.py/create_send_task:39 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[0,2,"*features*",{"args":[],"kwargs":{}}]'),{})
+INFO:mupf:|||||'-> client/_base.py/create_send_task:39 => None
+INFO:mupf:||||'-> client/_base.py/send_json:38 => None
+INFO:mupf:|||'-> _command.py/__call__:36 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C58291DB00>
+INFO:mupf:|||,-< client/_base.py/decode_json:40 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, '[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]'),{})
+INFO:mupf:|||'-> client/_base.py/decode_json:40 => [1, 2, 0, {'result': {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}}]
+INFO:mupf:|||,-< _command.py/resolve_by_id_mupf:41 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 2, {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}),{})
+INFO:mupf:||||,-< _command.py/_is_from_future_mupf:42 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 2),{})
+INFO:mupf:||||'-> _command.py/_is_from_future_mupf:42 => False
+INFO:mupf:|||'-> _command.py/resolve_by_id_mupf:41 => None
+INFO:mupf:|||,-< _command.py/__init__:43 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A87048>, '*getcmds*'),{})
+INFO:mupf:|||'-> _command.py/__init__:43 => None
+INFO:mupf:|||,-< _command.py/__call__:44 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A87048>,),{})
+INFO:mupf:||||,-< _command.py/_jsonify:45 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A87048>, (), {}),{})
+INFO:mupf:||||'-> _command.py/_jsonify:45 => [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}]
+INFO:mupf:||||,-< client/_base.py/send_json:46 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}]),{})
+INFO:mupf:|||||,-< client/_base.py/create_send_task:47 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]'),{})
+INFO:mupf:||||'-> client/_base.py/send_json:46 => None
+INFO:mupf:|||||'-> client/_base.py/create_send_task:47 => None
+INFO:mupf:|||'-> _command.py/__call__:44 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A87048>
+INFO:mupf:|||,-< client/_base.py/decode_json:48 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, '[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]'),{})
+INFO:mupf:|||'-> client/_base.py/decode_json:48 => [1, 3, 0, {'result': ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']}]
+INFO:mupf:|||,-< _command.py/resolve_by_id_mupf:49 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 3, ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']),{})
+INFO:mupf:||||,-< _command.py/_is_from_future_mupf:50 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 3),{})
+INFO:mupf:||||'-> _command.py/_is_from_future_mupf:50 => False
+INFO:mupf:|||'-> _command.py/resolve_by_id_mupf:49 => None
+INFO:mupf:|||,-< client/_base.py/summoned:51 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>,),{})
+INFO:mupf:|||'-> client/_base.py/summoned:51 => None
+INFO:mupf:||'-> _app.py/summon_client:7 => <mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>
+INFO:mupf:'-> _app.py/open_with_client:1 => <mupf._app.App object at 0x000002C5FFFAFE80>
+INFO:mupf:|,-< _app.py/__enter__:52 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:||,-< _app.py/is_opened:53 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:||'-> _app.py/is_opened:53 => True
+INFO:mupf:|'-> _app.py/__enter__:52 => <mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>
+INFO:mupf:|,-< _command.py/__init__:54 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, '*get*'),{})
+INFO:mupf:|'-> _command.py/__init__:54 => None
+INFO:mupf:|,-< _command.py/__call__:55 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, ["~@",0], 'document'),{})
+INFO:mupf:||,-< _command.py/_jsonify:56 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, (["~@",0], 'document'), {}),{})
+INFO:mupf:||'-> _command.py/_jsonify:56 => [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
+INFO:mupf:||,-< client/_base.py/send_json:57 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]),{})
+INFO:mupf:|||,-< client/_base.py/create_send_task:58 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]'),{})
+INFO:mupf:||'-> client/_base.py/send_json:57 => None
+INFO:mupf:|||'-> client/_base.py/create_send_task:58 => None
+INFO:mupf:|'-> _command.py/__call__:55 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>
+INFO:mupf:|,-< client/_base.py/decode_json:59 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, '[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]'),{})
+INFO:mupf:||,-< client/_base.py/get_remote_obj:60 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, 1, None),{})
+INFO:mupf:|||,-< client/_base.py/get_remote_obj:61 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, None),{})
+INFO:mupf:|||'-> client/_base.py/get_remote_obj:61 => None
+INFO:mupf:||'-> client/_base.py/get_remote_obj:60 => <mupf._remote.RemoteObj object at 0x000002C582A87278>
+INFO:mupf:|'-> client/_base.py/decode_json:59 => [1, 4, 0, {'result': <mupf._remote.RemoteObj object at 0x000002C582A87278>}]
+INFO:mupf:|,-< _command.py/resolve_by_id_mupf:62 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 4, <mupf._remote.RemoteObj object at 0x000002C582A87278>),{})
+INFO:mupf:||,-< _command.py/_is_from_future_mupf:63 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 4),{})
+INFO:mupf:||'-> _command.py/_is_from_future_mupf:63 => False
+INFO:mupf:|'-> _command.py/resolve_by_id_mupf:62 => None
+INFO:mupf:|,-< _command.py/__init__:64 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, '*get*'),{})
+INFO:mupf:|'-> _command.py/__init__:64 => None
+INFO:mupf:|,-< _command.py/__call__:65 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, ["~@",1], 'body'),{})
+INFO:mupf:||,-< _command.py/_jsonify:66 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, (["~@",1], 'body'), {}),{})
+INFO:mupf:||'-> _command.py/_jsonify:66 => [0, 5, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}]
+INFO:mupf:||,-< client/_base.py/send_json:67 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 5, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}]),{})
+INFO:mupf:|||,-< client/_base.py/create_send_task:68 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[0,5,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]'),{})
+INFO:mupf:||'-> client/_base.py/send_json:67 => None
+INFO:mupf:|||'-> client/_base.py/create_send_task:68 => None
+INFO:mupf:|'-> _command.py/__call__:65 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>
+INFO:mupf:|,-< client/_base.py/decode_json:69 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, '[1,5,0,["~",{"result":["~@",2,null]},{"c":1}]]'),{})
+INFO:mupf:||,-< client/_base.py/get_remote_obj:70 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, 2, None),{})
+INFO:mupf:|||,-< client/_base.py/get_remote_obj:71 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, None),{})
+INFO:mupf:|||'-> client/_base.py/get_remote_obj:71 => None
+INFO:mupf:||'-> client/_base.py/get_remote_obj:70 => <mupf._remote.RemoteObj object at 0x000002C582A872E8>
+INFO:mupf:|'-> client/_base.py/decode_json:69 => [1, 5, 0, {'result': <mupf._remote.RemoteObj object at 0x000002C582A872E8>}]
+INFO:mupf:|,-< _command.py/resolve_by_id_mupf:72 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 5, <mupf._remote.RemoteObj object at 0x000002C582A872E8>),{})
+INFO:mupf:||,-< _command.py/_is_from_future_mupf:73 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 5),{})
+INFO:mupf:||'-> _command.py/_is_from_future_mupf:73 => False
+INFO:mupf:|'-> _command.py/resolve_by_id_mupf:72 => None
+INFO:mupf:|,-< _command.py/__init__:74 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, '*gc*'),{})
+INFO:mupf:|'-> _command.py/__init__:74 => None
+INFO:mupf:|,-< _command.py/run:75 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, 1),{})
+INFO:mupf:||,-< _command.py/__call__:76 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, 1),{})
+INFO:mupf:|||,-< _command.py/_jsonify:77 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, (1,), {}),{})
+INFO:mupf:|||'-> _command.py/_jsonify:77 => [2, 6, '*gc*', {'args': (1,), 'kwargs': {}}]
+INFO:mupf:|||,-< client/_base.py/send_json:78 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [2, 6, '*gc*', {'args': (1,), 'kwargs': {}}]),{})
+INFO:mupf:||||,-< client/_base.py/create_send_task:79 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[2,6,"*gc*",{"args":[1],"kwargs":{}}]'),{})
+INFO:mupf:|||'-> client/_base.py/send_json:78 => None
+INFO:mupf:||||'-> client/_base.py/create_send_task:79 => None
+INFO:mupf:||'-> _command.py/__call__:76 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>
+INFO:mupf:|'-> _command.py/run:75 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>
+INFO:mupf:|,-< _command.py/__init__:80 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, '*set*'),{})
+INFO:mupf:|'-> _command.py/__init__:80 => None
+INFO:mupf:|,-< _command.py/__call__:81 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, ["~@",2], 'innerHTML', 'Hello, World!'),{})
+INFO:mupf:||,-< _command.py/_jsonify:82 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, (["~@",2], 'innerHTML', 'Hello, World!'), {}),{})
+INFO:mupf:||'-> _command.py/_jsonify:82 => [0, 7, '*set*', {'args': (["~@",2], 'innerHTML', 'Hello, World!'), 'kwargs': {}}]
+INFO:mupf:||,-< client/_base.py/send_json:83 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 7, '*set*', {'args': (["~@",2], 'innerHTML', 'Hello, World!'), 'kwargs': {}}]),{})
+INFO:mupf:|||,-< client/_base.py/create_send_task:84 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[0,7,"*set*",["~",{"args":[["~@",2],"innerHTML","Hello, World!"],"kwargs":{}},{"c":1}]]'),{})
+INFO:mupf:||'-> client/_base.py/send_json:83 => None
+INFO:mupf:|||'-> client/_base.py/create_send_task:84 => None
+INFO:mupf:|'-> _command.py/__call__:81 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>
+INFO:mupf:|,-< client/_base.py/decode_json:85 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, '[1,7,0,{"result":null}]'),{})
+INFO:mupf:|'-> client/_base.py/decode_json:85 => [1, 7, 0, {'result': None}]
+INFO:mupf:|,-< _command.py/resolve_by_id_mupf:86 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 7, None),{})
+INFO:mupf:||,-< _command.py/_is_from_future_mupf:87 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 7),{})
+INFO:mupf:||'-> _command.py/_is_from_future_mupf:87 => False
+INFO:mupf:|'-> _command.py/resolve_by_id_mupf:86 => None
+INFO:mupf:|,-< _command.py/__init__:88 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, '*gc*'),{})
+INFO:mupf:|'-> _command.py/__init__:88 => None
+INFO:mupf:|,-< _command.py/run:89 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, 2),{})
+INFO:mupf:||,-< _command.py/__call__:90 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, 2),{})
+INFO:mupf:|||,-< _command.py/_jsonify:91 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>, (2,), {}),{})
+INFO:mupf:|||'-> _command.py/_jsonify:91 => [2, 8, '*gc*', {'args': (2,), 'kwargs': {}}]
+INFO:mupf:|||,-< client/_base.py/send_json:92 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [2, 8, '*gc*', {'args': (2,), 'kwargs': {}}]),{})
+INFO:mupf:||||,-< client/_base.py/create_send_task:93 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[2,8,"*gc*",{"args":[2],"kwargs":{}}]'),{})
+INFO:mupf:|||'-> client/_base.py/send_json:92 => None
+INFO:mupf:||||'-> client/_base.py/create_send_task:93 => None
+INFO:mupf:||'-> _command.py/__call__:90 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>
+INFO:mupf:|'-> _command.py/run:89 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582910128>
+INFO:mupf:|,-< _app.py/__exit__:94 ((<mupf._app.App object at 0x000002C5FFFAFE80>, None, None, None),{})
+INFO:mupf:||,-< _app.py/close:95 ((<mupf._app.App object at 0x000002C5FFFAFE80>,),{})
+INFO:mupf:|||,-< client/_base.py/close:96 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>,),{'_dont_remove_from_app': True})
+INFO:mupf:||||,-< _command.py/__init__:97 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A73EF0>, '*last*'),{})
+INFO:mupf:||||'-> _command.py/__init__:97 => None
+INFO:mupf:||||,-< _command.py/__call__:98 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A73EF0>,),{})
+INFO:mupf:|||||,-< _command.py/_jsonify:99 ((<mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A73EF0>, (), {}),{})
+INFO:mupf:|||||'-> _command.py/_jsonify:99 => [0, 9, '*last*', {'args': (), 'kwargs': {}}]
+INFO:mupf:|||||,-< client/_base.py/send_json:100 ((<mupf.client._webbrowser.WebBrowser object at 0x000002C582910B00>, [0, 9, '*last*', {'args': (), 'kwargs': {}}]),{})
+INFO:mupf:||||||,-< client/_base.py/create_send_task:101 ((<_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x000002C58291DF28>, '[0,9,"*last*",{"args":[],"kwargs":{}}]'),{})
+INFO:mupf:|||||'-> client/_base.py/send_json:100 => None
+INFO:mupf:||||||'-> client/_base.py/create_send_task:101 => None
+INFO:mupf:||||'-> _command.py/__call__:98 => <mupf._command.create_command_class_for_client.<locals>.Command object at 0x000002C582A73EF0>
+INFO:mupf:||||,-< _command.py/resolve_all_mupf:102 ((<class 'mupf._command.create_command_class_for_client.<locals>.Command'>, ClientClosedNormally()),{})
+INFO:mupf:||||'-> _command.py/resolve_all_mupf:102 => None
+INFO:mupf:|||'-> client/_base.py/close:96 => None
+INFO:mupf:||'-> _app.py/close:95 => None
+INFO:mupf:|'-> _app.py/__exit__:94 => None
+INFO:mupf:|||'-> _app.py/_server_thread_body:5 => None

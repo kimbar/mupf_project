@@ -1,3 +1,6 @@
+import logging
+logging.basicConfig(filename='callback.log', filemode='w', level=logging.INFO)
+
 import mupf
 import hashlib
 
