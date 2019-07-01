@@ -41,6 +41,7 @@ class MetaCommand(type):
                 if unres[-1]._is_resolved.is_set():
                     raise RuntimeError("Command already resolved")
             for cmd in unres:
+                log_resolving(cmd)
                 cmd._is_error = isinstance(result, Exception)
                 cmd._result = result
             cls._unresolved.clear()
@@ -54,17 +55,16 @@ class MetaCommand(type):
     @logged
     def resolve_by_id_mupf(cls, ccid, result):
         with cls._global_mutex:
-            if cls._is_from_future_mupf(ccid):  #pylint: disable=no-value-for-parameter
+            if (ccid not in cls._unresolved):  #pylint: disable=no-value-for-parameter # this should be compared with `cls._ccid_counter`
                 if result is not None:
                     raise RuntimeError("only `None` result allowed for commands from the future")
                 cls._resolved_in_advance.append(ccid)
             else:
                 cls._unresolved[ccid].result = result
 
-    @logged
-    def _is_from_future_mupf(cls, ccid):
-        return (ccid not in cls._unresolved)   # this should be compared with `cls._ccid_counter`
-
+@logged
+def log_resolving(cmd):
+    pass
 
 @logged
 def create_command_class_for_client(client):
@@ -103,7 +103,8 @@ def create_command_class_for_client(client):
         def __call__(self, *args, **kwargs):
             # TODO: notifications can be send multiple times and commands only once!
             if self._cmd_name not in Command._legal_names:
-                print('*** Warning, there is no `{}` command ***'.format(self._cmd_name))
+                # print('*** Warning, there is no `{}` command ***'.format(self._cmd_name))
+                pass
             if self._is_resolved.is_set():
                 self._result = None
                 self._is_error = False

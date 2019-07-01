@@ -103,6 +103,7 @@ class App:
                 server.close()
                 self._event_loop.run_until_complete(server.wait_closed())
                 self._event_loop.close()
+                log_event_loop_closed()
                 self._server_closed_mutex.set()
 
     @logged
@@ -220,7 +221,7 @@ class App:
     @logged
     async def _websocket_request(self, new_websocket, path):
         raw_msg = await new_websocket.recv()
-        print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
+        # print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
         msg = client.Client.decode_json(None, raw_msg)
         result = msg[3]['result']
         cid = result['cid']
@@ -240,7 +241,7 @@ class App:
                 break_reason = e.reason
                 break
 
-            print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
+            # print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
             msg = the_client.decode_json(raw_msg)
 
             mode = msg[0]
@@ -266,6 +267,8 @@ class App:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())    # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*` didn't close them
         else:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
+
+        log_websocket_request_end()
     
     @logged
     def piggyback_call(self, function, *args):
@@ -273,3 +276,11 @@ class App:
 
     def __repr__(self):
         return "<App>"
+
+@logged
+def log_websocket_request_end():
+    pass
+
+@logged
+def log_event_loop_closed():
+    pass

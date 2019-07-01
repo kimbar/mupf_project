@@ -1,6 +1,8 @@
 from . import _symbols as S
 import weakref
 
+from ._logging import logged
+
 class MetaRemoteObj(type):
 
     def __init__(cls, name, bases, dict_):
@@ -75,6 +77,7 @@ class CallbackTask:
     # TODO: this is very much a work in progress, serious rethinking
     # of this class is needed
 
+    @logged
     def __init__(self, client, ccid, noun, pyld):
         self._client = client
         self._ccid = ccid
@@ -85,6 +88,7 @@ class CallbackTask:
             self._noun = None
             self._args = pyld['args']
 
+    @logged
     def run(self):
         if self._noun is None:
             answer = self._func(*self._args)
@@ -92,6 +96,9 @@ class CallbackTask:
             return
         if self._noun == '*close*':
             return
+
+    def __repr__(self):
+        return "<CallbackTask {} {} {}>".format(getattr(self, '_noun', '?'), getattr(self, '_ccid', '?'), getattr(self, '_func', '-'))
 
 
 class CallbackJsonEsc:

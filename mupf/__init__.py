@@ -12,3 +12,4 @@
 from ._app import App
 from . import _symbols as S
 from . import _features as F
+from ._logging import enable_logging
