@@ -3,7 +3,7 @@ import threading
 from ._enhjson import EnhancedBlock, encode
 import time
 from ._remote import RemoteObj
-from ._logging import logged
+from ._logging import logged, loggable
 
 class MetaCommand(type):
     """
@@ -133,7 +133,7 @@ def create_command_class_for_client(client):
                     del Command._resolved_in_advance[self._ccid]
             return self
 
-        @logged
+        @loggable
         def run(self, *args, **kwargs):
             ntf = self._notification
             self._notification = True

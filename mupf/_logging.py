@@ -11,6 +11,7 @@ thread_number_by_threadid = {}
 threads = []
 call_count = {}
 
+_loggables = []
 
 def enable_logging(filename):
     logging.basicConfig(level=logging.DEBUG)
@@ -18,11 +19,24 @@ def enable_logging(filename):
     hand.setFormatter(logging.Formatter(fmt='[%(name)s] %(message)s'))
     logging.getLogger('').addHandler(hand)
 
+def loggable(function):
+    global _loggables
+    head = function.__code__.co_filename
+    tail = ""
+    funcname = []
+    while tail != 'mupf':
+        funcname.append(tail)
+        head, tail = os.path.split(head)
+    funcname.reverse()
+    funcname = "/".join(funcname) + function.__qualname__
+    _loggables.append(funcname)
+
+    return function
 
 def logged(f):
 
     def wrap(*args, **kwargs):
-        global call_id, indent_by_threadid, lock
+        global indent_by_threadid, lock
         with lock:
             thread = threading.get_ident()
             if thread not in indent_by_threadid:

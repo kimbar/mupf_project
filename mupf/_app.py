@@ -16,7 +16,7 @@ from ._macro import MacroByteStream
 from . import _features as F
 from . import _enhjson as enhjson
 
-from ._logging import logged
+from ._logging import logged, loggable
 
 class App:
     """
@@ -147,7 +147,7 @@ class App:
         else:
             return isinstance(self._event_loop, asyncio.events.AbstractEventLoop)
 
-    @logged
+    @loggable
     def close(self, wait=False):
         for cl in self._clients_by_cid.values():
             cl.close(_dont_remove_from_app=True)
@@ -156,6 +156,7 @@ class App:
         if wait:
             self._server_closed_mutex.wait()
 
+    @loggable
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))
         if url == ('', ''):
@@ -195,7 +196,7 @@ class App:
         else:
             return self._get_route_response(url)
 
-    @logged
+    @loggable
     def register_route(self, route, **kwargs):
         route = tuple(urllib.parse.urlparse('/'+route).path.split('/'))
         if route[0:2] == ('', 'mupf') or route == ('', ''):
@@ -205,7 +206,7 @@ class App:
         else:
             raise TypeError('route destination required')
 
-    @logged
+    @loggable
     def _get_route_response(self, route):
         if route in self._file_routes:
             return (
@@ -218,7 +219,7 @@ class App:
         else:
             pass  # 404
 
-    @logged
+    @loggable
     async def _websocket_request(self, new_websocket, path):
         raw_msg = await new_websocket.recv()
         # print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
