@@ -1,50 +1,26 @@
-[mupf] th-M ┌─ _app.py/App.__init__-0                                                  ( <App> )
-[mupf] th-M └─ _app.py/App.__init__-0                                                    => None
-[mupf] th-M ┌─ _app.py/App.__enter__-0                                                 ( <App> )
-[mupf] th-M │┌─ _app.py/App.is_opened-0                                                ( <App> )
-[mupf] th-M │└─ _app.py/App.is_opened-0                                                  => False
-[mupf] th-M │┌─ _app.py/App.open-0                                                     ( <App> )
-[mupf] th-S ││········┌─ _app.py/App._server_thread_body-0                             ( <App> )
+[mupf] th-M ┌─ App.__init__-0                                                          ( <App> )
+[mupf] th-M └─ App.__init__-0                                                            => None
+[mupf] th-M ┌─ App.__enter__-0                                                         ( <App> )
+[mupf] th-M │┌─ App.is_opened-0                                                        ( <App> )
+[mupf] th-M │└─ App.is_opened-0                                                          => False
+[mupf] th-M │┌─ App.open-0                                                             ( <App> )
+[mupf] th-S ││········┌─ App._server_thread_body-0                                     ( <App> )
 [asyncio] Using selector: SelectSelector
-[mupf] th-M │└─ _app.py/App.open-0                                                       => <App>
-[mupf] th-M │┌─ _app.py/App.is_opened-1                                                ( <App> )
-[mupf] th-M │└─ _app.py/App.is_opened-1                                                  => True
-[mupf] th-M └─ _app.py/App.__enter__-0                                                   => <App>
-[mupf] th-M ┌─ _app.py/App.summon_client-0                                             ( <App> )
-[mupf] th-M │┌─ _app.py/App.get_unique_client_id-0                                     ( <App> )
-[mupf] th-M │└─ _app.py/App.get_unique_client_id-0                                       => 'jvhUiNR3QZaG1I1-L4SQNw'
-[mupf] th-M │┌─ client/_base.py/Client.__init__-0                                      ( <WebBrowser>, <App>, 'jvhUiNR3QZaG1I1-L4SQNw' )
-[mupf] th-M ││┌─ _command.py/create_command_class_for_client-0                         ( <WebBrowser> )
-[mupf] th-M ││└─ _command.py/create_command_class_for_client-0                           => <class 'mupf._command.create_command_class_for_client.<locals>.Command'>
-[mupf] th-M ││┌─ _command.py/Command.__init__-0                                        ( <Command ? ?>, '*first*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-0                                          => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-0                                        ( <Command *first* None> )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-0                                       ( <Command *first* 0>, (), {} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-0                                         => [0, 0, '*first*', {'args': (), 'kwargs': {}}]
-[mupf] th-M ││└─ _command.py/Command.__call__-0                                          => <Command *first* 0>
-[mupf] th-M │└─ client/_base.py/Client.__init__-0                                        => None
-[mupf] th-M │┌─ client/_base.py/Client.url-0                                           ( <WebBrowser> )
-[mupf] th-M ││┌─ client/_base.py/Client.app-0                                          ( <WebBrowser> )
-[mupf] th-M ││└─ client/_base.py/Client.app-0                                            => <App>
-[mupf] th-M ││┌─ client/_base.py/Client.app-1                                          ( <WebBrowser> )
-[mupf] th-M ││└─ client/_base.py/Client.app-1                                            => <App>
-[mupf] th-M ││┌─ client/_base.py/Client.cid-0                                          ( <WebBrowser> )
-[mupf] th-M ││└─ client/_base.py/Client.cid-0                                            => 'jvhUiNR3QZaG1I1-L4SQNw'
-[mupf] th-M │└─ client/_base.py/Client.url-0                                             => 'http://127.0.0.1:57107/#jvhUiNR3QZaG1I1-L4SQNw'
-[mupf] th-M │┌─ client/_base.py/Client.install_javascript-0                            ( <WebBrowser>, src='mupf/core' )
-[mupf] th-M ││┌─ _command.py/Command.__init__-1                                        ( <Command ? ?>, '*install*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-1                                          => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-1                                        ( <Command *install* None>, src='mupf/core', remove=True )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-1                                       ( <Command *install* 1>, (), {'src': 'mupf/core', 'remove': True} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-1                                         => [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-0                                   ( <WebBrowser>, [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-0                                     => None
-[mupf] th-M ││└─ _command.py/Command.__call__-1                                          => <Command *install* 1>
-[mupf] th-M │└─ client/_base.py/Client.install_javascript-0                              => <Command *install* 1>
-[mupf] th-M │┌─ _command.py/Command.result-0                                           ( <Command *install* 1> )
-[mupf] th-M ││┌─ _command.py/Command.wait-0                                            ( <Command *install* 1> )
+[mupf] th-M │└─ App.open-0                                                               => <App>
+[mupf] th-M │┌─ App.is_opened-1                                                        ( <App> )
+[mupf] th-M │└─ App.is_opened-1                                                          => True
+[mupf] th-M └─ App.__enter__-0                                                           => <App>
+[mupf] th-M ┌─ App.summon_client-0                                                     ( <App> )
+[mupf] th-M │┌─ App.get_unique_client_id-0                                             ( <App> )
+[mupf] th-M │└─ App.get_unique_client_id-0                                               => 'A84ZvRfDT9WSi7wZBRVbOw'
+[mupf] th-M │┌─ Client.__init__-0                                                      ( <WebBrowser>, <App>, 'A84ZvRfDT9WSi7wZBRVbOw' )
+[mupf] th-M │└─ Client.__init__-0                                                        => None
+[mupf] th-M │┌─ Client.install_javascript-0                                            ( <WebBrowser>, src='mupf/core' )
+[mupf] th-M ││┌─ Client.send_json-0                                                    ( <WebBrowser>, [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
+[mupf] th-M ││└─ Client.send_json-0                                                      => None
+[mupf] th-M │└─ Client.install_javascript-0                                              => <Command *install* 1>
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=436 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=1360 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server ! failing WebSocket connection in the CONNECTING state: 1006 [no reason]
 [websockets.protocol] server x half-closing TCP connection
 [websockets.protocol] server - event = eof_received()
@@ -52,7 +28,7 @@
 [websockets.protocol] server - state = CLOSED
 [websockets.protocol] server x code = 1006, reason = [no reason]
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=436 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=1324 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server ! failing WebSocket connection in the CONNECTING state: 1006 [no reason]
 [websockets.protocol] server x half-closing TCP connection
 [websockets.protocol] server - event = eof_received()
@@ -60,32 +36,18 @@
 [websockets.protocol] server - state = CLOSED
 [websockets.protocol] server x code = 1006, reason = [no reason]
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=436 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=1360 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server - state = OPEN
-[mupf] th-S │││·······│┌─ _app.py/App._websocket_request-0                             ( <App>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '/mupf/ws' )
-[mupf] th-S │││·······│└─ _app.py/App._websocket_request-0                               => <coroutine object App._websocket_request at 0x00000000039910C8>
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,0,0,{"result":{"cid":"jvhUiNR3QZaG1I1-L4SQNw","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │││·······│┌─ client/_base.py/Client.decode_json-0                         ( None, '[1,0,0,{"result":{"cid":"jvhUiNR3QZaG1I1-L4SQNw","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]' )
-[mupf] th-S │││·······│└─ client/_base.py/Client.decode_json-0                           => [1, 0, 0, {'result': {'cid': 'jvhUiNR3QZaG1I1-L4SQNw', 'ua': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'}}]
-[mupf] th-S │││·······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-0                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, ccid=0, result=None )
-[mupf] th-S │││·······││┌─ _command.py/Command.result-1                                ( <Command *first* 0>, None )
-[mupf] th-S │││·······││└─ _command.py/Command.result-1                                  => None
-[mupf] th-S │││·······│└─ _command.py/MetaCommand.resolve_by_id_mupf-0                   => None
-[mupf] th-S │││·······│┌─ client/_base.py/Client.await_connection-0                    ( <WebBrowser> )
-[mupf] th-S │││·······││┌─ _command.py/Command.wait-1                                  ( <Command *first* 0> )
-[mupf] th-S │││·······││└─ _command.py/Command.wait-1                                    => <Command *first* 0>
-[mupf] th-S │││·······││┌─ _command.py/Command.is_in_bad_state-0                       ( <Command *first* 0> )
-[mupf] th-S │││·······││└─ _command.py/Command.is_in_bad_state-0                         => False
-[mupf] th-S │││·······││┌─ client/_base.py/Client.send_json-1                          ( <WebBrowser>, [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
-[mupf] th-S │││·······││└─ client/_base.py/Client.send_json-1                            => None
-[mupf] th-S │││·······│└─ client/_base.py/Client.await_connection-0                      => <WebBrowser>
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-0                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]' )
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-0                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-0                              => <coroutine object send_task_body at 0x00000000039912C8>
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-0                             => None
+[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,0,0,{"result":{"cid":"A84ZvRfDT9WSi7wZBRVbOw","ua":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]', rsv1=False, rsv2=False, rsv3=False)
+[mupf] th-S │·········│┌─ Client.await_connection-0                                    ( <WebBrowser> )
+[mupf] th-S │·········││┌─ Client.send_json-1                                          ( <WebBrowser>, [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
+[mupf] th-S │·········││└─ Client.send_json-1                                            => None
+[mupf] th-S │·········│└─ Client.await_connection-0                                      => <WebBrowser>
+[mupf] th-S │·········│┌─ create_send_task-0                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]' )
+[mupf] th-S │·········│└─ create_send_task-0                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=392 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=824 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server ! failing WebSocket connection in the CONNECTING state: 1006 [no reason]
 [websockets.protocol] server x half-closing TCP connection
 [websockets.protocol] server - event = eof_received()
@@ -93,982 +55,312 @@
 [websockets.protocol] server - state = CLOSED
 [websockets.protocol] server x code = 1006, reason = [no reason]
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,1,0,{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │││·······│┌─ client/_base.py/Client.decode_json-1                         ( <WebBrowser>, '[1,1,0,{"result":null}]' )
-[mupf] th-S │││·······│└─ client/_base.py/Client.decode_json-1                           => [1, 1, 0, {'result': None}]
-[mupf] th-S │││·······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-1                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 1, None )
-[mupf] th-S │││·······││┌─ _command.py/Command.result-2                                ( <Command *install* 1>, None )
-[mupf] th-S │││·······││└─ _command.py/Command.result-2                                  => None
-[mupf] th-M ││└─ _command.py/Command.wait-0                                              => <Command *install* 1>
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-1                   => None
-[mupf] th-M │└─ _command.py/Command.result-0                                             => None
-[mupf] th-M │┌─ _command.py/Command.__init__-2                                         ( <Command ? ?>, '*features*' )
-[mupf] th-M │└─ _command.py/Command.__init__-2                                           => None
-[mupf] th-M │┌─ _command.py/Command.__call__-2                                         ( <Command *features* None> )
-[mupf] th-M ││┌─ _command.py/Command._jsonify-2                                        ( <Command *features* 2>, (), {} )
-[mupf] th-M ││└─ _command.py/Command._jsonify-2                                          => [0, 2, '*features*', {'args': (), 'kwargs': {}}]
-[mupf] th-M ││┌─ client/_base.py/Client.send_json-2                                    ( <WebBrowser>, [0, 2, '*features*', {'args': (), 'kwargs': {}}] )
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-1                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,2,"*features*",{"args":[],"kwargs":{}}]' )
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-1                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,2,"*features*",{"args":[],"kwargs":{}}]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-1                              => <coroutine object send_task_body at 0x0000000003991648>
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-1                             => None
+[mupf] th-S │·········│┌─ Client.decode_json-0                                         ( <WebBrowser>, '[1,1,0,{"result":null}]' )
+[mupf] th-S │·········│└─ Client.decode_json-0                                           => [1, 1, 0, {'result': None}]
+[mupf] th-M │┌─ Client.send_json-2                                                     ( <WebBrowser>, [0, 2, '*features*', {'args': (), 'kwargs': {}}] )
+[mupf] th-S ││········│┌─ create_send_task-1                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,2,"*features*",{"args":[],"kwargs":{}}]' )
+[mupf] th-M │└─ Client.send_json-2                                                       => None
+[mupf] th-S │·········│└─ create_send_task-1                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,2,"*features*",{"args":[],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M ││└─ client/_base.py/Client.send_json-2                                      => None
-[mupf] th-M │└─ _command.py/Command.__call__-2                                           => <Command *features* 2>
-[mupf] th-M │┌─ _command.py/Command.result-3                                           ( <Command *features* 2> )
-[mupf] th-M ││┌─ _command.py/Command.wait-2                                            ( <Command *features* 2> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │││·······│┌─ client/_base.py/Client.decode_json-2                         ( <WebBrowser>, '[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]' )
-[mupf] th-S │││·······│└─ client/_base.py/Client.decode_json-2                           => [1, 2, 0, {'result': {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}}]
-[mupf] th-S │││·······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-2                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 2, {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False} )
-[mupf] th-S │││·······││┌─ _command.py/Command.result-4                                ( <Command *features* 2>, {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False} )
-[mupf] th-S │││·······││└─ _command.py/Command.result-4                                  => None
-[mupf] th-S │││·······│└─ _command.py/MetaCommand.resolve_by_id_mupf-2                   => None
-[mupf] th-M ││└─ _command.py/Command.wait-2                                              => <Command *features* 2>
-[mupf] th-M │└─ _command.py/Command.result-3                                             => {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}
-[mupf] th-M │┌─ _command.py/Command.__init__-3                                         ( <Command ? ?>, '*getcmds*' )
-[mupf] th-M │└─ _command.py/Command.__init__-3                                           => None
-[mupf] th-M │┌─ _command.py/Command.__call__-3                                         ( <Command *getcmds* None> )
-[mupf] th-M ││┌─ _command.py/Command._jsonify-3                                        ( <Command *getcmds* 3>, (), {} )
-[mupf] th-M ││└─ _command.py/Command._jsonify-3                                          => [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}]
-[mupf] th-M ││┌─ client/_base.py/Client.send_json-3                                    ( <WebBrowser>, [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}] )
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-2                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]' )
-[mupf] th-M ││└─ client/_base.py/Client.send_json-3                                      => None
-[mupf] th-S ││········││┌─ client/_base.py/send_task_body-2                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]' )
-[mupf] th-S ││········││└─ client/_base.py/send_task_body-2                              => <coroutine object send_task_body at 0x00000000039917C8>
-[mupf] th-M │└─ _command.py/Command.__call__-3                                           => <Command *getcmds* 3>
-[mupf] th-S │·········│└─ client/_base.py/create_send_task-2                             => None
-[mupf] th-M │┌─ _command.py/Command.result-5                                           ( <Command *getcmds* 3> )
+[mupf] th-S │·········│┌─ Client.decode_json-1                                         ( <WebBrowser>, '[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]' )
+[mupf] th-S │·········│└─ Client.decode_json-1                                           => [1, 2, 0, {'result': {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}}]
+[mupf] th-M │┌─ Client.send_json-3                                                     ( <WebBrowser>, [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}] )
+[mupf] th-S ││········│┌─ create_send_task-2                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]' )
+[mupf] th-S ││········│└─ create_send_task-2                                             => None
+[mupf] th-M │└─ Client.send_json-3                                                       => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,3,"*getcmds*",{"args":[],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M ││┌─ _command.py/Command.wait-3                                            ( <Command *getcmds* 3> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │││·······│┌─ client/_base.py/Client.decode_json-3                         ( <WebBrowser>, '[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]' )
-[mupf] th-S │││·······│└─ client/_base.py/Client.decode_json-3                           => [1, 3, 0, {'result': ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']}]
-[mupf] th-S │││·······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-3                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 3, ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*'] )
-[mupf] th-S │││·······││┌─ _command.py/Command.result-6                                ( <Command *getcmds* 3>, ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*'] )
-[mupf] th-S │││·······││└─ _command.py/Command.result-6                                  => None
-[mupf] th-S │││·······│└─ _command.py/MetaCommand.resolve_by_id_mupf-3                   => None
-[mupf] th-M ││└─ _command.py/Command.wait-3                                              => <Command *getcmds* 3>
-[mupf] th-M │└─ _command.py/Command.result-5                                             => ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']
-[mupf] th-M │┌─ client/_base.py/Client.summoned-0                                      ( <WebBrowser> )
-[mupf] th-M │└─ client/_base.py/Client.summoned-0                                        => None
-[mupf] th-M └─ _app.py/App.summon_client-0                                               => <WebBrowser>
-[mupf] th-M ┌─ _command.py/Command.__init__-4                                          ( <Command ? ?>, '*get*' )
-[mupf] th-M └─ _command.py/Command.__init__-4                                            => None
-[mupf] th-M ┌─ _command.py/Command.__call__-4                                          ( <Command *get* None>, ["~@",0], 'document' )
-[mupf] th-M │┌─ _command.py/Command._jsonify-4                                         ( <Command *get* 4>, (["~@",0], 'document'), {} )
-[mupf] th-M │└─ _command.py/Command._jsonify-4                                           => [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-4                                     ( <WebBrowser>, [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-3                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-4                                       => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-3                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-3                              => <coroutine object send_task_body at 0x00000000039912C8>
-[mupf] th-M └─ _command.py/Command.__call__-4                                            => <Command *get* 4>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-3                             => None
-[mupf] th-M ┌─ _command.py/Command.result-7                                            ( <Command *get* 4> )
+[mupf] th-S │·········│┌─ Client.decode_json-2                                         ( <WebBrowser>, '[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]' )
+[mupf] th-S │·········│└─ Client.decode_json-2                                           => [1, 3, 0, {'result': ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']}]
+[mupf] th-M │┌─ Client.summoned-0                                                      ( <WebBrowser> )
+[mupf] th-M │└─ Client.summoned-0                                                        => None
+[mupf] th-M └─ App.summon_client-0                                                       => <WebBrowser>
+[mupf] th-M ┌─ Client.send_json-4                                                      ( <WebBrowser>, [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-3                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-S │·········│└─ create_send_task-3                                             => None
+[mupf] th-M └─ Client.send_json-4                                                        => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.wait-4                                             ( <Command *get* 4> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-4                         ( <WebBrowser>, '[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-0                     ( <WebBrowser>, 1, None )
-[mupf] th-S ││········│││┌─ client/_base.py/Client.get_remote_obj-1                    ( <WebBrowser>, None )
-[mupf] th-S ││········│││└─ client/_base.py/Client.get_remote_obj-1                      => None
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-0                       => <mupf._remote.RemoteObj object at 0x0000000003994C18>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-4                           => [1, 4, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003994C18>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-4                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 4, <mupf._remote.RemoteObj object at 0x0000000003994C18> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-8                                ( <Command *get* 4>, <mupf._remote.RemoteObj object at 0x0000000003994C18> )
-[mupf] th-S ││········││└─ _command.py/Command.result-8                                  => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-4                   => None
-[mupf] th-M │└─ _command.py/Command.wait-4                                               => <Command *get* 4>
-[mupf] th-M └─ _command.py/Command.result-7                                              => <mupf._remote.RemoteObj object at 0x0000000003994C18>
-[mupf] th-M ┌─ _command.py/Command.__init__-5                                          ( <Command ? ?>, '*get*' )
-[mupf] th-M └─ _command.py/Command.__init__-5                                            => None
-[mupf] th-M ┌─ _command.py/Command.__call__-5                                          ( <Command *get* None>, ["~@",1], 'createElement' )
-[mupf] th-M │┌─ _command.py/Command._jsonify-5                                         ( <Command *get* 5>, (["~@",1], 'createElement'), {} )
-[mupf] th-M │└─ _command.py/Command._jsonify-5                                           => [0, 5, '*get*', {'args': (["~@",1], 'createElement'), 'kwargs': {}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-5                                     ( <WebBrowser>, [0, 5, '*get*', {'args': (["~@",1], 'createElement'), 'kwargs': {}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-4                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,5,"*get*",["~",{"args":[["~@",1],"createElement"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-5                                       => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-4                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,5,"*get*",["~",{"args":[["~@",1],"createElement"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-4                              => <coroutine object send_task_body at 0x00000000039918C8>
-[mupf] th-M └─ _command.py/Command.__call__-5                                            => <Command *get* 5>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-4                             => None
-[mupf] th-M ┌─ _command.py/Command.result-9                                            ( <Command *get* 5> )
+[mupf] th-S ··········│┌─ Client.decode_json-3                                         ( <WebBrowser>, '[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-0                                     ( <WebBrowser>, 1, None )
+[mupf] th-S ··········│││┌─ Client.get_remote_obj-1                                    ( <WebBrowser>, None )
+[mupf] th-S ··········│││└─ Client.get_remote_obj-1                                      => None
+[mupf] th-S ··········││└─ Client.get_remote_obj-1                                       => <mupf._remote.RemoteObj object at 0x0000018562A01C50>
+[mupf] th-S ··········│└─ Client.decode_json-3                                           => [1, 4, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01C50>}]
+[mupf] th-M ┌─ Client.send_json-5                                                      ( <WebBrowser>, [0, 5, '*get*', {'args': (["~@",1], 'createElement'), 'kwargs': {}}] )
+[mupf] th-M └─ Client.send_json-5                                                        => None
+[mupf] th-S ··········│┌─ create_send_task-4                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,5,"*get*",["~",{"args":[["~@",1],"createElement"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-S ··········│└─ create_send_task-4                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,5,"*get*",["~",{"args":[["~@",1],"createElement"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.wait-5                                             ( <Command *get* 5> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,5,0,["~",{"result":["~@",2,1]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-5                         ( <WebBrowser>, '[1,5,0,["~",{"result":["~@",2,1]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-2                     ( <WebBrowser>, 2, 1 )
-[mupf] th-S ││········│││┌─ client/_base.py/Client.get_remote_obj-3                    ( <WebBrowser>, 1 )
-[mupf] th-S ││········│││└─ client/_base.py/Client.get_remote_obj-3                      => <mupf._remote.RemoteObj object at 0x0000000003994C18>
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-2                       => <mupf._remote.RemoteObj object at 0x0000000003994CF8>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-5                           => [1, 5, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003994CF8>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-5                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 5, <mupf._remote.RemoteObj object at 0x0000000003994CF8> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-10                               ( <Command *get* 5>, <mupf._remote.RemoteObj object at 0x0000000003994CF8> )
-[mupf] th-S ││········││└─ _command.py/Command.result-10                                 => None
-[mupf] th-M │└─ _command.py/Command.wait-5                                               => <Command *get* 5>
-[mupf] th-M └─ _command.py/Command.result-9                                              => <mupf._remote.RemoteObj object at 0x0000000003994CF8>
-[mupf] th-S ··········│└─ _command.py/MetaCommand.resolve_by_id_mupf-5                   => None
-[mupf] th-M ┌─ _command.py/Command.__init__-6                                          ( <Command ? ?>, '*get*' )
-[mupf] th-M └─ _command.py/Command.__init__-6                                            => None
-[mupf] th-M ┌─ _command.py/Command.__call__-6                                          ( <Command *get* None>, ["~@",0], 'document' )
-[mupf] th-M │┌─ _command.py/Command._jsonify-6                                         ( <Command *get* 6>, (["~@",0], 'document'), {} )
-[mupf] th-M │└─ _command.py/Command._jsonify-6                                           => [0, 6, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-6                                     ( <WebBrowser>, [0, 6, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}] )
-[mupf] th-M │└─ client/_base.py/Client.send_json-6                                       => None
-[mupf] th-M └─ _command.py/Command.__call__-6                                            => <Command *get* 6>
-[mupf] th-S ··········│┌─ client/_base.py/create_send_task-5                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,6,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S ··········││┌─ client/_base.py/send_task_body-5                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,6,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S ··········││└─ client/_base.py/send_task_body-5                              => <coroutine object send_task_body at 0x00000000039917C8>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-5                             => None
+[mupf] th-S ··········│┌─ Client.decode_json-4                                         ( <WebBrowser>, '[1,5,0,["~",{"result":["~@",2,1]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-2                                     ( <WebBrowser>, 2, 1 )
+[mupf] th-S ··········│││┌─ Client.get_remote_obj-3                                    ( <WebBrowser>, 1 )
+[mupf] th-S ··········│││└─ Client.get_remote_obj-3                                      => <mupf._remote.RemoteObj object at 0x0000018562A01C50>
+[mupf] th-S ··········││└─ Client.get_remote_obj-3                                       => <mupf._remote.RemoteObj object at 0x0000018562A01C18>
+[mupf] th-S ··········│└─ Client.decode_json-4                                           => [1, 5, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01C18>}]
+[mupf] th-M ┌─ Client.send_json-6                                                      ( <WebBrowser>, [0, 6, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-5                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,6,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-M └─ Client.send_json-6                                                        => None
+[mupf] th-S ··········│└─ create_send_task-5                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,6,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M ┌─ _command.py/Command.result-11                                           ( <Command *get* 6> )
-[mupf] th-M │┌─ _command.py/Command.wait-6                                             ( <Command *get* 6> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,6,0,["~",{"result":["~@",1,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-6                         ( <WebBrowser>, '[1,6,0,["~",{"result":["~@",1,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-4                     ( <WebBrowser>, 1, None )
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-4                       => <mupf._remote.RemoteObj object at 0x0000000003994C18>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-6                           => [1, 6, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003994C18>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-6                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 6, <mupf._remote.RemoteObj object at 0x0000000003994C18> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-12                               ( <Command *get* 6>, <mupf._remote.RemoteObj object at 0x0000000003994C18> )
-[mupf] th-S ││········││└─ _command.py/Command.result-12                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-6                   => None
-[mupf] th-M │└─ _command.py/Command.wait-6                                               => <Command *get* 6>
-[mupf] th-M └─ _command.py/Command.result-11                                             => <mupf._remote.RemoteObj object at 0x0000000003994C18>
-[mupf] th-M ┌─ _command.py/Command.__init__-7                                          ( <Command ? ?>, '*get*' )
-[mupf] th-M └─ _command.py/Command.__init__-7                                            => None
-[mupf] th-M ┌─ _command.py/Command.__call__-7                                          ( <Command *get* None>, ["~@",1], 'body' )
-[mupf] th-M │┌─ _command.py/Command._jsonify-7                                         ( <Command *get* 7>, (["~@",1], 'body'), {} )
-[mupf] th-M │└─ _command.py/Command._jsonify-7                                           => [0, 7, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-7                                     ( <WebBrowser>, [0, 7, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-6                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,7,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-7                                       => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-6                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,7,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-6                              => <coroutine object send_task_body at 0x00000000039912C8>
-[mupf] th-M └─ _command.py/Command.__call__-7                                            => <Command *get* 7>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-6                             => None
-[mupf] th-M ┌─ _command.py/Command.result-13                                           ( <Command *get* 7> )
+[mupf] th-S ··········│┌─ Client.decode_json-5                                         ( <WebBrowser>, '[1,6,0,["~",{"result":["~@",1,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-4                                     ( <WebBrowser>, 1, None )
+[mupf] th-S ··········││└─ Client.get_remote_obj-4                                       => <mupf._remote.RemoteObj object at 0x0000018562A01C50>
+[mupf] th-S ··········│└─ Client.decode_json-5                                           => [1, 6, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01C50>}]
+[mupf] th-M ┌─ Client.send_json-7                                                      ( <WebBrowser>, [0, 7, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-6                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,7,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-S │·········│└─ create_send_task-6                                             => None
+[mupf] th-M └─ Client.send_json-7                                                        => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,7,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.wait-7                                             ( <Command *get* 7> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,7,0,["~",{"result":["~@",3,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-7                         ( <WebBrowser>, '[1,7,0,["~",{"result":["~@",3,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-5                     ( <WebBrowser>, 3, None )
-[mupf] th-S ││········│││┌─ client/_base.py/Client.get_remote_obj-6                    ( <WebBrowser>, None )
-[mupf] th-S ││········│││└─ client/_base.py/Client.get_remote_obj-6                      => None
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-5                       => <mupf._remote.RemoteObj object at 0x0000000003994D30>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-7                           => [1, 7, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003994D30>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-7                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 7, <mupf._remote.RemoteObj object at 0x0000000003994D30> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-14                               ( <Command *get* 7>, <mupf._remote.RemoteObj object at 0x0000000003994D30> )
-[mupf] th-S ││········││└─ _command.py/Command.result-14                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-7                   => None
-[mupf] th-M │└─ _command.py/Command.wait-7                                               => <Command *get* 7>
-[mupf] th-M └─ _command.py/Command.result-13                                             => <mupf._remote.RemoteObj object at 0x0000000003994D30>
-[mupf] th-M ┌─ _command.py/Command.__init__-8                                          ( <Command ? ?>, '*get*' )
-[mupf] th-M └─ _command.py/Command.__init__-8                                            => None
-[mupf] th-M ┌─ _command.py/Command.__call__-8                                          ( <Command *get* None>, ["~@",3], 'appendChild' )
-[mupf] th-M │┌─ _command.py/Command._jsonify-8                                         ( <Command *get* 8>, (["~@",3], 'appendChild'), {} )
-[mupf] th-M │└─ _command.py/Command._jsonify-8                                           => [0, 8, '*get*', {'args': (["~@",3], 'appendChild'), 'kwargs': {}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-8                                     ( <WebBrowser>, [0, 8, '*get*', {'args': (["~@",3], 'appendChild'), 'kwargs': {}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-7                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,8,"*get*",["~",{"args":[["~@",3],"appendChild"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-8                                       => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-7                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,8,"*get*",["~",{"args":[["~@",3],"appendChild"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-7                              => <coroutine object send_task_body at 0x0000000003991748>
-[mupf] th-M └─ _command.py/Command.__call__-8                                            => <Command *get* 8>
-[mupf] th-M ┌─ _command.py/Command.result-15                                           ( <Command *get* 8> )
-[mupf] th-M │┌─ _command.py/Command.wait-8                                             ( <Command *get* 8> )
-[mupf] th-S ││········│└─ client/_base.py/create_send_task-7                             => None
+[mupf] th-S ··········│┌─ Client.decode_json-6                                         ( <WebBrowser>, '[1,7,0,["~",{"result":["~@",3,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-5                                     ( <WebBrowser>, 3, None )
+[mupf] th-S ··········│││┌─ Client.get_remote_obj-6                                    ( <WebBrowser>, None )
+[mupf] th-S ··········│││└─ Client.get_remote_obj-6                                      => None
+[mupf] th-S ··········││└─ Client.get_remote_obj-6                                       => <mupf._remote.RemoteObj object at 0x0000018562A01898>
+[mupf] th-S ··········│└─ Client.decode_json-6                                           => [1, 7, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01898>}]
+[mupf] th-M ┌─ Client.send_json-8                                                      ( <WebBrowser>, [0, 8, '*get*', {'args': (["~@",3], 'appendChild'), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-7                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,8,"*get*",["~",{"args":[["~@",3],"appendChild"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-M └─ Client.send_json-8                                                        => None
+[mupf] th-S ··········│└─ create_send_task-7                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,8,"*get*",["~",{"args":[["~@",3],"appendChild"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,8,0,["~",{"result":["~@",4,3]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-8                         ( <WebBrowser>, '[1,8,0,["~",{"result":["~@",4,3]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-7                     ( <WebBrowser>, 4, 3 )
-[mupf] th-S ││········│││┌─ client/_base.py/Client.get_remote_obj-8                    ( <WebBrowser>, 3 )
-[mupf] th-S ││········│││└─ client/_base.py/Client.get_remote_obj-8                      => <mupf._remote.RemoteObj object at 0x0000000003994D30>
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-7                       => <mupf._remote.RemoteObj object at 0x0000000003994DA0>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-8                           => [1, 8, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003994DA0>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-8                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 8, <mupf._remote.RemoteObj object at 0x0000000003994DA0> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-16                               ( <Command *get* 8>, <mupf._remote.RemoteObj object at 0x0000000003994DA0> )
-[mupf] th-S ││········││└─ _command.py/Command.result-16                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-8                   => None
-[mupf] th-M │└─ _command.py/Command.wait-8                                               => <Command *get* 8>
-[mupf] th-M └─ _command.py/Command.result-15                                             => <mupf._remote.RemoteObj object at 0x0000000003994DA0>
-[mupf] th-M ┌─ _command.py/Command.__init__-9                                          ( <Command ? ?>, '*call*' )
-[mupf] th-M └─ _command.py/Command.__init__-9                                            => None
-[mupf] th-M ┌─ _command.py/Command.__call__-9                                          ( <Command *call* None>, 'button', id=2, this_=["~@",1] )
-[mupf] th-M │┌─ _command.py/Command._jsonify-9                                         ( <Command *call* 9>, ('button',), {'id': 2, 'this_': ["~@",1]} )
-[mupf] th-M │└─ _command.py/Command._jsonify-9                                           => [0, 9, '*call*', {'args': ('button',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-9                                     ( <WebBrowser>, [0, 9, '*call*', {'args': ('button',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-8                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,9,"*call*",["~",{"args":["button"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-9                                       => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-8                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,9,"*call*",["~",{"args":["button"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-8                              => <coroutine object send_task_body at 0x00000000039917C8>
-[mupf] th-M └─ _command.py/Command.__call__-9                                            => <Command *call* 9>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-8                             => None
-[mupf] th-M ┌─ _command.py/Command.result-17                                           ( <Command *call* 9> )
+[mupf] th-S ··········│┌─ Client.decode_json-7                                         ( <WebBrowser>, '[1,8,0,["~",{"result":["~@",4,3]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-7                                     ( <WebBrowser>, 4, 3 )
+[mupf] th-S ··········│││┌─ Client.get_remote_obj-8                                    ( <WebBrowser>, 3 )
+[mupf] th-S ··········│││└─ Client.get_remote_obj-8                                      => <mupf._remote.RemoteObj object at 0x0000018562A01898>
+[mupf] th-S ··········││└─ Client.get_remote_obj-8                                       => <mupf._remote.RemoteObj object at 0x0000018562A01D30>
+[mupf] th-S ··········│└─ Client.decode_json-7                                           => [1, 8, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01D30>}]
+[mupf] th-M ┌─ Client.send_json-9                                                      ( <WebBrowser>, [0, 9, '*call*', {'args': ('button',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
+[mupf] th-S │·········│┌─ create_send_task-8                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,9,"*call*",["~",{"args":["button"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
+[mupf] th-S │·········│└─ create_send_task-8                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,9,"*call*",["~",{"args":["button"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.wait-9                                             ( <Command *call* 9> )
+[mupf] th-M └─ Client.send_json-9                                                        => None
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,9,0,["~",{"result":["~@",5,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-9                         ( <WebBrowser>, '[1,9,0,["~",{"result":["~@",5,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-9                     ( <WebBrowser>, 5, None )
-[mupf] th-S ││········│││┌─ client/_base.py/Client.get_remote_obj-10                   ( <WebBrowser>, None )
-[mupf] th-S ││········│││└─ client/_base.py/Client.get_remote_obj-10                     => None
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-9                       => <mupf._remote.RemoteObj object at 0x0000000003994E48>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-9                           => [1, 9, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003994E48>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-9                 ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 9, <mupf._remote.RemoteObj object at 0x0000000003994E48> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-18                               ( <Command *call* 9>, <mupf._remote.RemoteObj object at 0x0000000003994E48> )
-[mupf] th-S ││········││└─ _command.py/Command.result-18                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-9                   => None
-[mupf] th-M │└─ _command.py/Command.wait-9                                               => <Command *call* 9>
-[mupf] th-M └─ _command.py/Command.result-17                                             => <mupf._remote.RemoteObj object at 0x0000000003994E48>
-[mupf] th-M ┌─ _command.py/Command.__init__-10                                         ( <Command ? ?>, '*call*' )
-[mupf] th-M └─ _command.py/Command.__init__-10                                           => None
-[mupf] th-M ┌─ _command.py/Command.__call__-10                                         ( <Command *call* None>, 'input', id=2, this_=["~@",1] )
-[mupf] th-M │┌─ _command.py/Command._jsonify-10                                        ( <Command *call* 10>, ('input',), {'id': 2, 'this_': ["~@",1]} )
-[mupf] th-M │└─ _command.py/Command._jsonify-10                                          => [0, 10, '*call*', {'args': ('input',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-10                                    ( <WebBrowser>, [0, 10, '*call*', {'args': ('input',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-9                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,10,"*call*",["~",{"args":["input"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-10                                      => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-9                            ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,10,"*call*",["~",{"args":["input"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-9                              => <coroutine object send_task_body at 0x000000000359ADC8>
-[mupf] th-M └─ _command.py/Command.__call__-10                                           => <Command *call* 10>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-9                             => None
-[mupf] th-M ┌─ _command.py/Command.result-19                                           ( <Command *call* 10> )
+[mupf] th-S ··········│┌─ Client.decode_json-8                                         ( <WebBrowser>, '[1,9,0,["~",{"result":["~@",5,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-9                                     ( <WebBrowser>, 5, None )
+[mupf] th-S ··········│││┌─ Client.get_remote_obj-10                                   ( <WebBrowser>, None )
+[mupf] th-S ··········│││└─ Client.get_remote_obj-10                                     => None
+[mupf] th-S ··········││└─ Client.get_remote_obj-10                                      => <mupf._remote.RemoteObj object at 0x0000018562A01B00>
+[mupf] th-S ··········│└─ Client.decode_json-8                                           => [1, 9, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01B00>}]
+[mupf] th-M ┌─ Client.send_json-10                                                     ( <WebBrowser>, [0, 10, '*call*', {'args': ('input',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
+[mupf] th-S │·········│┌─ create_send_task-9                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,10,"*call*",["~",{"args":["input"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
+[mupf] th-M └─ Client.send_json-10                                                       => None
+[mupf] th-S ··········│└─ create_send_task-9                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,10,"*call*",["~",{"args":["input"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.wait-10                                            ( <Command *call* 10> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,10,0,["~",{"result":["~@",6,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-10                        ( <WebBrowser>, '[1,10,0,["~",{"result":["~@",6,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-11                    ( <WebBrowser>, 6, None )
-[mupf] th-S ││········│││┌─ client/_base.py/Client.get_remote_obj-12                   ( <WebBrowser>, None )
-[mupf] th-S ││········│││└─ client/_base.py/Client.get_remote_obj-12                     => None
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-11                      => <mupf._remote.RemoteObj object at 0x00000000036244E0>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-10                          => [1, 10, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036244E0>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-10                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 10, <mupf._remote.RemoteObj object at 0x00000000036244E0> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-20                               ( <Command *call* 10>, <mupf._remote.RemoteObj object at 0x00000000036244E0> )
-[mupf] th-S ││········││└─ _command.py/Command.result-20                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-10                  => None
-[mupf] th-M │└─ _command.py/Command.wait-10                                              => <Command *call* 10>
-[mupf] th-M └─ _command.py/Command.result-19                                             => <mupf._remote.RemoteObj object at 0x00000000036244E0>
-[mupf] th-M ┌─ _command.py/Command.__init__-11                                         ( <Command ? ?>, '*call*' )
-[mupf] th-M └─ _command.py/Command.__init__-11                                           => None
-[mupf] th-M ┌─ _command.py/Command.__call__-11                                         ( <Command *call* None>, ["~@",6], id=4, this_=["~@",3] )
-[mupf] th-M │┌─ _command.py/Command._jsonify-11                                        ( <Command *call* 11>, (["~@",6],), {'id': 4, 'this_': ["~@",3]} )
-[mupf] th-M │└─ _command.py/Command._jsonify-11                                          => [0, 11, '*call*', {'args': (["~@",6],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-11                                    ( <WebBrowser>, [0, 11, '*call*', {'args': (["~@",6],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
-[mupf] th-M │└─ client/_base.py/Client.send_json-11                                      => None
-[mupf] th-M └─ _command.py/Command.__call__-11                                           => <Command *call* 11>
-[mupf] th-M ┌─ _command.py/Command.result-21                                           ( <Command *call* 11> )
-[mupf] th-S │·········│┌─ client/_base.py/create_send_task-10                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,11,"*call*",["~",{"args":[["~@",6]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-10                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,11,"*call*",["~",{"args":[["~@",6]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-10                             => <coroutine object send_task_body at 0x0000000003991748>
-[mupf] th-S │·········│└─ client/_base.py/create_send_task-10                            => None
-[mupf] th-M │┌─ _command.py/Command.wait-11                                            ( <Command *call* 11> )
+[mupf] th-S ··········│┌─ Client.decode_json-9                                         ( <WebBrowser>, '[1,10,0,["~",{"result":["~@",6,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-11                                    ( <WebBrowser>, 6, None )
+[mupf] th-S ··········│││┌─ Client.get_remote_obj-12                                   ( <WebBrowser>, None )
+[mupf] th-S ··········│││└─ Client.get_remote_obj-12                                     => None
+[mupf] th-S ··········││└─ Client.get_remote_obj-12                                      => <mupf._remote.RemoteObj object at 0x0000018562A01EB8>
+[mupf] th-S ··········│└─ Client.decode_json-9                                           => [1, 10, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01EB8>}]
+[mupf] th-M ┌─ Client.send_json-11                                                     ( <WebBrowser>, [0, 11, '*call*', {'args': (["~@",6],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
+[mupf] th-S │·········│┌─ create_send_task-10                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,11,"*call*",["~",{"args":[["~@",6]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
+[mupf] th-S │·········│└─ create_send_task-10                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,11,"*call*",["~",{"args":[["~@",6]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
+[mupf] th-M └─ Client.send_json-11                                                       => None
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,11,0,["~",{"result":["~@",6,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-11                        ( <WebBrowser>, '[1,11,0,["~",{"result":["~@",6,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-13                    ( <WebBrowser>, 6, None )
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-13                      => <mupf._remote.RemoteObj object at 0x00000000036244E0>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-11                          => [1, 11, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036244E0>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-11                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 11, <mupf._remote.RemoteObj object at 0x00000000036244E0> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-22                               ( <Command *call* 11>, <mupf._remote.RemoteObj object at 0x00000000036244E0> )
-[mupf] th-S ││········││└─ _command.py/Command.result-22                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-11                  => None
-[mupf] th-M │└─ _command.py/Command.wait-11                                              => <Command *call* 11>
-[mupf] th-M └─ _command.py/Command.result-21                                             => <mupf._remote.RemoteObj object at 0x00000000036244E0>
-[mupf] th-M ┌─ _command.py/Command.__init__-12                                         ( <Command ? ?>, '*call*' )
-[mupf] th-M └─ _command.py/Command.__init__-12                                           => None
-[mupf] th-M ┌─ _command.py/Command.__call__-12                                         ( <Command *call* None>, ["~@",5], id=4, this_=["~@",3] )
-[mupf] th-M │┌─ _command.py/Command._jsonify-12                                        ( <Command *call* 12>, (["~@",5],), {'id': 4, 'this_': ["~@",3]} )
-[mupf] th-M │└─ _command.py/Command._jsonify-12                                          => [0, 12, '*call*', {'args': (["~@",5],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-12                                    ( <WebBrowser>, [0, 12, '*call*', {'args': (["~@",5],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-11                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,12,"*call*",["~",{"args":[["~@",5]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-12                                      => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-11                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,12,"*call*",["~",{"args":[["~@",5]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-11                             => <coroutine object send_task_body at 0x00000000039913C8>
-[mupf] th-M └─ _command.py/Command.__call__-12                                           => <Command *call* 12>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-11                            => None
-[mupf] th-M ┌─ _command.py/Command.result-23                                           ( <Command *call* 12> )
+[mupf] th-S ··········│┌─ Client.decode_json-10                                        ( <WebBrowser>, '[1,11,0,["~",{"result":["~@",6,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-13                                    ( <WebBrowser>, 6, None )
+[mupf] th-S ··········││└─ Client.get_remote_obj-13                                      => <mupf._remote.RemoteObj object at 0x0000018562A01EB8>
+[mupf] th-S ··········│└─ Client.decode_json-10                                          => [1, 11, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01EB8>}]
+[mupf] th-M ┌─ Client.send_json-12                                                     ( <WebBrowser>, [0, 12, '*call*', {'args': (["~@",5],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
+[mupf] th-S │·········│┌─ create_send_task-11                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,12,"*call*",["~",{"args":[["~@",5]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
+[mupf] th-S │·········│└─ create_send_task-11                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,12,"*call*",["~",{"args":[["~@",5]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.wait-12                                            ( <Command *call* 12> )
+[mupf] th-M └─ Client.send_json-12                                                       => None
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,12,0,["~",{"result":["~@",5,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-12                        ( <WebBrowser>, '[1,12,0,["~",{"result":["~@",5,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-14                    ( <WebBrowser>, 5, None )
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-14                      => <mupf._remote.RemoteObj object at 0x0000000003994E48>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-12                          => [1, 12, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003994E48>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-12                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 12, <mupf._remote.RemoteObj object at 0x0000000003994E48> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-24                               ( <Command *call* 12>, <mupf._remote.RemoteObj object at 0x0000000003994E48> )
-[mupf] th-S ││········││└─ _command.py/Command.result-24                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-12                  => None
-[mupf] th-M │└─ _command.py/Command.wait-12                                              => <Command *call* 12>
-[mupf] th-M └─ _command.py/Command.result-23                                             => <mupf._remote.RemoteObj object at 0x0000000003994E48>
-[mupf] th-M ┌─ _command.py/Command.__init__-13                                         ( <Command ? ?>, '*call*' )
-[mupf] th-M └─ _command.py/Command.__init__-13                                           => None
-[mupf] th-M ┌─ _command.py/Command.__call__-13                                         ( <Command *call* None>, 'br', id=2, this_=["~@",1] )
-[mupf] th-M │┌─ _command.py/Command._jsonify-13                                        ( <Command *call* 13>, ('br',), {'id': 2, 'this_': ["~@",1]} )
-[mupf] th-M │└─ _command.py/Command._jsonify-13                                          => [0, 13, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-13                                    ( <WebBrowser>, [0, 13, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-12                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,13,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-13                                      => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-12                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,13,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-12                             => <coroutine object send_task_body at 0x000000000359AEC8>
-[mupf] th-M └─ _command.py/Command.__call__-13                                           => <Command *call* 13>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-12                            => None
-[mupf] th-M ┌─ _command.py/Command.result-25                                           ( <Command *call* 13> )
+[mupf] th-S ··········│┌─ Client.decode_json-11                                        ( <WebBrowser>, '[1,12,0,["~",{"result":["~@",5,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-14                                    ( <WebBrowser>, 5, None )
+[mupf] th-S ··········││└─ Client.get_remote_obj-14                                      => <mupf._remote.RemoteObj object at 0x0000018562A01B00>
+[mupf] th-S ··········│└─ Client.decode_json-11                                          => [1, 12, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01B00>}]
+[mupf] th-M ┌─ Client.send_json-13                                                     ( <WebBrowser>, [0, 13, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
+[mupf] th-S │·········│┌─ create_send_task-12                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,13,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
+[mupf] th-S │·········│└─ create_send_task-12                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,13,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.wait-13                                            ( <Command *call* 13> )
+[mupf] th-M └─ Client.send_json-13                                                       => None
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,13,0,["~",{"result":["~@",7,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-13                        ( <WebBrowser>, '[1,13,0,["~",{"result":["~@",7,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-15                    ( <WebBrowser>, 7, None )
-[mupf] th-S ││········│││┌─ client/_base.py/Client.get_remote_obj-16                   ( <WebBrowser>, None )
-[mupf] th-S ││········│││└─ client/_base.py/Client.get_remote_obj-16                     => None
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-15                      => <mupf._remote.RemoteObj object at 0x00000000036240B8>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-13                          => [1, 13, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036240B8>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-13                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 13, <mupf._remote.RemoteObj object at 0x00000000036240B8> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-26                               ( <Command *call* 13>, <mupf._remote.RemoteObj object at 0x00000000036240B8> )
-[mupf] th-S ││········││└─ _command.py/Command.result-26                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-13                  => None
-[mupf] th-M │└─ _command.py/Command.wait-13                                              => <Command *call* 13>
-[mupf] th-M └─ _command.py/Command.result-25                                             => <mupf._remote.RemoteObj object at 0x00000000036240B8>
-[mupf] th-M ┌─ _command.py/Command.__init__-14                                         ( <Command ? ?>, '*call*' )
-[mupf] th-M └─ _command.py/Command.__init__-14                                           => None
-[mupf] th-M ┌─ _command.py/Command.__call__-14                                         ( <Command *call* None>, ["~@",7], id=4, this_=["~@",3] )
-[mupf] th-M │┌─ _command.py/Command._jsonify-14                                        ( <Command *call* 14>, (["~@",7],), {'id': 4, 'this_': ["~@",3]} )
-[mupf] th-M │└─ _command.py/Command._jsonify-14                                          => [0, 14, '*call*', {'args': (["~@",7],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-14                                    ( <WebBrowser>, [0, 14, '*call*', {'args': (["~@",7],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-13                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,14,"*call*",["~",{"args":[["~@",7]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/send_task_body-13                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,14,"*call*",["~",{"args":[["~@",7]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S ││········││└─ client/_base.py/send_task_body-13                             => <coroutine object send_task_body at 0x0000000003991748>
-[mupf] th-S ││········│└─ client/_base.py/create_send_task-13                            => None
+[mupf] th-S ··········│┌─ Client.decode_json-12                                        ( <WebBrowser>, '[1,13,0,["~",{"result":["~@",7,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-15                                    ( <WebBrowser>, 7, None )
+[mupf] th-S ··········│││┌─ Client.get_remote_obj-16                                   ( <WebBrowser>, None )
+[mupf] th-S ··········│││└─ Client.get_remote_obj-16                                     => None
+[mupf] th-S ··········││└─ Client.get_remote_obj-16                                      => <mupf._remote.RemoteObj object at 0x0000018562A01F98>
+[mupf] th-S ··········│└─ Client.decode_json-12                                          => [1, 13, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01F98>}]
+[mupf] th-M ┌─ Client.send_json-14                                                     ( <WebBrowser>, [0, 14, '*call*', {'args': (["~@",7],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
+[mupf] th-S │·········│┌─ create_send_task-13                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,14,"*call*",["~",{"args":[["~@",7]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
+[mupf] th-M └─ Client.send_json-14                                                       => None
+[mupf] th-S ··········│└─ create_send_task-13                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,14,"*call*",["~",{"args":[["~@",7]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │└─ client/_base.py/Client.send_json-14                                      => None
-[mupf] th-M └─ _command.py/Command.__call__-14                                           => <Command *call* 14>
-[mupf] th-M ┌─ _command.py/Command.result-27                                           ( <Command *call* 14> )
-[mupf] th-M │┌─ _command.py/Command.wait-14                                            ( <Command *call* 14> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,14,0,["~",{"result":["~@",7,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ client/_base.py/Client.decode_json-14                        ( <WebBrowser>, '[1,14,0,["~",{"result":["~@",7,null]},{"c":1}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/Client.get_remote_obj-17                    ( <WebBrowser>, 7, None )
-[mupf] th-S ││········││└─ client/_base.py/Client.get_remote_obj-17                      => <mupf._remote.RemoteObj object at 0x00000000036240B8>
-[mupf] th-S ││········│└─ client/_base.py/Client.decode_json-14                          => [1, 14, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036240B8>}]
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-14                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 14, <mupf._remote.RemoteObj object at 0x00000000036240B8> )
-[mupf] th-S ││········││┌─ _command.py/Command.result-28                               ( <Command *call* 14>, <mupf._remote.RemoteObj object at 0x00000000036240B8> )
-[mupf] th-S ││········││└─ _command.py/Command.result-28                                 => None
-[mupf] th-S ││········│└─ _command.py/MetaCommand.resolve_by_id_mupf-14                  => None
-[mupf] th-M │└─ _command.py/Command.wait-14                                              => <Command *call* 14>
-[mupf] th-M └─ _command.py/Command.result-27                                             => <mupf._remote.RemoteObj object at 0x00000000036240B8>
-[mupf] th-M ┌─ _command.py/Command.__init__-15                                         ( <Command ? ?>, '*set*' )
-[mupf] th-M └─ _command.py/Command.__init__-15                                           => None
-[mupf] th-M ┌─ _command.py/Command.__call__-15                                         ( <Command *set* None>, ["~@",5], 'textContent', 'SHA256' )
-[mupf] th-M │┌─ _command.py/Command._jsonify-15                                        ( <Command *set* 15>, (["~@",5], 'textContent', 'SHA256'), {} )
-[mupf] th-M │└─ _command.py/Command._jsonify-15                                          => [0, 15, '*set*', {'args': (["~@",5], 'textContent', 'SHA256'), 'kwargs': {}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-15                                    ( <WebBrowser>, [0, 15, '*set*', {'args': (["~@",5], 'textContent', 'SHA256'), 'kwargs': {}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-14                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,15,"*set*",["~",{"args":[["~@",5],"textContent","SHA256"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-15                                      => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-14                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,15,"*set*",["~",{"args":[["~@",5],"textContent","SHA256"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-14                             => <coroutine object send_task_body at 0x00000000039913C8>
-[mupf] th-M └─ _command.py/Command.__call__-15                                           => <Command *set* 15>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-14                            => None
-[mupf] th-M ┌─ _command.py/Command.wait-15                                             ( <Command *set* 15> )
+[mupf] th-S ··········│┌─ Client.decode_json-13                                        ( <WebBrowser>, '[1,14,0,["~",{"result":["~@",7,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client.get_remote_obj-17                                    ( <WebBrowser>, 7, None )
+[mupf] th-S ··········││└─ Client.get_remote_obj-17                                      => <mupf._remote.RemoteObj object at 0x0000018562A01F98>
+[mupf] th-S ··········│└─ Client.decode_json-13                                          => [1, 14, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562A01F98>}]
+[mupf] th-M ┌─ Client.send_json-15                                                     ( <WebBrowser>, [0, 15, '*set*', {'args': (["~@",5], 'textContent', 'SHA256'), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-14                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,15,"*set*",["~",{"args":[["~@",5],"textContent","SHA256"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-M └─ Client.send_json-15                                                       => None
+[mupf] th-S ··········│└─ create_send_task-14                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,15,"*set*",["~",{"args":[["~@",5],"textContent","SHA256"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,15,0,{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │·········│┌─ client/_base.py/Client.decode_json-15                        ( <WebBrowser>, '[1,15,0,{"result":null}]' )
-[mupf] th-S │·········│└─ client/_base.py/Client.decode_json-15                          => [1, 15, 0, {'result': None}]
-[mupf] th-S │·········│┌─ _command.py/Command.__init__-16                              ( <Command ? ?>, '*gc*' )
-[mupf] th-S │·········│└─ _command.py/Command.__init__-16                                => None
-[mupf] th-S │·········│┌─ _command.py/Command.run-0                                    ( <Command *gc* None>, 7 )
-[mupf] th-S │·········││┌─ _command.py/Command.__call__-16                             ( <Command *gc* None>, 7 )
-[mupf] th-S │·········│││┌─ _command.py/Command._jsonify-16                            ( <Command *gc* 16>, (7,), {} )
-[mupf] th-S │·········│││└─ _command.py/Command._jsonify-16                              => [2, 16, '*gc*', {'args': (7,), 'kwargs': {}}]
-[mupf] th-S │·········│││┌─ client/_base.py/Client.send_json-16                        ( <WebBrowser>, [2, 16, '*gc*', {'args': (7,), 'kwargs': {}}] )
-[mupf] th-S │·········│││└─ client/_base.py/Client.send_json-16                          => None
-[mupf] th-S │·········││└─ _command.py/Command.__call__-16                               => <Command *gc* 16>
-[mupf] th-S │·········│└─ _command.py/Command.run-0                                      => <Command *gc* 16>
-[mupf] th-S │·········│┌─ _command.py/Command.result-29                                ( <Command *gc* 16> )
-[mupf] th-S │·········││┌─ _command.py/Command.wait-16                                 ( <Command *gc* 16> )
-[mupf] th-S │·········││└─ _command.py/Command.wait-16                                   => <Command *gc* 16>
-[mupf] th-S │·········│└─ _command.py/Command.result-29                                  => None
-[mupf] th-S │·········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-15                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 15, None )
-[mupf] th-S │·········││┌─ _command.py/Command.result-30                               ( <Command *set* 15>, None )
-[mupf] th-S │·········││└─ _command.py/Command.result-30                                 => None
-[mupf] th-S │·········│└─ _command.py/MetaCommand.resolve_by_id_mupf-15                  => None
-[mupf] th-M └─ _command.py/Command.wait-15                                               => <Command *set* 15>
-[mupf] th-S ··········│┌─ client/_base.py/create_send_task-15                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,16,"*gc*",{"args":[7],"kwargs":{}}]' )
-[mupf] th-S ··········││┌─ client/_base.py/send_task_body-15                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,16,"*gc*",{"args":[7],"kwargs":{}}]' )
-[mupf] th-S ··········││└─ client/_base.py/send_task_body-15                             => <coroutine object send_task_body at 0x000000000359AEC8>
-[mupf] th-M ┌─ client/_base.py/Client._wrap_callback-0                                 ( <WebBrowser>, <function button_click at 0x000000000210A9D8> )
-[mupf] th-M └─ client/_base.py/Client._wrap_callback-0                                   => ["~$",null,0]
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-15                            => None
-[mupf] th-M ┌─ _command.py/Command.__init__-17                                         ( <Command ? ?>, '*set*' )
+[mupf] th-S ··········│┌─ Client.decode_json-14                                        ( <WebBrowser>, '[1,15,0,{"result":null}]' )
+[mupf] th-S ··········│└─ Client.decode_json-14                                          => [1, 15, 0, {'result': None}]
+[mupf] th-S ··········│┌─ Client.send_json-16                                          ( <WebBrowser>, [2, 16, '*gc*', {'args': (7,), 'kwargs': {}}] )
+[mupf] th-S ··········│└─ Client.send_json-16                                            => None
+[mupf] th-M ┌─ Client._wrap_callback-0                                                 ( <WebBrowser>, <function button_click at 0x00000185615CC1E0> )
+[mupf] th-S │·········│┌─ create_send_task-15                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[2,16,"*gc*",{"args":[7],"kwargs":{}}]' )
+[mupf] th-M └─ Client._wrap_callback-0                                                   => ["~$",null,0]
+[mupf] th-S ··········│└─ create_send_task-15                                            => None
+[mupf] th-M ┌─ Client.send_json-17                                                     ( <WebBrowser>, [0, 17, '*set*', {'args': (["~@",5], 'onclick', ["~$",null,0]), 'kwargs': {}}] )
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,16,"*gc*",{"args":[7],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M └─ _command.py/Command.__init__-17                                           => None
-[mupf] th-M ┌─ _command.py/Command.__call__-17                                         ( <Command *set* None>, ["~@",5], 'onclick', ["~$",null,0] )
-[mupf] th-M │┌─ _command.py/Command._jsonify-17                                        ( <Command *set* 17>, (["~@",5], 'onclick', ["~$",null,0]), {} )
-[mupf] th-M │└─ _command.py/Command._jsonify-17                                          => [0, 17, '*set*', {'args': (["~@",5], 'onclick', ["~$",null,0]), 'kwargs': {}}]
-[mupf] th-M │┌─ client/_base.py/Client.send_json-17                                    ( <WebBrowser>, [0, 17, '*set*', {'args': (["~@",5], 'onclick', ["~$",null,0]), 'kwargs': {}}] )
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-16                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,17,"*set*",["~",{"args":[["~@",5],"onclick",["~$",null,0]],"kwargs":{}},{"c":2}]]' )
-[mupf] th-M │└─ client/_base.py/Client.send_json-17                                      => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-16                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,17,"*set*",["~",{"args":[["~@",5],"onclick",["~$",null,0]],"kwargs":{}},{"c":2}]]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-16                             => <coroutine object send_task_body at 0x000000000359AEC8>
-[mupf] th-M └─ _command.py/Command.__call__-17                                           => <Command *set* 17>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-16                            => None
-[mupf] th-M ┌─ _command.py/Command.wait-17                                             ( <Command *set* 17> )
+[mupf] th-M └─ Client.send_json-17                                                       => None
+[mupf] th-S ··········│┌─ create_send_task-16                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,17,"*set*",["~",{"args":[["~@",5],"onclick",["~$",null,0]],"kwargs":{}},{"c":2}]]' )
+[mupf] th-S ··········│└─ create_send_task-16                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,17,"*set*",["~",{"args":[["~@",5],"onclick",["~$",null,0]],"kwargs":{}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,17,0,{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │·········│┌─ client/_base.py/Client.decode_json-16                        ( <WebBrowser>, '[1,17,0,{"result":null}]' )
-[mupf] th-S │·········│└─ client/_base.py/Client.decode_json-16                          => [1, 17, 0, {'result': None}]
-[mupf] th-S │·········│┌─ _command.py/MetaCommand.resolve_by_id_mupf-16                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 17, None )
-[mupf] th-S │·········││┌─ _command.py/Command.result-31                               ( <Command *set* 17>, None )
-[mupf] th-S │·········││└─ _command.py/Command.result-31                                 => None
-[mupf] th-S │·········│└─ _command.py/MetaCommand.resolve_by_id_mupf-16                  => None
-[mupf] th-M └─ _command.py/Command.wait-17                                               => <Command *set* 17>
-[mupf] th-M ┌─ client/_base.py/Client.__bool__-0                                       ( <WebBrowser> )
-[mupf] th-M └─ client/_base.py/Client.__bool__-0                                         => True
-[mupf] th-M ┌─ client/_base.py/Client.run_one_callback_blocking-0                      ( <WebBrowser> )
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\xda\xe8e\xd2', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\xda\xe8e\xd2', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: dae865d2
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\x7f\xe1\x88\xb8', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\x7f\xe1\x88\xb8', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: 7fe188b8
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'm9?\x03', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'm9?\x03', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: 6d393f03
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'kW\x94\xe2', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'kW\x94\xe2', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: 6b5794e2
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\xbe\x14\x003', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\xbe\x14\x003', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: be140033
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\xa7Y}\x15', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\xa7Y}\x15', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: a7597d15
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'T>\xf3\x12', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'T>\xf3\x12', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: 543ef312
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\xa2\x99\r\xb7', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\xa2\x99\r\xb7', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: a2990db7
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b')u\xc3F', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b')u\xc3F', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: 2975c346
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\x86\xa9\xd4y', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\x86\xa9\xd4y', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: 86a9d479
+[mupf] th-S ··········│┌─ Client.decode_json-15                                        ( <WebBrowser>, '[1,17,0,{"result":null}]' )
+[mupf] th-S ··········│└─ Client.decode_json-15                                          => [1, 17, 0, {'result': None}]
+[mupf] th-M ┌─ Client.__bool__-0                                                       ( <WebBrowser> )
+[mupf] th-M └─ Client.__bool__-0                                                         => True
+[mupf] th-M ┌─ Client.run_one_callback_blocking-0                                      ( <WebBrowser> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[5,0,0,["~",{"args":[["~@",8,null]]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │·········│┌─ client/_base.py/Client.decode_json-17                        ( <WebBrowser>, '[5,0,0,["~",{"args":[["~@",8,null]]},{"c":1}]]' )
-[mupf] th-S │·········││┌─ client/_base.py/Client.get_remote_obj-18                    ( <WebBrowser>, 8, None )
-[mupf] th-S │·········│││┌─ client/_base.py/Client.get_remote_obj-19                   ( <WebBrowser>, None )
-[mupf] th-S │·········│││└─ client/_base.py/Client.get_remote_obj-19                     => None
-[mupf] th-S │·········││└─ client/_base.py/Client.get_remote_obj-18                      => <mupf._remote.RemoteObj object at 0x0000000003624550>
-[mupf] th-S │·········│└─ client/_base.py/Client.decode_json-17                          => [5, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003624550>]}]
-[mupf] th-S │·········│┌─ client/_base.py/Client.shedule_callback-0                    ( <WebBrowser>, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003624550>]} )
-[mupf] th-S │·········││┌─ _remote.py/CallbackTask.__init__-0                          ( <CallbackTask ? ? ->, <WebBrowser>, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003624550>]} )
-[mupf] th-S │·········││└─ _remote.py/CallbackTask.__init__-0                            => None
-[mupf] th-S │·········│└─ client/_base.py/Client.shedule_callback-0                      => None
-[mupf] th-M │┌─ _remote.py/CallbackTask.run-0                                          ( <CallbackTask None 0 <function button_click at 0x000000000210A9D8>> )
-[mupf] th-M ││┌─ _command.py/Command.__init__-18                                       ( <Command ? ?>, '*get*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-18                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-18                                       ( <Command *get* None>, ["~@",6], 'value' )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-18                                      ( <Command *get* 18>, (["~@",6], 'value'), {} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-18                                        => [0, 18, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-18                                  ( <WebBrowser>, [0, 18, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}] )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-18                                    => None
-[mupf] th-M ││└─ _command.py/Command.__call__-18                                         => <Command *get* 18>
-[mupf] th-M ││┌─ _command.py/Command.result-32                                         ( <Command *get* 18> )
-[mupf] th-M │││┌─ _command.py/Command.wait-18                                          ( <Command *get* 18> )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-17                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,18,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/send_task_body-17                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,18,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S ││││······││└─ client/_base.py/send_task_body-17                             => <coroutine object send_task_body at 0x00000000039913C8>
-[mupf] th-S ││││······│└─ client/_base.py/create_send_task-17                            => None
+[mupf] th-S │·········│┌─ Client.decode_json-16                                        ( <WebBrowser>, '[5,0,0,["~",{"args":[["~@",8,null]]},{"c":1}]]' )
+[mupf] th-S │·········││┌─ Client.get_remote_obj-18                                    ( <WebBrowser>, 8, None )
+[mupf] th-S │·········│││┌─ Client.get_remote_obj-19                                   ( <WebBrowser>, None )
+[mupf] th-S │·········│││└─ Client.get_remote_obj-19                                     => None
+[mupf] th-S │·········││└─ Client.get_remote_obj-19                                      => <mupf._remote.RemoteObj object at 0x0000018562A01FD0>
+[mupf] th-S │·········│└─ Client.decode_json-16                                          => [5, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000018562A01FD0>]}]
+[mupf] th-S │·········│┌─ Client.shedule_callback-0                                    ( <WebBrowser>, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000018562A01FD0>]} )
+[mupf] th-S │·········││┌─ CallbackTask.__init__-0                                     ( <CallbackTask ? ? ->, <WebBrowser>, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000018562A01FD0>]} )
+[mupf] th-S │·········││└─ CallbackTask.__init__-0                                       => None
+[mupf] th-S │·········│└─ Client.shedule_callback-0                                      => None
+[mupf] th-M │┌─ CallbackTask.run-0                                                     ( <CallbackTask None 0 <function button_click at 0x00000185615CC1E0>> )
+[mupf] th-M ││┌─ Client.send_json-18                                                   ( <WebBrowser>, [0, 18, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}] )
+[mupf] th-M ││└─ Client.send_json-18                                                     => None
+[mupf] th-S ││········│┌─ create_send_task-17                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,18,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-S ││········│└─ create_send_task-17                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,18,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,18,0,{"result":"suzr"}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-18                        ( <WebBrowser>, '[1,18,0,{"result":"suzr"}]' )
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-18                          => [1, 18, 0, {'result': 'suzr'}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-17                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 18, 'suzr' )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-33                               ( <Command *get* 18>, 'suzr' )
-[mupf] th-S ││││······││└─ _command.py/Command.result-33                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-17                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-18                                            => <Command *get* 18>
-[mupf] th-M ││└─ _command.py/Command.result-32                                           => 'suzr'
-[mupf] th-M ││┌─ _command.py/Command.__init__-19                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-19                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-19                                       ( <Command *call* None>, 'span', id=2, this_=["~@",1] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-19                                      ( <Command *call* 19>, ('span',), {'id': 2, 'this_': ["~@",1]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-19                                        => [0, 19, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-19                                  ( <WebBrowser>, [0, 19, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-18                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,19,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/send_task_body-18                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,19,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S ││││······││└─ client/_base.py/send_task_body-18                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-S ││││······│└─ client/_base.py/create_send_task-18                            => None
+[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,18,0,{"result":"ggg"}]', rsv1=False, rsv2=False, rsv3=False)
+[mupf] th-S ││········│┌─ Client.decode_json-17                                        ( <WebBrowser>, '[1,18,0,{"result":"ggg"}]' )
+[mupf] th-S ││········│└─ Client.decode_json-17                                          => [1, 18, 0, {'result': 'ggg'}]
+[mupf] th-M ││┌─ Client.send_json-19                                                   ( <WebBrowser>, [0, 19, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
+[mupf] th-S │││·······│┌─ create_send_task-18                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,19,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
+[mupf] th-M ││└─ Client.send_json-19                                                     => None
+[mupf] th-S ││········│└─ create_send_task-18                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,19,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││└─ client/_base.py/Client.send_json-19                                    => None
-[mupf] th-M ││└─ _command.py/Command.__call__-19                                         => <Command *call* 19>
-[mupf] th-M ││┌─ _command.py/Command.result-34                                         ( <Command *call* 19> )
-[mupf] th-M │││┌─ _command.py/Command.wait-19                                          ( <Command *call* 19> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,19,0,["~",{"result":["~@",9,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-19                        ( <WebBrowser>, '[1,19,0,["~",{"result":["~@",9,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-20                    ( <WebBrowser>, 9, None )
-[mupf] th-S ││││······│││┌─ client/_base.py/Client.get_remote_obj-21                   ( <WebBrowser>, None )
-[mupf] th-S ││││······│││└─ client/_base.py/Client.get_remote_obj-21                     => None
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-20                      => <mupf._remote.RemoteObj object at 0x0000000003624AC8>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-19                          => [1, 19, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003624AC8>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-18                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 19, <mupf._remote.RemoteObj object at 0x0000000003624AC8> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-35                               ( <Command *call* 19>, <mupf._remote.RemoteObj object at 0x0000000003624AC8> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-35                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-18                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-19                                            => <Command *call* 19>
-[mupf] th-M ││└─ _command.py/Command.result-34                                           => <mupf._remote.RemoteObj object at 0x0000000003624AC8>
-[mupf] th-M ││┌─ _command.py/Command.__init__-20                                       ( <Command ? ?>, '*set*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-20                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-20                                       ( <Command *set* None>, ["~@",9], 'innerHTML', "SHA256('suzr') = c5cf58cfdf5f270d8e6bb92dee01898093dc9444d90813d128eaa7ece83fc951" )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-20                                      ( <Command *set* 20>, (["~@",9], 'innerHTML', "SHA256('suzr') = c5cf58cfdf5f270d8e6bb92dee01898093dc9444d90813d128eaa7ece83fc951"), {} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-20                                        => [0, 20, '*set*', {'args': (["~@",9], 'innerHTML', "SHA256('suzr') = c5cf58cfdf5f270d8e6bb92dee01898093dc9444d90813d128eaa7ece83fc951"), 'kwargs': {}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-20                                  ( <WebBrowser>, [0, 20, '*set*', {'args': (["~@",9], 'innerHTML', "SHA256('suzr') = c5cf58cfdf5f270d8e6bb92dee01898093dc9444d90813d128eaa7ece83fc951"), 'kwargs': {}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-19                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,20,"*set*",["~",{"args":[["~@",9],"innerHTML","SHA256(\'suzr\') = c5cf58cfdf5f270d8e6bb92dee01898093dc9444d90813d128eaa7ece83fc951"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-20                                    => None
-[mupf] th-M ││└─ _command.py/Command.__call__-20                                         => <Command *set* 20>
-[mupf] th-S ││········││┌─ client/_base.py/send_task_body-19                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,20,"*set*",["~",{"args":[["~@",9],"innerHTML","SHA256(\'suzr\') = c5cf58cfdf5f270d8e6bb92dee01898093dc9444d90813d128eaa7ece83fc951"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S ││········││└─ client/_base.py/send_task_body-19                             => <coroutine object send_task_body at 0x00000000039917C8>
-[mupf] th-M ││┌─ _command.py/Command.wait-20                                           ( <Command *set* 20> )
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-19                            => None
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,20,"*set*",["~",{"args":[["~@",9],"innerHTML","SHA256(\'suzr\') = c5cf58cfdf5f270d8e6bb92dee01898093dc9444d90813d128eaa7ece83fc951"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
+[mupf] th-S ││········│┌─ Client.decode_json-18                                        ( <WebBrowser>, '[1,19,0,["~",{"result":["~@",9,null]},{"c":1}]]' )
+[mupf] th-S ││········││┌─ Client.get_remote_obj-20                                    ( <WebBrowser>, 9, None )
+[mupf] th-S ││········│││┌─ Client.get_remote_obj-21                                   ( <WebBrowser>, None )
+[mupf] th-S ││········│││└─ Client.get_remote_obj-21                                     => None
+[mupf] th-S ││········││└─ Client.get_remote_obj-21                                      => <mupf._remote.RemoteObj object at 0x0000018562B38198>
+[mupf] th-S ││········│└─ Client.decode_json-18                                          => [1, 19, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562B38198>}]
+[mupf] th-M ││┌─ Client.send_json-20                                                   ( <WebBrowser>, [0, 20, '*set*', {'args': (["~@",9], 'innerHTML', "SHA256('ggg') = 569c7f0b41ce9649602a0218cd02ed0b0a3d93130329451cc782b7dfda79ce71"), 'kwargs': {}}] )
+[mupf] th-S │││·······│┌─ create_send_task-19                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,20,"*set*",["~",{"args":[["~@",9],"innerHTML","SHA256(\'ggg\') = 569c7f0b41ce9649602a0218cd02ed0b0a3d93130329451cc782b7dfda79ce71"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-M ││└─ Client.send_json-20                                                     => None
+[mupf] th-S ││········│└─ create_send_task-19                                            => None
+[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,20,"*set*",["~",{"args":[["~@",9],"innerHTML","SHA256(\'ggg\') = 569c7f0b41ce9649602a0218cd02ed0b0a3d93130329451cc782b7dfda79ce71"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,20,0,{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │││·······│┌─ client/_base.py/Client.decode_json-20                        ( <WebBrowser>, '[1,20,0,{"result":null}]' )
-[mupf] th-S │││·······│└─ client/_base.py/Client.decode_json-20                          => [1, 20, 0, {'result': None}]
-[mupf] th-S │││·······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-19                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 20, None )
-[mupf] th-S │││·······││┌─ _command.py/Command.result-36                               ( <Command *set* 20>, None )
-[mupf] th-S │││·······││└─ _command.py/Command.result-36                                 => None
-[mupf] th-S │││·······│└─ _command.py/MetaCommand.resolve_by_id_mupf-19                  => None
-[mupf] th-M ││└─ _command.py/Command.wait-20                                             => <Command *set* 20>
-[mupf] th-M ││┌─ _command.py/Command.__init__-21                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-21                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-21                                       ( <Command *call* None>, ["~@",9], id=4, this_=["~@",3] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-21                                      ( <Command *call* 21>, (["~@",9],), {'id': 4, 'this_': ["~@",3]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-21                                        => [0, 21, '*call*', {'args': (["~@",9],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-21                                  ( <WebBrowser>, [0, 21, '*call*', {'args': (["~@",9],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-20                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,21,"*call*",["~",{"args":[["~@",9]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-21                                    => None
-[mupf] th-M ││└─ _command.py/Command.__call__-21                                         => <Command *call* 21>
-[mupf] th-S ││········││┌─ client/_base.py/send_task_body-20                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,21,"*call*",["~",{"args":[["~@",9]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S ││········││└─ client/_base.py/send_task_body-20                             => <coroutine object send_task_body at 0x00000000039913C8>
-[mupf] th-M ││┌─ _command.py/Command.result-37                                         ( <Command *call* 21> )
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-20                            => None
-[mupf] th-M │││┌─ _command.py/Command.wait-21                                          ( <Command *call* 21> )
+[mupf] th-S ││········│┌─ Client.decode_json-19                                        ( <WebBrowser>, '[1,20,0,{"result":null}]' )
+[mupf] th-S ││········│└─ Client.decode_json-19                                          => [1, 20, 0, {'result': None}]
+[mupf] th-M ││┌─ Client.send_json-21                                                   ( <WebBrowser>, [0, 21, '*call*', {'args': (["~@",9],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
+[mupf] th-S │││·······│┌─ create_send_task-20                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,21,"*call*",["~",{"args":[["~@",9]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
+[mupf] th-M ││└─ Client.send_json-21                                                     => None
+[mupf] th-S ││········│└─ create_send_task-20                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,21,"*call*",["~",{"args":[["~@",9]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,21,0,["~",{"result":["~@",9,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-21                        ( <WebBrowser>, '[1,21,0,["~",{"result":["~@",9,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-22                    ( <WebBrowser>, 9, None )
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-22                      => <mupf._remote.RemoteObj object at 0x0000000003624AC8>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-21                          => [1, 21, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003624AC8>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-20                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 21, <mupf._remote.RemoteObj object at 0x0000000003624AC8> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-38                               ( <Command *call* 21>, <mupf._remote.RemoteObj object at 0x0000000003624AC8> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-38                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-20                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-21                                            => <Command *call* 21>
-[mupf] th-M ││└─ _command.py/Command.result-37                                           => <mupf._remote.RemoteObj object at 0x0000000003624AC8>
-[mupf] th-M ││┌─ _command.py/Command.__init__-22                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-22                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-22                                       ( <Command *call* None>, 'br', id=2, this_=["~@",1] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-22                                      ( <Command *call* 22>, ('br',), {'id': 2, 'this_': ["~@",1]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-22                                        => [0, 22, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-22                                  ( <WebBrowser>, [0, 22, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-21                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,22,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-22                                    => None
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-21                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,22,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-21                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-M ││└─ _command.py/Command.__call__-22                                         => <Command *call* 22>
-[mupf] th-S ││········│└─ client/_base.py/create_send_task-21                            => None
-[mupf] th-M ││┌─ _command.py/Command.result-39                                         ( <Command *call* 22> )
+[mupf] th-S ││········│┌─ Client.decode_json-20                                        ( <WebBrowser>, '[1,21,0,["~",{"result":["~@",9,null]},{"c":1}]]' )
+[mupf] th-S ││········││┌─ Client.get_remote_obj-22                                    ( <WebBrowser>, 9, None )
+[mupf] th-S ││········││└─ Client.get_remote_obj-22                                      => <mupf._remote.RemoteObj object at 0x0000018562B38198>
+[mupf] th-S ││········│└─ Client.decode_json-20                                          => [1, 21, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562B38198>}]
+[mupf] th-M ││┌─ Client.send_json-22                                                   ( <WebBrowser>, [0, 22, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
+[mupf] th-S │││·······│┌─ create_send_task-21                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,22,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
+[mupf] th-S │││·······│└─ create_send_task-21                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,22,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││┌─ _command.py/Command.wait-22                                          ( <Command *call* 22> )
+[mupf] th-M ││└─ Client.send_json-22                                                     => None
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,22,0,["~",{"result":["~@",10,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-22                        ( <WebBrowser>, '[1,22,0,["~",{"result":["~@",10,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-23                    ( <WebBrowser>, 10, None )
-[mupf] th-S ││││······│││┌─ client/_base.py/Client.get_remote_obj-24                   ( <WebBrowser>, None )
-[mupf] th-S ││││······│││└─ client/_base.py/Client.get_remote_obj-24                     => None
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-23                      => <mupf._remote.RemoteObj object at 0x00000000036244A8>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-22                          => [1, 22, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036244A8>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-21                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 22, <mupf._remote.RemoteObj object at 0x00000000036244A8> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-40                               ( <Command *call* 22>, <mupf._remote.RemoteObj object at 0x00000000036244A8> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-40                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-21                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-22                                            => <Command *call* 22>
-[mupf] th-M ││└─ _command.py/Command.result-39                                           => <mupf._remote.RemoteObj object at 0x00000000036244A8>
-[mupf] th-M ││┌─ _command.py/Command.__init__-23                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-23                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-23                                       ( <Command *call* None>, ["~@",10], id=4, this_=["~@",3] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-23                                      ( <Command *call* 23>, (["~@",10],), {'id': 4, 'this_': ["~@",3]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-23                                        => [0, 23, '*call*', {'args': (["~@",10],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-23                                  ( <WebBrowser>, [0, 23, '*call*', {'args': (["~@",10],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-22                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,23,"*call*",["~",{"args":[["~@",10]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/send_task_body-22                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,23,"*call*",["~",{"args":[["~@",10]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S ││││······││└─ client/_base.py/send_task_body-22                             => <coroutine object send_task_body at 0x00000000039917C8>
-[mupf] th-S ││││······│└─ client/_base.py/create_send_task-22                            => None
+[mupf] th-S ││········│┌─ Client.decode_json-21                                        ( <WebBrowser>, '[1,22,0,["~",{"result":["~@",10,null]},{"c":1}]]' )
+[mupf] th-S ││········││┌─ Client.get_remote_obj-23                                    ( <WebBrowser>, 10, None )
+[mupf] th-S ││········│││┌─ Client.get_remote_obj-24                                   ( <WebBrowser>, None )
+[mupf] th-S ││········│││└─ Client.get_remote_obj-24                                     => None
+[mupf] th-S ││········││└─ Client.get_remote_obj-24                                      => <mupf._remote.RemoteObj object at 0x0000018562B380F0>
+[mupf] th-S ││········│└─ Client.decode_json-21                                          => [1, 22, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562B380F0>}]
+[mupf] th-M ││┌─ Client.send_json-23                                                   ( <WebBrowser>, [0, 23, '*call*', {'args': (["~@",10],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
+[mupf] th-S │││·······│┌─ create_send_task-22                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[0,23,"*call*",["~",{"args":[["~@",10]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
+[mupf] th-M ││└─ Client.send_json-23                                                     => None
+[mupf] th-S ││········│└─ create_send_task-22                                            => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,23,"*call*",["~",{"args":[["~@",10]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││└─ client/_base.py/Client.send_json-23                                    => None
-[mupf] th-M ││└─ _command.py/Command.__call__-23                                         => <Command *call* 23>
-[mupf] th-M ││┌─ _command.py/Command.result-41                                         ( <Command *call* 23> )
-[mupf] th-M │││┌─ _command.py/Command.wait-23                                          ( <Command *call* 23> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,23,0,["~",{"result":["~@",10,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-23                        ( <WebBrowser>, '[1,23,0,["~",{"result":["~@",10,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-25                    ( <WebBrowser>, 10, None )
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-25                      => <mupf._remote.RemoteObj object at 0x00000000036244A8>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-23                          => [1, 23, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036244A8>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-22                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 23, <mupf._remote.RemoteObj object at 0x00000000036244A8> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-42                               ( <Command *call* 23>, <mupf._remote.RemoteObj object at 0x00000000036244A8> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-42                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-22                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-23                                            => <Command *call* 23>
-[mupf] th-M ││└─ _command.py/Command.result-41                                           => <mupf._remote.RemoteObj object at 0x00000000036244A8>
-[mupf] th-M ││┌─ _command.py/Command.__init__-24                                       ( <Command ? ?>, '*gc*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-24                                         => None
-[mupf] th-M ││┌─ _command.py/Command.run-1                                             ( <Command *gc* None>, 9 )
-[mupf] th-M │││┌─ _command.py/Command.__call__-24                                      ( <Command *gc* None>, 9 )
-[mupf] th-M ││││┌─ _command.py/Command._jsonify-24                                     ( <Command *gc* 24>, (9,), {} )
-[mupf] th-M ││││└─ _command.py/Command._jsonify-24                                       => [2, 24, '*gc*', {'args': (9,), 'kwargs': {}}]
-[mupf] th-M ││││┌─ client/_base.py/Client.send_json-24                                 ( <WebBrowser>, [2, 24, '*gc*', {'args': (9,), 'kwargs': {}}] )
-[mupf] th-M ││││└─ client/_base.py/Client.send_json-24                                   => None
-[mupf] th-M │││└─ _command.py/Command.__call__-24                                        => <Command *gc* 24>
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-23                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,24,"*gc*",{"args":[9],"kwargs":{}}]' )
-[mupf] th-M ││└─ _command.py/Command.run-1                                               => <Command *gc* 24>
-[mupf] th-S ││········││┌─ client/_base.py/send_task_body-23                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,24,"*gc*",{"args":[9],"kwargs":{}}]' )
-[mupf] th-S ││········││└─ client/_base.py/send_task_body-23                             => <coroutine object send_task_body at 0x00000000039913C8>
-[mupf] th-M ││┌─ _command.py/Command.result-43                                         ( <Command *gc* 24> )
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-23                            => None
-[mupf] th-M │││┌─ _command.py/Command.wait-24                                          ( <Command *gc* 24> )
+[mupf] th-S ││········│┌─ Client.decode_json-22                                        ( <WebBrowser>, '[1,23,0,["~",{"result":["~@",10,null]},{"c":1}]]' )
+[mupf] th-S ││········││┌─ Client.get_remote_obj-25                                    ( <WebBrowser>, 10, None )
+[mupf] th-S ││········││└─ Client.get_remote_obj-25                                      => <mupf._remote.RemoteObj object at 0x0000018562B380F0>
+[mupf] th-S ││········│└─ Client.decode_json-22                                          => [1, 23, 0, {'result': <mupf._remote.RemoteObj object at 0x0000018562B380F0>}]
+[mupf] th-M ││┌─ Client.send_json-24                                                   ( <WebBrowser>, [2, 24, '*gc*', {'args': (9,), 'kwargs': {}}] )
+[mupf] th-S │││·······│┌─ create_send_task-23                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[2,24,"*gc*",{"args":[9],"kwargs":{}}]' )
+[mupf] th-S │││·······│└─ create_send_task-23                                            => None
+[mupf] th-M ││└─ Client.send_json-24                                                     => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,24,"*gc*",{"args":[9],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││└─ _command.py/Command.wait-24                                            => <Command *gc* 24>
-[mupf] th-M ││└─ _command.py/Command.result-43                                           => None
-[mupf] th-M ││┌─ client/_base.py/Client.send_json-25                                   ( <WebBrowser>, [6, 0, 0, None] )
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-24                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[6,0,0,null]' )
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-24                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[6,0,0,null]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-24                             => <coroutine object send_task_body at 0x00000000039913C8>
-[mupf] th-M ││└─ client/_base.py/Client.send_json-25                                     => None
-[mupf] th-M │└─ _remote.py/CallbackTask.run-0                                            => None
-[mupf] th-S │·········│└─ client/_base.py/create_send_task-24                            => None
+[mupf] th-M ││┌─ Client.send_json-25                                                   ( <WebBrowser>, [6, 0, 0, None] )
+[mupf] th-S │││·······│┌─ create_send_task-24                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[6,0,0,null]' )
+[mupf] th-S │││·······│└─ create_send_task-24                                            => None
+[mupf] th-M ││└─ Client.send_json-25                                                     => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[6,0,0,null]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.__init__-25                                        ( <Command ? ?>, '*gc*' )
-[mupf] th-M │└─ _command.py/Command.__init__-25                                          => None
-[mupf] th-M │┌─ _command.py/Command.run-2                                              ( <Command *gc* None>, 8 )
-[mupf] th-M ││┌─ _command.py/Command.__call__-25                                       ( <Command *gc* None>, 8 )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-25                                      ( <Command *gc* 25>, (8,), {} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-25                                        => [2, 25, '*gc*', {'args': (8,), 'kwargs': {}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-26                                  ( <WebBrowser>, [2, 25, '*gc*', {'args': (8,), 'kwargs': {}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-25                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,25,"*gc*",{"args":[8],"kwargs":{}}]' )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-26                                    => None
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-25                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,25,"*gc*",{"args":[8],"kwargs":{}}]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-25                             => <coroutine object send_task_body at 0x00000000039913C8>
-[mupf] th-M ││└─ _command.py/Command.__call__-25                                         => <Command *gc* 25>
-[mupf] th-S ││········│└─ client/_base.py/create_send_task-25                            => None
-[mupf] th-M │└─ _command.py/Command.run-2                                                => <Command *gc* 25>
+[mupf] th-M │└─ CallbackTask.run-0                                                       => None
+[mupf] th-M │┌─ Client.send_json-26                                                    ( <WebBrowser>, [2, 25, '*gc*', {'args': (8,), 'kwargs': {}}] )
+[mupf] th-M │└─ Client.send_json-26                                                      => None
+[mupf] th-S │·········│┌─ create_send_task-25                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[2,25,"*gc*",{"args":[8],"kwargs":{}}]' )
+[mupf] th-M └─ Client.run_one_callback_blocking-0                                        => None
+[mupf] th-S ··········│└─ create_send_task-25                                            => None
+[mupf] th-M ┌─ Client.__bool__-1                                                       ( <WebBrowser> )
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,25,"*gc*",{"args":[8],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.result-44                                          ( <Command *gc* 25> )
-[mupf] th-M ││┌─ _command.py/Command.wait-25                                           ( <Command *gc* 25> )
-[mupf] th-M ││└─ _command.py/Command.wait-25                                             => <Command *gc* 25>
-[mupf] th-M │└─ _command.py/Command.result-44                                            => None
-[mupf] th-M └─ client/_base.py/Client.run_one_callback_blocking-0                        => None
-[mupf] th-M ┌─ client/_base.py/Client.__bool__-1                                       ( <WebBrowser> )
-[mupf] th-M └─ client/_base.py/Client.__bool__-1                                         => True
-[mupf] th-M ┌─ client/_base.py/Client.run_one_callback_blocking-1                      ( <WebBrowser> )
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\xca\x18\xfd\xad', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\xca\x18\xfd\xad', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: ca18fdad
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[5,1,0,["~",{"args":[["~@",11,null]]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │·········│┌─ client/_base.py/Client.decode_json-24                        ( <WebBrowser>, '[5,1,0,["~",{"args":[["~@",11,null]]},{"c":1}]]' )
-[mupf] th-S │·········││┌─ client/_base.py/Client.get_remote_obj-26                    ( <WebBrowser>, 11, None )
-[mupf] th-S │·········│││┌─ client/_base.py/Client.get_remote_obj-27                   ( <WebBrowser>, None )
-[mupf] th-S │·········│││└─ client/_base.py/Client.get_remote_obj-27                     => None
-[mupf] th-S │·········││└─ client/_base.py/Client.get_remote_obj-26                      => <mupf._remote.RemoteObj object at 0x0000000003624400>
-[mupf] th-S │·········│└─ client/_base.py/Client.decode_json-24                          => [5, 1, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003624400>]}]
-[mupf] th-S │·········│┌─ _command.py/Command.__init__-26                              ( <Command ? ?>, '*gc*' )
-[mupf] th-S │·········│└─ _command.py/Command.__init__-26                                => None
-[mupf] th-S │·········│┌─ _command.py/Command.run-3                                    ( <Command *gc* None>, 10 )
-[mupf] th-S │·········││┌─ _command.py/Command.__call__-26                             ( <Command *gc* None>, 10 )
-[mupf] th-S │·········│││┌─ _command.py/Command._jsonify-26                            ( <Command *gc* 26>, (10,), {} )
-[mupf] th-S │·········│││└─ _command.py/Command._jsonify-26                              => [2, 26, '*gc*', {'args': (10,), 'kwargs': {}}]
-[mupf] th-S │·········│││┌─ client/_base.py/Client.send_json-27                        ( <WebBrowser>, [2, 26, '*gc*', {'args': (10,), 'kwargs': {}}] )
-[mupf] th-S │·········│││└─ client/_base.py/Client.send_json-27                          => None
-[mupf] th-S │·········││└─ _command.py/Command.__call__-26                               => <Command *gc* 26>
-[mupf] th-S │·········│└─ _command.py/Command.run-3                                      => <Command *gc* 26>
-[mupf] th-S │·········│┌─ _command.py/Command.result-45                                ( <Command *gc* 26> )
-[mupf] th-S │·········││┌─ _command.py/Command.wait-26                                 ( <Command *gc* 26> )
-[mupf] th-S │·········││└─ _command.py/Command.wait-26                                   => <Command *gc* 26>
-[mupf] th-S │·········│└─ _command.py/Command.result-45                                  => None
-[mupf] th-S │·········│┌─ client/_base.py/Client.shedule_callback-1                    ( <WebBrowser>, 1, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003624400>]} )
-[mupf] th-S │·········││┌─ _remote.py/CallbackTask.__init__-1                          ( <CallbackTask ? ? ->, <WebBrowser>, 1, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003624400>]} )
-[mupf] th-S │·········││└─ _remote.py/CallbackTask.__init__-1                            => None
-[mupf] th-S │·········│└─ client/_base.py/Client.shedule_callback-1                      => None
-[mupf] th-M │┌─ _remote.py/CallbackTask.run-1                                          ( <CallbackTask None 1 <function button_click at 0x000000000210A9D8>> )
-[mupf] th-M ││┌─ _command.py/Command.__init__-27                                       ( <Command ? ?>, '*get*' )
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-26                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,26,"*gc*",{"args":[10],"kwargs":{}}]' )
-[mupf] th-M ││└─ _command.py/Command.__init__-27                                         => None
-[mupf] th-S ││········││┌─ client/_base.py/send_task_body-26                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,26,"*gc*",{"args":[10],"kwargs":{}}]' )
-[mupf] th-S ││········││└─ client/_base.py/send_task_body-26                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-M ││┌─ _command.py/Command.__call__-27                                       ( <Command *get* None>, ["~@",6], 'value' )
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-26                            => None
-[mupf] th-M │││┌─ _command.py/Command._jsonify-27                                      ( <Command *get* 27>, (["~@",6], 'value'), {} )
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,26,"*gc*",{"args":[10],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││└─ _command.py/Command._jsonify-27                                        => [0, 27, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-28                                  ( <WebBrowser>, [0, 27, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}] )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-28                                    => None
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-27                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,27,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-27                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,27,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-27                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-M ││└─ _command.py/Command.__call__-27                                         => <Command *get* 27>
-[mupf] th-S ││········│└─ client/_base.py/create_send_task-27                            => None
-[mupf] th-M ││┌─ _command.py/Command.result-46                                         ( <Command *get* 27> )
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,27,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││┌─ _command.py/Command.wait-27                                          ( <Command *get* 27> )
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,27,0,{"result":"bur"}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-25                        ( <WebBrowser>, '[1,27,0,{"result":"bur"}]' )
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-25                          => [1, 27, 0, {'result': 'bur'}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-23                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 27, 'bur' )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-47                               ( <Command *get* 27>, 'bur' )
-[mupf] th-S ││││······││└─ _command.py/Command.result-47                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-23                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-27                                            => <Command *get* 27>
-[mupf] th-M ││└─ _command.py/Command.result-46                                           => 'bur'
-[mupf] th-M ││┌─ _command.py/Command.__init__-28                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-28                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-28                                       ( <Command *call* None>, 'span', id=2, this_=["~@",1] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-28                                      ( <Command *call* 28>, ('span',), {'id': 2, 'this_': ["~@",1]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-28                                        => [0, 28, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-29                                  ( <WebBrowser>, [0, 28, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-28                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,28,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/send_task_body-28                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,28,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S ││││······││└─ client/_base.py/send_task_body-28                             => <coroutine object send_task_body at 0x0000000003991748>
-[mupf] th-M │││└─ client/_base.py/Client.send_json-29                                    => None
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-28                            => None
-[mupf] th-M ││└─ _command.py/Command.__call__-28                                         => <Command *call* 28>
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,28,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M ││┌─ _command.py/Command.result-48                                         ( <Command *call* 28> )
-[mupf] th-M │││┌─ _command.py/Command.wait-28                                          ( <Command *call* 28> )
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,28,0,["~",{"result":["~@",12,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-26                        ( <WebBrowser>, '[1,28,0,["~",{"result":["~@",12,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-28                    ( <WebBrowser>, 12, None )
-[mupf] th-S ││││······│││┌─ client/_base.py/Client.get_remote_obj-29                   ( <WebBrowser>, None )
-[mupf] th-S ││││······│││└─ client/_base.py/Client.get_remote_obj-29                     => None
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-28                      => <mupf._remote.RemoteObj object at 0x00000000036249E8>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-26                          => [1, 28, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036249E8>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-24                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 28, <mupf._remote.RemoteObj object at 0x00000000036249E8> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-49                               ( <Command *call* 28>, <mupf._remote.RemoteObj object at 0x00000000036249E8> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-49                                 => None
-[mupf] th-M │││└─ _command.py/Command.wait-28                                            => <Command *call* 28>
-[mupf] th-S │││·······│└─ _command.py/MetaCommand.resolve_by_id_mupf-24                  => None
-[mupf] th-M ││└─ _command.py/Command.result-48                                           => <mupf._remote.RemoteObj object at 0x00000000036249E8>
-[mupf] th-M ││┌─ _command.py/Command.__init__-29                                       ( <Command ? ?>, '*set*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-29                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-29                                       ( <Command *set* None>, ["~@",12], 'innerHTML', "SHA256('bur') = 6debeeb262f83b1a11cbbcda749d17437b8e61a389f1c8ecbb8a3d83f833f674" )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-29                                      ( <Command *set* 29>, (["~@",12], 'innerHTML', "SHA256('bur') = 6debeeb262f83b1a11cbbcda749d17437b8e61a389f1c8ecbb8a3d83f833f674"), {} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-29                                        => [0, 29, '*set*', {'args': (["~@",12], 'innerHTML', "SHA256('bur') = 6debeeb262f83b1a11cbbcda749d17437b8e61a389f1c8ecbb8a3d83f833f674"), 'kwargs': {}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-30                                  ( <WebBrowser>, [0, 29, '*set*', {'args': (["~@",12], 'innerHTML', "SHA256('bur') = 6debeeb262f83b1a11cbbcda749d17437b8e61a389f1c8ecbb8a3d83f833f674"), 'kwargs': {}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-29                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,29,"*set*",["~",{"args":[["~@",12],"innerHTML","SHA256(\'bur\') = 6debeeb262f83b1a11cbbcda749d17437b8e61a389f1c8ecbb8a3d83f833f674"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-30                                    => None
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-29                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,29,"*set*",["~",{"args":[["~@",12],"innerHTML","SHA256(\'bur\') = 6debeeb262f83b1a11cbbcda749d17437b8e61a389f1c8ecbb8a3d83f833f674"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-29                             => <coroutine object send_task_body at 0x000000000359ADC8>
-[mupf] th-M ││└─ _command.py/Command.__call__-29                                         => <Command *set* 29>
-[mupf] th-M ││┌─ _command.py/Command.wait-29                                           ( <Command *set* 29> )
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-29                            => None
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,29,"*set*",["~",{"args":[["~@",12],"innerHTML","SHA256(\'bur\') = 6debeeb262f83b1a11cbbcda749d17437b8e61a389f1c8ecbb8a3d83f833f674"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,29,0,{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S │││·······│┌─ client/_base.py/Client.decode_json-27                        ( <WebBrowser>, '[1,29,0,{"result":null}]' )
-[mupf] th-S │││·······│└─ client/_base.py/Client.decode_json-27                          => [1, 29, 0, {'result': None}]
-[mupf] th-S │││·······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-25                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 29, None )
-[mupf] th-S │││·······││┌─ _command.py/Command.result-50                               ( <Command *set* 29>, None )
-[mupf] th-S │││·······││└─ _command.py/Command.result-50                                 => None
-[mupf] th-S │││·······│└─ _command.py/MetaCommand.resolve_by_id_mupf-25                  => None
-[mupf] th-M ││└─ _command.py/Command.wait-29                                             => <Command *set* 29>
-[mupf] th-M ││┌─ _command.py/Command.__init__-30                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-30                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-30                                       ( <Command *call* None>, ["~@",12], id=4, this_=["~@",3] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-30                                      ( <Command *call* 30>, (["~@",12],), {'id': 4, 'this_': ["~@",3]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-30                                        => [0, 30, '*call*', {'args': (["~@",12],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-31                                  ( <WebBrowser>, [0, 30, '*call*', {'args': (["~@",12],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-31                                    => None
-[mupf] th-M ││└─ _command.py/Command.__call__-30                                         => <Command *call* 30>
-[mupf] th-S ││········│┌─ client/_base.py/create_send_task-30                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,30,"*call*",["~",{"args":[["~@",12]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S ││········││┌─ client/_base.py/send_task_body-30                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,30,"*call*",["~",{"args":[["~@",12]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S ││········││└─ client/_base.py/send_task_body-30                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-M ││┌─ _command.py/Command.result-51                                         ( <Command *call* 30> )
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-30                            => None
-[mupf] th-M │││┌─ _command.py/Command.wait-30                                          ( <Command *call* 30> )
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,30,"*call*",["~",{"args":[["~@",12]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,30,0,["~",{"result":["~@",12,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-28                        ( <WebBrowser>, '[1,30,0,["~",{"result":["~@",12,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-30                    ( <WebBrowser>, 12, None )
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-30                      => <mupf._remote.RemoteObj object at 0x00000000036249E8>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-28                          => [1, 30, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036249E8>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-26                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 30, <mupf._remote.RemoteObj object at 0x00000000036249E8> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-52                               ( <Command *call* 30>, <mupf._remote.RemoteObj object at 0x00000000036249E8> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-52                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-26                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-30                                            => <Command *call* 30>
-[mupf] th-M ││└─ _command.py/Command.result-51                                           => <mupf._remote.RemoteObj object at 0x00000000036249E8>
-[mupf] th-M ││┌─ _command.py/Command.__init__-31                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-31                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-31                                       ( <Command *call* None>, 'br', id=2, this_=["~@",1] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-31                                      ( <Command *call* 31>, ('br',), {'id': 2, 'this_': ["~@",1]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-31                                        => [0, 31, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-32                                  ( <WebBrowser>, [0, 31, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-31                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,31,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/send_task_body-31                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,31,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]' )
-[mupf] th-S ││││······││└─ client/_base.py/send_task_body-31                             => <coroutine object send_task_body at 0x0000000003991748>
-[mupf] th-S ││││······│└─ client/_base.py/create_send_task-31                            => None
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,31,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││└─ client/_base.py/Client.send_json-32                                    => None
-[mupf] th-M ││└─ _command.py/Command.__call__-31                                         => <Command *call* 31>
-[mupf] th-M ││┌─ _command.py/Command.result-53                                         ( <Command *call* 31> )
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,31,0,["~",{"result":["~@",13,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││┌─ _command.py/Command.wait-31                                          ( <Command *call* 31> )
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-29                        ( <WebBrowser>, '[1,31,0,["~",{"result":["~@",13,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-31                    ( <WebBrowser>, 13, None )
-[mupf] th-S ││││······│││┌─ client/_base.py/Client.get_remote_obj-32                   ( <WebBrowser>, None )
-[mupf] th-S ││││······│││└─ client/_base.py/Client.get_remote_obj-32                     => None
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-31                      => <mupf._remote.RemoteObj object at 0x00000000036245C0>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-29                          => [1, 31, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036245C0>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-27                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 31, <mupf._remote.RemoteObj object at 0x00000000036245C0> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-54                               ( <Command *call* 31>, <mupf._remote.RemoteObj object at 0x00000000036245C0> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-54                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-27                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-31                                            => <Command *call* 31>
-[mupf] th-M ││└─ _command.py/Command.result-53                                           => <mupf._remote.RemoteObj object at 0x00000000036245C0>
-[mupf] th-M ││┌─ _command.py/Command.__init__-32                                       ( <Command ? ?>, '*call*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-32                                         => None
-[mupf] th-M ││┌─ _command.py/Command.__call__-32                                       ( <Command *call* None>, ["~@",13], id=4, this_=["~@",3] )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-32                                      ( <Command *call* 32>, (["~@",13],), {'id': 4, 'this_': ["~@",3]} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-32                                        => [0, 32, '*call*', {'args': (["~@",13],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-33                                  ( <WebBrowser>, [0, 32, '*call*', {'args': (["~@",13],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}] )
-[mupf] th-M │││└─ client/_base.py/Client.send_json-33                                    => None
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-32                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,32,"*call*",["~",{"args":[["~@",13]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S │││·······││┌─ client/_base.py/send_task_body-32                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[0,32,"*call*",["~",{"args":[["~@",13]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]' )
-[mupf] th-S │││·······││└─ client/_base.py/send_task_body-32                             => <coroutine object send_task_body at 0x000000000359ADC8>
-[mupf] th-M ││└─ _command.py/Command.__call__-32                                         => <Command *call* 32>
-[mupf] th-S ││········│└─ client/_base.py/create_send_task-32                            => None
-[mupf] th-M ││┌─ _command.py/Command.result-55                                         ( <Command *call* 32> )
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,32,"*call*",["~",{"args":[["~@",13]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │││┌─ _command.py/Command.wait-32                                          ( <Command *call* 32> )
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,32,0,["~",{"result":["~@",13,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││││······│┌─ client/_base.py/Client.decode_json-30                        ( <WebBrowser>, '[1,32,0,["~",{"result":["~@",13,null]},{"c":1}]]' )
-[mupf] th-S ││││······││┌─ client/_base.py/Client.get_remote_obj-33                    ( <WebBrowser>, 13, None )
-[mupf] th-S ││││······││└─ client/_base.py/Client.get_remote_obj-33                      => <mupf._remote.RemoteObj object at 0x00000000036245C0>
-[mupf] th-S ││││······│└─ client/_base.py/Client.decode_json-30                          => [1, 32, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000036245C0>}]
-[mupf] th-S ││││······│┌─ _command.py/MetaCommand.resolve_by_id_mupf-28                ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, 32, <mupf._remote.RemoteObj object at 0x00000000036245C0> )
-[mupf] th-S ││││······││┌─ _command.py/Command.result-56                               ( <Command *call* 32>, <mupf._remote.RemoteObj object at 0x00000000036245C0> )
-[mupf] th-S ││││······││└─ _command.py/Command.result-56                                 => None
-[mupf] th-S ││││······│└─ _command.py/MetaCommand.resolve_by_id_mupf-28                  => None
-[mupf] th-M │││└─ _command.py/Command.wait-32                                            => <Command *call* 32>
-[mupf] th-M ││└─ _command.py/Command.result-55                                           => <mupf._remote.RemoteObj object at 0x00000000036245C0>
-[mupf] th-M ││┌─ _command.py/Command.__init__-33                                       ( <Command ? ?>, '*gc*' )
-[mupf] th-M ││└─ _command.py/Command.__init__-33                                         => None
-[mupf] th-M ││┌─ _command.py/Command.run-4                                             ( <Command *gc* None>, 12 )
-[mupf] th-M │││┌─ _command.py/Command.__call__-33                                      ( <Command *gc* None>, 12 )
-[mupf] th-M ││││┌─ _command.py/Command._jsonify-33                                     ( <Command *gc* 33>, (12,), {} )
-[mupf] th-M ││││└─ _command.py/Command._jsonify-33                                       => [2, 33, '*gc*', {'args': (12,), 'kwargs': {}}]
-[mupf] th-M ││││┌─ client/_base.py/Client.send_json-34                                 ( <WebBrowser>, [2, 33, '*gc*', {'args': (12,), 'kwargs': {}}] )
-[mupf] th-S │││││·····│┌─ client/_base.py/create_send_task-33                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,33,"*gc*",{"args":[12],"kwargs":{}}]' )
-[mupf] th-S │││││·····││┌─ client/_base.py/send_task_body-33                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,33,"*gc*",{"args":[12],"kwargs":{}}]' )
-[mupf] th-S │││││·····││└─ client/_base.py/send_task_body-33                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-M ││││└─ client/_base.py/Client.send_json-34                                   => None
-[mupf] th-M │││└─ _command.py/Command.__call__-33                                        => <Command *gc* 33>
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-33                            => None
-[mupf] th-M ││└─ _command.py/Command.run-4                                               => <Command *gc* 33>
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,33,"*gc*",{"args":[12],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M ││┌─ _command.py/Command.result-57                                         ( <Command *gc* 33> )
-[mupf] th-M │││┌─ _command.py/Command.wait-33                                          ( <Command *gc* 33> )
-[mupf] th-M │││└─ _command.py/Command.wait-33                                            => <Command *gc* 33>
-[mupf] th-M ││└─ _command.py/Command.result-57                                           => None
-[mupf] th-M ││┌─ client/_base.py/Client.send_json-35                                   ( <WebBrowser>, [6, 1, 0, None] )
-[mupf] th-S │││·······│┌─ client/_base.py/create_send_task-34                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[6,1,0,null]' )
-[mupf] th-M ││└─ client/_base.py/Client.send_json-35                                     => None
-[mupf] th-M │└─ _remote.py/CallbackTask.run-1                                            => None
-[mupf] th-S │·········││┌─ client/_base.py/send_task_body-34                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[6,1,0,null]' )
-[mupf] th-S │·········││└─ client/_base.py/send_task_body-34                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-M │┌─ _command.py/Command.__init__-34                                        ( <Command ? ?>, '*gc*' )
-[mupf] th-S ││········│└─ client/_base.py/create_send_task-34                            => None
-[mupf] th-M │└─ _command.py/Command.__init__-34                                          => None
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[6,1,0,null]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │┌─ _command.py/Command.run-5                                              ( <Command *gc* None>, 11 )
-[mupf] th-M ││┌─ _command.py/Command.__call__-34                                       ( <Command *gc* None>, 11 )
-[mupf] th-M │││┌─ _command.py/Command._jsonify-34                                      ( <Command *gc* 34>, (11,), {} )
-[mupf] th-M │││└─ _command.py/Command._jsonify-34                                        => [2, 34, '*gc*', {'args': (11,), 'kwargs': {}}]
-[mupf] th-M │││┌─ client/_base.py/Client.send_json-36                                  ( <WebBrowser>, [2, 34, '*gc*', {'args': (11,), 'kwargs': {}}] )
-[mupf] th-S ││││······│┌─ client/_base.py/create_send_task-35                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,34,"*gc*",{"args":[11],"kwargs":{}}]' )
-[mupf] th-S ││││······││┌─ client/_base.py/send_task_body-35                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,34,"*gc*",{"args":[11],"kwargs":{}}]' )
-[mupf] th-S ││││······││└─ client/_base.py/send_task_body-35                             => <coroutine object send_task_body at 0x0000000003991348>
-[mupf] th-M │││└─ client/_base.py/Client.send_json-36                                    => None
-[mupf] th-S │││·······│└─ client/_base.py/create_send_task-35                            => None
-[mupf] th-M ││└─ _command.py/Command.__call__-34                                         => <Command *gc* 34>
-[websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,34,"*gc*",{"args":[11],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M │└─ _command.py/Command.run-5                                                => <Command *gc* 34>
-[mupf] th-M │┌─ _command.py/Command.result-58                                          ( <Command *gc* 34> )
-[mupf] th-M ││┌─ _command.py/Command.wait-34                                           ( <Command *gc* 34> )
-[mupf] th-M ││└─ _command.py/Command.wait-34                                             => <Command *gc* 34>
-[mupf] th-M │└─ _command.py/Command.result-58                                            => None
-[mupf] th-M └─ client/_base.py/Client.run_one_callback_blocking-1                        => None
-[mupf] th-M ┌─ client/_base.py/Client.__bool__-2                                       ( <WebBrowser> )
-[mupf] th-M └─ client/_base.py/Client.__bool__-2                                         => True
-[mupf] th-M ┌─ client/_base.py/Client.run_one_callback_blocking-2                      ( <WebBrowser> )
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'\xf1y4\xa2', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'\xf1y4\xa2', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: f17934a2
-[websockets.protocol] server > Frame(fin=True, opcode=9, data=b'@UA\x19', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server < Frame(fin=True, opcode=10, data=b'@UA\x19', rsv1=False, rsv2=False, rsv3=False)
-[websockets.protocol] server - received solicited pong: 40554119
+[mupf] th-M └─ Client.__bool__-1                                                         => True
+[mupf] th-M ┌─ Client.run_one_callback_blocking-1                                      ( <WebBrowser> )
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[7,0,"*close*",{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=8, data=b'\x03\xe9', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server - state = CLOSING
 [websockets.protocol] server > Frame(fin=True, opcode=8, data=b'\x03\xe9', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server x half-closing TCP connection
-[mupf] th-S │·········│┌─ client/_base.py/Client.decode_json-31                        ( <WebBrowser>, '[7,0,"*close*",{"result":null}]' )
-[mupf] th-S │·········│└─ client/_base.py/Client.decode_json-31                          => [7, 0, '*close*', {'result': None}]
-[mupf] th-S │·········│┌─ _command.py/Command.__init__-35                              ( <Command ? ?>, '*gc*' )
-[mupf] th-S │·········│└─ _command.py/Command.__init__-35                                => None
-[mupf] th-S │·········│┌─ _command.py/Command.run-6                                    ( <Command *gc* None>, 13 )
-[mupf] th-S │·········││┌─ _command.py/Command.__call__-35                             ( <Command *gc* None>, 13 )
-[mupf] th-S │·········│││┌─ _command.py/Command._jsonify-35                            ( <Command *gc* 35>, (13,), {} )
-[mupf] th-S │·········│││└─ _command.py/Command._jsonify-35                              => [2, 35, '*gc*', {'args': (13,), 'kwargs': {}}]
-[mupf] th-S │·········│││┌─ client/_base.py/Client.send_json-37                        ( <WebBrowser>, [2, 35, '*gc*', {'args': (13,), 'kwargs': {}}] )
-[mupf] th-S │·········│││└─ client/_base.py/Client.send_json-37                          => None
-[mupf] th-S │·········││└─ _command.py/Command.__call__-35                               => <Command *gc* 35>
-[mupf] th-S │·········│└─ _command.py/Command.run-6                                      => <Command *gc* 35>
-[mupf] th-S │·········│┌─ _command.py/Command.result-59                                ( <Command *gc* 35> )
-[mupf] th-S │·········││┌─ _command.py/Command.wait-35                                 ( <Command *gc* 35> )
-[mupf] th-S │·········││└─ _command.py/Command.wait-35                                   => <Command *gc* 35>
-[mupf] th-S │·········│└─ _command.py/Command.result-59                                  => None
-[mupf] th-S │·········│┌─ client/_base.py/Client.shedule_callback-2                    ( <WebBrowser>, 0, '*close*', {'result': None} )
-[mupf] th-S │·········││┌─ _remote.py/CallbackTask.__init__-2                          ( <CallbackTask ? ? ->, <WebBrowser>, 0, '*close*', {'result': None} )
-[mupf] th-S │·········││└─ _remote.py/CallbackTask.__init__-2                            => None
-[mupf] th-S │·········│└─ client/_base.py/Client.shedule_callback-2                      => None
-[mupf] th-M │┌─ _remote.py/CallbackTask.run-2                                          ( <CallbackTask *close* 0 -> )
-[mupf] th-M │└─ _remote.py/CallbackTask.run-2                                            => None
-[mupf] th-M └─ client/_base.py/Client.run_one_callback_blocking-2                        => None
-[mupf] th-M ┌─ client/_base.py/Client.__bool__-3                                       ( <WebBrowser> )
-[mupf] th-M └─ client/_base.py/Client.__bool__-3                                         => False
-[mupf] th-M ┌─ _app.py/App.__exit__-0                                                  ( <App>, None, None, None )
-[mupf] th-M │┌─ _app.py/App.close-0                                                    ( <App> )
-[mupf] th-M ││┌─ client/_base.py/Client.close-0                                        ( <WebBrowser>, _dont_remove_from_app=True )
-[mupf] th-M ││└─ client/_base.py/Client.close-0                                          => None
-[mupf] th-S ││········│┌─ _command.py/MetaCommand.resolve_all_mupf-0                   ( <class 'mupf._command.create_command_class_for_client.<locals>.Command'>, ClientClosedUnexpectedly() )
-[mupf] th-M │└─ _app.py/App.close-0                                                      => None
-[mupf] th-S │·········│└─ _command.py/MetaCommand.resolve_all_mupf-0                     => None
-[mupf] th-M └─ _app.py/App.__exit__-0                                                    => None
-[mupf] th-S ··········│┌─ _app.py/log_websocket_request_end-0                          (  )
-[mupf] th-S ··········│└─ _app.py/log_websocket_request_end-0                            => None
+[mupf] th-S │·········│┌─ Client.decode_json-23                                        ( <WebBrowser>, '[7,0,"*close*",{"result":null}]' )
+[mupf] th-S │·········│└─ Client.decode_json-23                                          => [7, 0, '*close*', {'result': None}]
+[mupf] th-S │·········│┌─ Client.send_json-27                                          ( <WebBrowser>, [2, 26, '*gc*', {'args': (10,), 'kwargs': {}}] )
+[mupf] th-S │·········│└─ Client.send_json-27                                            => None
+[mupf] th-S │·········│┌─ Client.shedule_callback-1                                    ( <WebBrowser>, 0, '*close*', {'result': None} )
+[mupf] th-S │·········││┌─ CallbackTask.__init__-1                                     ( <CallbackTask ? ? ->, <WebBrowser>, 0, '*close*', {'result': None} )
+[mupf] th-S │·········││└─ CallbackTask.__init__-1                                       => None
+[mupf] th-S │·········│└─ Client.shedule_callback-1                                      => None
+[mupf] th-M │┌─ CallbackTask.run-1                                                     ( <CallbackTask *close* 0 -> )
+[mupf] th-M │└─ CallbackTask.run-1                                                       => None
+[mupf] th-M └─ Client.run_one_callback_blocking-1                                        => None
+[mupf] th-S ··········│┌─ log_websocket_request_end-0                                  (  )
+[mupf] th-S ··········│└─ log_websocket_request_end-0                                    => None
+[mupf] th-M ┌─ Client.__bool__-2                                                       ( <WebBrowser> )
 [websockets.protocol] server - event = eof_received()
-[mupf] th-S ··········│┌─ client/_base.py/create_send_task-36                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,35,"*gc*",{"args":[13],"kwargs":{}}]' )
-[mupf] th-S ··········││┌─ client/_base.py/send_task_body-36                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003624390>, '[2,35,"*gc*",{"args":[13],"kwargs":{}}]' )
-[mupf] th-S ··········││└─ client/_base.py/send_task_body-36                             => <coroutine object send_task_body at 0x000000000359AC48>
-[mupf] th-S ··········│└─ client/_base.py/create_send_task-36                            => None
+[mupf] th-M └─ Client.__bool__-2                                                         => False
+[mupf] th-M ┌─ App.__exit__-0                                                          ( <App>, None, None, None )
+[mupf] th-S │·········│┌─ create_send_task-26                                          ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000185629DCEB8>, '[2,26,"*gc*",{"args":[10],"kwargs":{}}]' )
+[mupf] th-M │┌─ App.close-0                                                            ( <App> )
+[mupf] th-S ││········│└─ create_send_task-26                                            => None
 [websockets.protocol] server - event = connection_lost(None)
+[mupf] th-M ││┌─ Client.close-0                                                        ( <WebBrowser>, _dont_remove_from_app=True )
 [websockets.protocol] server - state = CLOSED
+[mupf] th-M ││└─ Client.close-0                                                          => None
 [websockets.protocol] server x code = 1001, reason = [no reason]
+[mupf] th-M │└─ App.close-0                                                              => None
+[mupf] th-M └─ App.__exit__-0                                                            => None
 [asyncio] Task exception was never retrieved
-future: <Task finished coro=<send_task_body() done, defined at c:\users\g.kimbar\pycharmprojects\mupf_project\mupf\client\_base.py:14> exception=ConnectionClosed('WebSocket connection is closed: code = 1001 (going away), no reason')>
+future: <Task finished coro=<send_task_body() done, defined at d:\mupf_project\mupf\client\_base.py:14> exception=ConnectionClosed('WebSocket connection is closed: code = 1001 (going away), no reason')>
 Traceback (most recent call last):
-  File "c:\users\g.kimbar\pycharmprojects\mupf_project\mupf\client\_base.py", line 16, in send_task_body
+  File "d:\mupf_project\mupf\client\_base.py", line 15, in send_task_body
     await wbs.send(json)
-  File "c:\Users\G.Kimbar\PycharmProjects\mupf_project\venv\lib\site-packages\websockets\protocol.py", line 462, in send
+  File "d:\mupf_project\venv\lib\site-packages\websockets\protocol.py", line 462, in send
     yield from self.ensure_open()
-  File "c:\Users\G.Kimbar\PycharmProjects\mupf_project\venv\lib\site-packages\websockets\protocol.py", line 646, in ensure_open
+  File "d:\mupf_project\venv\lib\site-packages\websockets\protocol.py", line 646, in ensure_open
     ) from self.transfer_data_exc
 websockets.exceptions.ConnectionClosed: WebSocket connection is closed: code = 1001 (going away), no reason
 [websockets.protocol] server ! failing WebSocket connection in the CLOSED state: 1001 [no reason]
-[mupf] th-S ··········│┌─ _app.py/log_event_loop_closed-0                              (  )
-[mupf] th-S ··········│└─ _app.py/log_event_loop_closed-0                                => None
-[mupf] th-S ··········└─ _app.py/App._server_thread_body-0                               => None
+[mupf] th-S ··········│┌─ log_event_loop_closed-0                                      (  )
+[mupf] th-S ··········│└─ log_event_loop_closed-0                                        => None
+[mupf] th-S ··········└─ App._server_thread_body-0                                       => None

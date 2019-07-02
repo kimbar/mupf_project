@@ -9,16 +9,16 @@ import json
 from .. import _enhjson as enhjson
 import queue
 
-from .._logging import logged
+from .._logging import loggable
 
-@logged
 async def send_task_body(wbs, json):
     await wbs.send(json)
 
-@logged
+@loggable()
 def create_send_task(evl, wbs, json):
     evl.create_task(send_task_body(wbs, json))
 
+@loggable('Client')
 class Client:
     """
     Object represents a window of a browser.
@@ -26,7 +26,7 @@ class Client:
     It is not called "Window", because `window` is already a top-level object of the JavaSript side, and this object is
     a little more than that. A `RemoteObj` of `window` can be easily obtained by `client.window`.
     """
-    @logged
+    @loggable()
     def __init__(self, app, client_id):
         self._app_wr = weakref.ref(app)
         self._cid = client_id
@@ -48,7 +48,7 @@ class Client:
         self._callback_free_id = 0
         self._first_command = self.command('*first*')()    # ccid=0
 
-    @logged
+    @loggable()
     def send_json(self, json):
         if not self._websocket:
             self._preconnection_stash.append(json)
@@ -64,15 +64,13 @@ class Client:
                 json,
             )
 
-    @logged
+    @loggable()
     def __bool__(self):
         # for `while client:` syntax
         return self._healthy_connection
 
-    @logged
-    def decode_json(self, raw_json):
-        if self is None:
-            return json.loads(raw_json)    # called through class for `*first*`
+    @loggable()
+    def decode_json(self, raw_json): 
         msg = json.loads(raw_json)
         if F.core_features in self.features:
             msg[3] = enhjson.decode(msg[3], self.enhjson_decoders)
@@ -80,7 +78,14 @@ class Client:
             msg[3]['result'] = exceptions.create_from_result(msg[3]['result'])
         return msg
 
-    @logged
+    @staticmethod
+    # @loggable()  # FIXME: cannot be done right now for static methods
+    # `TypeError: decode_json_simple() takes 1 positional argument but 2 were given`
+    def decode_json_simple(raw_json):
+        # called through class for `*first*`
+        return json.loads(raw_json)
+
+    @loggable()
     def get_remote_obj(self, *args):
         rid = args[0]
         ctxrid = args[1] if len(args)>1 else None
@@ -96,13 +101,13 @@ class Client:
             self._remote_obj_byid[(rid, ctxrid)] = rem_obj
             return rem_obj
 
-    @logged
+    @loggable()
     def summoned(self):
         self._safe_dunders_feature = (F.safe_dunders in self.features)
         if F.strict_feature_list in self.features and self.features != self.app._features:
             raise ValueError('features computed {} different from requested {} while `strict_feature_list` feature turned on'.format(self.features, self.app._features))
 
-    @logged
+    @loggable()
     def close(self, dont_wait=False, _dont_remove_from_app=False):   # TODO: dont_wait not implemented
         # Mutex here to set this and issue `*last*` atomicly?
         if self._healthy_connection:
@@ -118,7 +123,7 @@ class Client:
         if not _dont_remove_from_app:
             del self.app._clients_by_cid[self._cid]
 
-    @logged
+    @loggable()
     def await_connection(self):
         if self._first_command:
             self._first_command.wait
@@ -130,7 +135,7 @@ class Client:
         self._preconnection_stash.clear()
         return self
 
-    @logged
+    @loggable()
     def install_javascript(self, code=None, src=None, remove=True):
         if code is not None and src is None:
             return self.command('*install*')(code, remove=remove)
@@ -139,13 +144,13 @@ class Client:
         else:
             raise ValueError('you must provide just one of `code` or `src`')
     
-    @logged
+    @loggable()
     def install_commands(self, code=None, src=None):
         self.install_javascript(code, src, remove=True).result
         if F.core_features in self.features:
             self.command._legal_names = self.command('*getcmds*')().result
     
-    @logged
+    @loggable()
     def _wrap_callback(self, func):
         if func in self._clbid_by_callbacks:
             return CallbackJsonEsc(self._clbid_by_callbacks[func])
@@ -157,11 +162,11 @@ class Client:
         self._callback_free_id += 1
         return res
 
-    @logged
+    @loggable()
     def shedule_callback(self, ccid, noun, pyld):
         self._callback_queue.put(CallbackTask(self, ccid, noun, pyld))
     
-    @logged
+    @loggable()
     def run_one_callback_blocking(self):
         if not self._healthy_connection:
             return
@@ -169,17 +174,14 @@ class Client:
         callback_task.run()
 
     @property
-    @logged
     def app(self):
         return self._app_wr()
 
     @property
-    @logged
     def cid(self):
         return self._cid
 
     @property
-    @logged
     def url(self):
         return "http://{domain}:{port}/#{cid}".format(
                 domain = self.app._host,

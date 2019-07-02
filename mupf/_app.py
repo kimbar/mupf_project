@@ -16,8 +16,9 @@ from ._macro import MacroByteStream
 from . import _features as F
 from . import _enhjson as enhjson
 
-from ._logging import logged, loggable
+from ._logging import loggable
 
+@loggable('App')
 class App:
     """
     Class for an app. Object represents a server and port, and a thread with an event-loop.
@@ -29,7 +30,7 @@ class App:
     
     default_port = 57107
 
-    @logged
+    @loggable()
     def __init__(
         self,
         host='127.0.0.1',
@@ -60,11 +61,11 @@ class App:
         self._clients_by_cid = {}
         self._file_routes = {}
 
-    @logged
+    @loggable()
     def get_unique_client_id(self):
         return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
 
-    @logged
+    @loggable()
     def summon_client(self, frontend=client.WebBrowser, **kwargs):
         cid = self.get_unique_client_id()
         client = frontend(self, cid, **kwargs)
@@ -79,7 +80,7 @@ class App:
         client.summoned()
         return client
 
-    @logged
+    @loggable()
     def _server_thread_body(self):
         self._event_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._event_loop)
@@ -106,7 +107,7 @@ class App:
                 log_event_loop_closed()
                 self._server_closed_mutex.set()
 
-    @logged
+    @loggable()
     def __enter__(self):
         if self.is_opened():
             return self._clients_by_cid[list(self._clients_by_cid.keys())[0]]
@@ -116,11 +117,11 @@ class App:
                 raise self._event_loop    # if event-loop is not opened this is an exception
             return self
 
-    @logged
+    @loggable()
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
 
-    @logged
+    @loggable()
     def open(self):
         self._server_thread = threading.Thread(
             target = self._server_thread_body,
@@ -131,13 +132,13 @@ class App:
         self._server_opened_mutex.wait()
         return self
 
-    @logged
+    @loggable()
     def open_with_client(self, frontend=client.WebBrowser, **kwargs):
         self.__enter__()
         self.summon_client(frontend, **kwargs)
         return self
 
-    @logged
+    @loggable()
     def is_opened(self, get_culprit=False):
         if get_culprit:
             if self.is_opened():
@@ -147,7 +148,7 @@ class App:
         else:
             return isinstance(self._event_loop, asyncio.events.AbstractEventLoop)
 
-    @loggable
+    @loggable()
     def close(self, wait=False):
         for cl in self._clients_by_cid.values():
             cl.close(_dont_remove_from_app=True)
@@ -156,7 +157,7 @@ class App:
         if wait:
             self._server_closed_mutex.wait()
 
-    @loggable
+    # @loggable() # FIXME: temprary turned off because of the length of the output
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))
         if url == ('', ''):
@@ -196,7 +197,7 @@ class App:
         else:
             return self._get_route_response(url)
 
-    @loggable
+    @loggable()
     def register_route(self, route, **kwargs):
         route = tuple(urllib.parse.urlparse('/'+route).path.split('/'))
         if route[0:2] == ('', 'mupf') or route == ('', ''):
@@ -206,7 +207,7 @@ class App:
         else:
             raise TypeError('route destination required')
 
-    @loggable
+    @loggable()
     def _get_route_response(self, route):
         if route in self._file_routes:
             return (
@@ -219,11 +220,10 @@ class App:
         else:
             pass  # 404
 
-    @loggable
     async def _websocket_request(self, new_websocket, path):
         raw_msg = await new_websocket.recv()
         # print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
-        msg = client.Client.decode_json(None, raw_msg)
+        msg = client.Client.decode_json_simple(raw_msg)
         result = msg[3]['result']
         cid = result['cid']
         the_client = self._clients_by_cid[cid]
@@ -271,17 +271,17 @@ class App:
 
         log_websocket_request_end()
     
-    @logged
+    @loggable()
     def piggyback_call(self, function, *args):
         self._event_loop.call_soon_threadsafe(function, *args)
 
     def __repr__(self):
         return "<App>"
 
-@logged
+@loggable()
 def log_websocket_request_end():
     pass
 
-@logged
+@loggable()
 def log_event_loop_closed():
     pass

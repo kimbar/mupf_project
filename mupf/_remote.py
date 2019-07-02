@@ -1,7 +1,7 @@
 from . import _symbols as S
 import weakref
 
-from ._logging import logged
+from ._logging import loggable
 
 class MetaRemoteObj(type):
 
@@ -72,12 +72,12 @@ class RemoteJsonEsc:
     def __repr__(self):
         return '["~@",{}]'.format(self.rid)
 
-
+@loggable('CallbackTask')
 class CallbackTask:
     # TODO: this is very much a work in progress, serious rethinking
     # of this class is needed
 
-    @logged
+    @loggable()
     def __init__(self, client, ccid, noun, pyld):
         self._client = client
         self._ccid = ccid
@@ -88,7 +88,7 @@ class CallbackTask:
             self._noun = None
             self._args = pyld['args']
 
-    @logged
+    @loggable()
     def run(self):
         if self._noun is None:
             answer = self._func(*self._args)
