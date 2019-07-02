@@ -3,6 +3,8 @@ import sys
 import os
 import threading
 import re
+import types
+import inspect
 
 lock = threading.Lock()
 
@@ -11,7 +13,76 @@ thread_number_by_threadid = {}
 threads = []
 call_count = {}
 
-_loggables = []
+_loggables = {}
+
+
+class LogFuncWrapper:
+
+    def __init__(self, parent, func_name):
+        self._func = getattr(parent, func_name)
+        if isinstance(self._func, LogFuncWrapper):
+            return
+        self._func_name = func_name
+        self._parent = parent
+        setattr(parent, func_name, self)
+    
+    def __call__(self, *args, **kwargs):
+        print('started', self._func_name)
+        result = self._func(self._parent, *args, **kwargs)
+        print('ended', self._func_name)
+        return result
+
+    def remove_logger(self):
+        setattr(self._parent, self._func_name, self._func)
+
+
+
+def loggable(log_name='*'):
+    def loggable_decorator(x):
+        global _loggables
+        nonlocal log_name
+        print('qn', x.__qualname__)
+        log_name = log_name.replace('*',  x.__name__, 1)
+        if type(x) == types.FunctionType:
+            if x.__qualname__ != x.__name__:
+                x._methodtolog = log_name
+            else:
+                _loggables[log_name] = (inspect.getmodule(x), x)
+        elif type(x) == type:
+            for key in dir(x):
+                p = getattr(x, key)
+                if hasattr(p, '_methodtolog'):
+                    _loggables[log_name+'.'+p._methodtolog] = (x, p)
+                    del p._methodtolog
+        return x
+    return loggable_decorator
+
+@loggable('app.basic.Klass')
+class K:
+    def __init__(self):
+        pass
+    @loggable('googooo')
+    def g(self, x):
+        print('K.x = ', x)
+
+@loggable('app.*')
+def hhh(x, y):
+    print(x+y)
+
+
+k = K()
+k.g(120)
+
+LogFuncWrapper(K, 'g')
+
+k.g(180)
+
+k.g.remove_logger()
+
+k.g(800)
+
+print(_loggables)
+
 
 def enable_logging(filename):
     logging.basicConfig(level=logging.DEBUG)
@@ -19,19 +90,7 @@ def enable_logging(filename):
     hand.setFormatter(logging.Formatter(fmt='[%(name)s] %(message)s'))
     logging.getLogger('').addHandler(hand)
 
-def loggable(function):
-    global _loggables
-    head = function.__code__.co_filename
-    tail = ""
-    funcname = []
-    while tail != 'mupf':
-        funcname.append(tail)
-        head, tail = os.path.split(head)
-    funcname.reverse()
-    funcname = "/".join(funcname) + function.__qualname__
-    _loggables.append(funcname)
 
-    return function
 
 def logged(f):
 
