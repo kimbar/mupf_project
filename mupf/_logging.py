@@ -17,19 +17,21 @@ _loggables = {}
 
 class LogFuncWrapper:
 
-    def __init__(self, log_name, parent, func_name):
+    def __init__(self, log_name, parent, func_name, log_args):
         self._func = getattr(parent, func_name)
         if isinstance(self._func, LogFuncWrapper):
             return
         self._log_name = log_name
         self._func_name = func_name
+        self._log_args = log_args
         self._parent = parent
         self._self = ()
         setattr(parent, func_name, self)
 
-    def __get__(self, obj, objtype=None):
+    def __get__(self, obj, class_):
         method = copy.copy(self)
-        method._self = (obj,)
+        if obj is not None:
+            method._self = (obj,)
         return method
 
     # def __del__(self):
@@ -79,7 +81,8 @@ class LogFuncWrapper:
 
         msg = "{3} {0}┌─ {1}-{2}".format(indent_sp, self._log_name, call_number, thread_abr)
         lmsg = max(((len(msg)-10)//20+2)*20,80)
-        msg += " "*(lmsg-len(msg)) + "( {} )".format(", ".join([repr(a) for a in args]+[k+"="+repr(v) for k,v in kwargs.items()]))
+        if self._log_args:
+            msg += " "*(lmsg-len(msg)) + "( {} )".format(", ".join([repr(a) for a in args]+[k+"="+repr(v) for k,v in kwargs.items()]))
         logger.info(msg)
         indent_by_threadid[thread] += 1
 
@@ -109,22 +112,28 @@ class LogFuncWrapper:
         logger.info(msg)
 
 
-def loggable(log_name='*'):
+def loggable(log_name='*', log_args=True):
     def loggable_decorator(x):
         global _loggables
-        nonlocal log_name
-        log_name = log_name.replace('*',  x.__name__, 1)
-        if type(x) == types.FunctionType:
+        nonlocal log_name, log_args
+        if isinstance(x, types.FunctionType):
+            log_name = log_name.replace('*',  x.__name__, 1)
             if x.__qualname__ != x.__name__:
-                x._methodtolog = log_name
+                x._methodtolog = (log_name, log_args)
             else:
-                _loggables[log_name] = (inspect.getmodule(x), x, x.__name__)
+                _loggables[log_name] = (inspect.getmodule(x), x, x.__name__, log_args)
+        elif isinstance(x, classmethod):
+            log_name = log_name.replace('*',  x.__func__.__name__, 1)
+            setattr(x.__func__, '_methodtolog', (log_name, log_args))
         elif type(x) == type:
+            log_name = log_name.replace('*',  x.__name__, 1)
             for key in dir(x):
                 p = getattr(x, key)
-                if hasattr(p, '_methodtolog'):
-                    _loggables[log_name+'.'+p._methodtolog] = (x, p, p.__name__)
+                try:
+                    _loggables[log_name+'.'+p._methodtolog[0]] = (x, p, p.__name__, p._methodtolog[1])
                     del p._methodtolog
+                except Exception as e:
+                    pass
         return x
     return loggable_decorator
 
@@ -133,15 +142,15 @@ def log_on(*names):
     if len(names) == 0:
         names = _loggables.keys()
     for name in names:
-        parent, target, func_name = _loggables[name]
-        LogFuncWrapper(name, parent, func_name)
+        parent, target, func_name, log_args = _loggables[name]
+        LogFuncWrapper(name, parent, func_name, log_args)
 
 def log_off(*names):
     global _loggables
     if len(names) == 0:
         names = _loggables.keys()
     for name in names:
-        parent, target, func_name = _loggables[name]
+        parent, target, func_name, log_args = _loggables[name]
         func = getattr(parent, func_name)
         if func != target:
             func.remove_logger()

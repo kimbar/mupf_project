@@ -26,7 +26,7 @@ class Client:
     It is not called "Window", because `window` is already a top-level object of the JavaSript side, and this object is
     a little more than that. A `RemoteObj` of `window` can be easily obtained by `client.window`.
     """
-    @loggable()
+    @loggable('*')
     def __init__(self, app, client_id):
         self._app_wr = weakref.ref(app)
         self._cid = client_id
@@ -78,10 +78,9 @@ class Client:
             msg[3]['result'] = exceptions.create_from_result(msg[3]['result'])
         return msg
 
-    @staticmethod
-    # @loggable()  # FIXME: cannot be done right now for static methods
-    # `TypeError: decode_json_simple() takes 1 positional argument but 2 were given`
-    def decode_json_simple(raw_json):
+    @loggable()
+    @classmethod
+    def decode_json_simple(cls, raw_json):
         # called through class for `*first*`
         return json.loads(raw_json)
 
@@ -188,5 +187,8 @@ class Client:
                 port = self.app._port,
                 cid = self.cid,
             )
+
+    def __repr__(self):
+        return "<{} {}>".format(type(self).__name__, getattr(self, 'cid', '?')[0:6])
 
         
