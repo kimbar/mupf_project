@@ -30,8 +30,9 @@ class LogFuncWrapper:
 
     def __get__(self, obj, class_):
         method = copy.copy(self)
+        method._func = method._func.__get__(obj, class_)
         if obj is not None:
-            method._self = (obj,)
+            method._log_name = method._log_name.replace('@', repr(obj), 1)
         return method
 
     # def __del__(self):
@@ -79,7 +80,7 @@ class LogFuncWrapper:
         call_count[self._log_name] = call_count.get(self._log_name,-1)+1
         call_number = call_count[self._log_name]
 
-        msg = "{3} {0}┌─ {1}-{2}".format(indent_sp, self._log_name, call_number, thread_abr)
+        msg = "{3} {0}┌─ {1}-{2}".format(indent_sp, self._log_name.replace('@',''), call_number, thread_abr)
         lmsg = max(((len(msg)-10)//20+2)*20,80)
         if self._log_args:
             msg += " "*(lmsg-len(msg)) + "( {} )".format(", ".join([repr(a) for a in args]+[k+"="+repr(v) for k,v in kwargs.items()]))
@@ -105,7 +106,7 @@ class LogFuncWrapper:
 
         call_number = call_count[self._log_name]
 
-        msg = "{3} {0}└─ {1}-{2}".format(indent_sp, self._log_name, call_number, thread_abr)
+        msg = "{3} {0}└─ {1}-{2}".format(indent_sp, self._log_name.replace('@',''), call_number, thread_abr)
         lmsg = max(((len(msg)-10)//20+2)*20,80)
         msg += " "*(lmsg-len(msg)) + "  => {}".format(repr(result))
         logger = logging.getLogger('mupf')

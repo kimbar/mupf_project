@@ -18,7 +18,7 @@ async def send_task_body(wbs, json):
 def create_send_task(evl, wbs, json):
     evl.create_task(send_task_body(wbs, json))
 
-@loggable('Client')
+@loggable('Client@')
 class Client:
     """
     Object represents a window of a browser.
