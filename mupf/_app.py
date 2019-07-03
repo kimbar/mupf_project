@@ -88,7 +88,7 @@ class App:
         client.summoned()
         return client
 
-    @loggable()
+    # @loggable()
     def _server_thread_body(self):
         self._event_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self._event_loop)
@@ -101,6 +101,7 @@ class App:
         server = None
         try:
             server = self._event_loop.run_until_complete(start_server)
+            log_event_server_started(server)
             self._server_opened_mutex.set()
             self._event_loop.run_forever()
         except OSError as err:
@@ -297,4 +298,8 @@ def log_event_loop_closed(evloop):
 
 @loggable('_app.py/websocket_going_to_sleep')
 def log_websocket_going_to_sleep(websocket):
+    pass
+
+@loggable('_app.py/event_server_started')
+def log_event_server_started(server):
     pass
