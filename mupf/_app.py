@@ -90,8 +90,11 @@ class App:
 
     # @loggable()
     def _server_thread_body(self):
+        log_server_event('entering server thread body')
         self._event_loop = asyncio.new_event_loop()
+        log_server_event('creating event loop')
         asyncio.set_event_loop(self._event_loop)
+        log_server_event('creating server object')
         start_server = websockets.serve(
             ws_handler = self._websocket_request,
             host = self._host,
@@ -100,21 +103,31 @@ class App:
         )
         server = None
         try:
+            log_server_event('server starting ...')
             server = self._event_loop.run_until_complete(start_server)
-            log_event_server_started(server)
+            log_server_event('server started', server)
             self._server_opened_mutex.set()
+            log_server_event('server open state mutex set', server)
             self._event_loop.run_forever()
+            log_server_event('event loop main run ended', server)
         except OSError as err:
+            log_server_event('server OSError', err, server)
             self._event_loop = err
         finally:
             if server is None:
                 self._server_opened_mutex.set()
+                log_server_event('server open state mutex set', server)
             else:
+                log_server_event('server closing ...', server)
                 server.close()
+                log_server_event('server closed', server)
                 self._event_loop.run_until_complete(server.wait_closed())
+                log_server_event('event loop completed', server)
                 self._event_loop.close()
-                log_event_loop_closed(self._event_loop)
+                log_server_event('event loop closed', server)
                 self._server_closed_mutex.set()
+                log_server_event('server close state mutex set', server)
+        log_server_event('exiting server thread body', server)
 
     @loggable()
     def __enter__(self):
@@ -141,7 +154,7 @@ class App:
         self._server_opened_mutex.wait()
         return self
 
-    @loggable()
+    @loggable(log_results=False)
     def open_with_client(self, frontend=client.WebBrowser, **kwargs):
         self.__enter__()
         self.summon_client(frontend, **kwargs)
@@ -166,7 +179,7 @@ class App:
         if wait:
             self._server_closed_mutex.wait()
 
-    # @loggable() # FIXME: temprary turned off because of the length of the output
+    @loggable(log_results=False) # FIXME: temprary turned off because of the length of the output
     def _process_HTTP_request(self, path, request_headers):
         url = tuple(urllib.parse.urlparse(path).path.split('/'))
         if url == ('', ''):
@@ -230,22 +243,26 @@ class App:
             pass  # 404
 
     async def _websocket_request(self, new_websocket, path):
+        log_websocket_event('entering websocket request body', new_websocket, path=path)
         raw_msg = await new_websocket.recv()
-        # print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
+        log_websocket_event('websocket received result of *first*', new_websocket)
         msg = client.Client.decode_json_simple(raw_msg)
         result = msg[3]['result']
         cid = result['cid']
         the_client = self._clients_by_cid[cid]
         the_client._websocket = new_websocket
+        log_websocket_event('websocket assigned to client', new_websocket)
         the_client._user_agent = result['ua']
         
         # this line accepts a response from  `command('*first*')` because if the websocket is
         # open then the `*first` have been just executed
         the_client.command.resolve_by_id_mupf(ccid=0, result=None)
+        log_websocket_event('websocket awaiting for client...', new_websocket)
         the_client.await_connection()
+        log_websocket_event('websocket contacted by client', new_websocket)
         break_reason = None
         while True:
-            log_websocket_going_to_sleep(new_websocket)
+            log_websocket_event('websocket going to sleep', new_websocket)
             try:
                 raw_msg = await new_websocket.recv()
             except websockets.exceptions.ConnectionClosed as e:
@@ -279,7 +296,7 @@ class App:
         else:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
 
-        log_websocket_request_end(new_websocket)
+        log_websocket_event('exiting websocket request body', new_websocket)
     
     @loggable()
     def piggyback_call(self, function, *args):
@@ -288,18 +305,11 @@ class App:
     def __repr__(self):
         return "<App>"
 
-@loggable('_app.py/websocket_request_end')
-def log_websocket_request_end(websocket):
+
+@loggable('_app.py/server_event', log_exit=False)
+def log_server_event(*args, **kwargs):
     pass
 
-@loggable('_app.py/event_loop_closed')
-def log_event_loop_closed(evloop):
-    pass
-
-@loggable('_app.py/websocket_going_to_sleep')
-def log_websocket_going_to_sleep(websocket):
-    pass
-
-@loggable('_app.py/event_server_started')
-def log_event_server_started(server):
+@loggable('_app.py/websocket_event', log_exit=False)
+def log_websocket_event(*args, **kwargs):
     pass
