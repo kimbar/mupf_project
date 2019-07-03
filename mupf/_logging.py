@@ -207,7 +207,9 @@ def loggable(log_name='*', log_args=True):
                 x._methodtolog = LoggableFunc(log_name, None, x, x.__name__)
                 x._methodtolog.log_args = log_args
             else:
-                LoggableFunc(log_name, inspect.getmodule(x), x, x.__name__).add()
+                lf = LoggableFunc(log_name, inspect.getmodule(x), x, x.__name__).add()
+                lf.log_args = log_args
+                lf.log_results = log_results
         elif isinstance(x, classmethod):
             log_name = log_name.replace('*',  x.__func__.__name__, 1)
             x.__func__._methodtolog = LoggableFunc(log_name, None, x, x.__func__.__name__)
