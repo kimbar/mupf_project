@@ -9,7 +9,7 @@ import copy
 
 lock = threading.Lock()
 thread_number_by_threadid = {}
-call_count = {}
+call_count = {}    # FIXME: this will leak -- destroyed objects still keep track of their call count
 _tracks = []
 
 
@@ -223,7 +223,7 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
             x.__func__._methodtolog.log_results = log_results
             x.__func__._methodtolog.log_enter = log_enter
             x.__func__._methodtolog.log_exit = log_exit
-        elif type(x) == type:
+        elif isinstance(x, type):
             log_name = log_name.replace('*',  x.__name__, 1)
             for prop_name in dir(x):
                 property_ = getattr(x, prop_name)
@@ -237,11 +237,19 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
         return x
     return loggable_decorator
 
+class Loggable:
+
+    def __init__(cls, name, bases, dict_):    # pylint: disable=no-self-argument
+        lgd = loggable(log_name=name)
+        lgd(cls)
+        for l in LoggableFunc._loggables_by_name.values():
+            l.on()
+
 
 def enable_logging(filename):
     logging.basicConfig(level=logging.INFO)
     hand = logging.FileHandler(filename=filename, mode='w', encoding='utf-8')
     hand.setFormatter(logging.Formatter(fmt='[%(name)s] %(message)s'))
     logging.getLogger('').addHandler(hand)
-    for loggable in LoggableFunc._loggables_by_name.values():
-        loggable.on()
+    for l in LoggableFunc._loggables_by_name.values():
+        l.on()
