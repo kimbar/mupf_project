@@ -63,7 +63,15 @@ class App:
 
     @loggable()
     def get_unique_client_id(self):
-        return base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
+        while True:
+            cid = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
+            if '-' not in cid[0:6]:
+                for used_cid in self._clients_by_cid:
+                    if cid[0:6] == used_cid[0:6]:
+                        break
+                else:
+                    break
+        return cid
 
     @loggable()
     def summon_client(self, frontend=client.WebBrowser, **kwargs):
