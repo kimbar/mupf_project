@@ -218,15 +218,15 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
                 lf.log_exit = log_exit
         elif isinstance(x, classmethod):
             log_name = log_name.replace('*',  x.__func__.__name__, 1)
-            x.__func__._methodtolog = LoggableFunc(log_name, None, x, x.__func__.__name__)
-            x.__func__._methodtolog.log_args = log_args
-            x.__func__._methodtolog.log_results = log_results
-            x.__func__._methodtolog.log_enter = log_enter
-            x.__func__._methodtolog.log_exit = log_exit
+            x._methodtolog = LoggableFunc(log_name, None, x, x.__func__.__name__)
+            x._methodtolog.log_args = log_args
+            x._methodtolog.log_results = log_results
+            x._methodtolog.log_enter = log_enter
+            x._methodtolog.log_exit = log_exit
         elif isinstance(x, type):
             log_name = log_name.replace('*',  x.__name__, 1)
             for prop_name in dir(x):
-                property_ = getattr(x, prop_name)
+                property_ = x.__getattribute__(x, prop_name)
                 try:
                     property_._methodtolog.name = log_name + '.' + property_._methodtolog.name
                     property_._methodtolog.parent = x
