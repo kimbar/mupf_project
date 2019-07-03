@@ -208,10 +208,11 @@ def loggable(log_name='*', log_args=True):
                 x._methodtolog.log_args = log_args
             else:
                 LoggableFunc(log_name, inspect.getmodule(x), x, x.__name__).add()
-                # _loggables[log_name] = (inspect.getmodule(x), x, x.__name__, log_args)
         elif isinstance(x, classmethod):
             log_name = log_name.replace('*',  x.__func__.__name__, 1)
-            setattr(x.__func__, '_methodtolog', (log_name, log_args))
+            x.__func__._methodtolog = LoggableFunc(log_name, None, x, x.__func__.__name__)
+            x.__func__._methodtolog.log_args = log_args
+            x.__func__._methodtolog.log_results = log_results
         elif type(x) == type:
             log_name = log_name.replace('*',  x.__name__, 1)
             for prop_name in dir(x):
