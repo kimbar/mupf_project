@@ -14,7 +14,7 @@ from .._logging import loggable
 async def send_task_body(wbs, json):
     await wbs.send(json)
 
-@loggable()
+@loggable('client/_base.py/*')
 def create_send_task(evl, wbs, json):
     evl.create_task(send_task_body(wbs, json))
 
@@ -100,7 +100,7 @@ class Client:
             self._remote_obj_byid[(rid, ctxrid)] = rem_obj
             return rem_obj
 
-    @loggable()
+    @loggable(log_enter=False)
     def summoned(self):
         self._safe_dunders_feature = (F.safe_dunders in self.features)
         if F.strict_feature_list in self.features and self.features != self.app._features:
