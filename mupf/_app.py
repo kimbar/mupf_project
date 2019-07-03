@@ -112,7 +112,7 @@ class App:
                 server.close()
                 self._event_loop.run_until_complete(server.wait_closed())
                 self._event_loop.close()
-                log_event_loop_closed()
+                log_event_loop_closed(self._event_loop)
                 self._server_closed_mutex.set()
 
     @loggable()
@@ -244,6 +244,7 @@ class App:
         the_client.await_connection()
         break_reason = None
         while True:
+            log_websocket_going_to_sleep(new_websocket)
             try:
                 raw_msg = await new_websocket.recv()
             except websockets.exceptions.ConnectionClosed as e:
@@ -277,7 +278,7 @@ class App:
         else:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
 
-        log_websocket_request_end()
+        log_websocket_request_end(new_websocket)
     
     @loggable()
     def piggyback_call(self, function, *args):
@@ -286,10 +287,14 @@ class App:
     def __repr__(self):
         return "<App>"
 
-@loggable()
-def log_websocket_request_end():
+@loggable('_app.py/websocket_request_end')
+def log_websocket_request_end(websocket):
     pass
 
-@loggable()
-def log_event_loop_closed():
+@loggable('_app.py/event_loop_closed')
+def log_event_loop_closed(evloop):
+    pass
+
+@loggable('_app.py/websocket_going_to_sleep')
+def log_websocket_going_to_sleep(websocket):
     pass

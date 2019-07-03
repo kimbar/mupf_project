@@ -13,15 +13,15 @@
 [mupf] th-M │└─ App.__enter__-0                                                          => <App>
 [mupf] th-M │┌─ App.summon_client-0                                                    ( <class 'mupf.client._webbrowser.WebBrowser'> )
 [mupf] th-M ││┌─ App.get_unique_client_id-0                                            (  )
-[mupf] th-M ││└─ App.get_unique_client_id-0                                              => 'nNDifLdmSkO2GfDEgfkc7A'
-[mupf] th-M ││┌─ Client<WebBrowser ?>.__init__-0                                       ( <App>, 'nNDifLdmSkO2GfDEgfkc7A' )
+[mupf] th-M ││└─ App.get_unique_client_id-0                                              => 'HiC32V90RYmWlHiK9Fs--g'
+[mupf] th-M ││┌─ Client<WebBrowser ?>.__init__-0                                       ( <App>, 'HiC32V90RYmWlHiK9Fs--g' )
 [mupf] th-M ││└─ Client<WebBrowser ?>.__init__-0                                         => None
-[mupf] th-M ││┌─ Client<WebBrowser nNDifL>.install_javascript-0                        ( src='mupf/core' )
-[mupf] th-M │││┌─ Client<WebBrowser nNDifL>.send_json-0                                ( [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
-[mupf] th-M │││└─ Client<WebBrowser nNDifL>.send_json-0                                  => None
-[mupf] th-M ││└─ Client<WebBrowser nNDifL>.install_javascript-0                          => <Command *install* 1>
+[mupf] th-M ││┌─ Client<WebBrowser HiC32V>.install_javascript-0                        ( src='mupf/core' )
+[mupf] th-M │││┌─ Client<WebBrowser HiC32V>.send_json-0                                ( [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
+[mupf] th-M │││└─ Client<WebBrowser HiC32V>.send_json-0                                  => None
+[mupf] th-M ││└─ Client<WebBrowser HiC32V>.install_javascript-0                          => <Command *install* 1>
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=428 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=424 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server ! failing WebSocket connection in the CONNECTING state: 1006 [no reason]
 [websockets.protocol] server x half-closing TCP connection
 [websockets.protocol] server - event = eof_received()
@@ -29,7 +29,7 @@
 [websockets.protocol] server - state = CLOSED
 [websockets.protocol] server x code = 1006, reason = [no reason]
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=428 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=424 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server ! failing WebSocket connection in the CONNECTING state: 1006 [no reason]
 [websockets.protocol] server x half-closing TCP connection
 [websockets.protocol] server - event = eof_received()
@@ -37,20 +37,22 @@
 [websockets.protocol] server - state = CLOSED
 [websockets.protocol] server x code = 1006, reason = [no reason]
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=428 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=424 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server - state = OPEN
-[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,0,0,{"result":{"cid":"nNDifLdmSkO2GfDEgfkc7A","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ Client.decode_json_simple-0                                  ( '[1,0,0,{"result":{"cid":"nNDifLdmSkO2GfDEgfkc7A","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]' )
-[mupf] th-S ││········│└─ Client.decode_json_simple-0                                    => [1, 0, 0, {'result': {'cid': 'nNDifLdmSkO2GfDEgfkc7A', 'ua': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'}}]
-[mupf] th-S ││········│┌─ Client<WebBrowser nNDifL>.await_connection-0                 (  )
-[mupf] th-S ││········││┌─ Client<WebBrowser nNDifL>.send_json-1                       ( [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
-[mupf] th-S ││········││└─ Client<WebBrowser nNDifL>.send_json-1                         => None
-[mupf] th-S ││········│└─ Client<WebBrowser nNDifL>.await_connection-0                   => <WebBrowser nNDifL>
-[mupf] th-S ││········│┌─ create_send_task-0                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]' )
+[websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,0,0,{"result":{"cid":"HiC32V90RYmWlHiK9Fs--g","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]', rsv1=False, rsv2=False, rsv3=False)
+[mupf] th-S ││········│┌─ Client.decode_json_simple-0                                  ( '[1,0,0,{"result":{"cid":"HiC32V90RYmWlHiK9Fs--g","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0"}}]' )
+[mupf] th-S ││········│└─ Client.decode_json_simple-0                                    => [1, 0, 0, {'result': {'cid': 'HiC32V90RYmWlHiK9Fs--g', 'ua': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:60.0) Gecko/20100101 Firefox/60.0'}}]
+[mupf] th-S ││········│┌─ Client<WebBrowser HiC32V>.await_connection-0                 (  )
+[mupf] th-S ││········││┌─ Client<WebBrowser HiC32V>.send_json-1                       ( [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}] )
+[mupf] th-S ││········││└─ Client<WebBrowser HiC32V>.send_json-1                         => None
+[mupf] th-S ││········│└─ Client<WebBrowser HiC32V>.await_connection-0                   => <WebBrowser HiC32V>
+[mupf] th-S ││········│┌─ _app.py/websocket_going_to_sleep-0                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-S ││········│└─ _app.py/websocket_going_to_sleep-0                             => None
+[mupf] th-S ││········│┌─ create_send_task-0                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]' )
 [mupf] th-S ││········│└─ create_send_task-0                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server - state = CONNECTING
-[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=396 read=idle write=<idle, bufsize=0>>)
+[websockets.protocol] server - event = connection_made(<_SelectorSocketTransport fd=392 read=idle write=<idle, bufsize=0>>)
 [websockets.protocol] server ! failing WebSocket connection in the CONNECTING state: 1006 [no reason]
 [websockets.protocol] server x half-closing TCP connection
 [websockets.protocol] server - event = eof_received()
@@ -58,96 +60,108 @@
 [websockets.protocol] server - state = CLOSED
 [websockets.protocol] server x code = 1006, reason = [no reason]
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,1,0,{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ Client<WebBrowser nNDifL>.decode_json-0                      ( '[1,1,0,{"result":null}]' )
-[mupf] th-S ││········│└─ Client<WebBrowser nNDifL>.decode_json-0                        => [1, 1, 0, {'result': None}]
-[mupf] th-M ││┌─ Client<WebBrowser nNDifL>.send_json-2                                 ( [0, 2, '*features*', {'args': (), 'kwargs': {}}] )
-[mupf] th-S │││·······│┌─ create_send_task-1                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[0,2,"*features*",{"args":[],"kwargs":{}}]' )
-[mupf] th-M ││└─ Client<WebBrowser nNDifL>.send_json-2                                   => None
+[mupf] th-S ││········│┌─ Client<WebBrowser HiC32V>.decode_json-0                      ( '[1,1,0,{"result":null}]' )
+[mupf] th-S ││········│└─ Client<WebBrowser HiC32V>.decode_json-0                        => [1, 1, 0, {'result': None}]
+[mupf] th-S ││········│┌─ _app.py/websocket_going_to_sleep-1                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-S ││········│└─ _app.py/websocket_going_to_sleep-1                             => None
+[mupf] th-M ││┌─ Client<WebBrowser HiC32V>.send_json-2                                 ( [0, 2, '*features*', {'args': (), 'kwargs': {}}] )
+[mupf] th-S │││·······│┌─ create_send_task-1                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[0,2,"*features*",{"args":[],"kwargs":{}}]' )
+[mupf] th-M ││└─ Client<WebBrowser HiC32V>.send_json-2                                   => None
 [mupf] th-S ││········│└─ create_send_task-1                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,2,"*features*",{"args":[],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ Client<WebBrowser nNDifL>.decode_json-1                      ( '[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]' )
-[mupf] th-S ││········│└─ Client<WebBrowser nNDifL>.decode_json-1                        => [1, 2, 0, {'result': {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}}]
-[mupf] th-M ││┌─ Client<WebBrowser nNDifL>.send_json-3                                 ( [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}] )
-[mupf] th-S │││·······│┌─ create_send_task-2                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]' )
-[mupf] th-M ││└─ Client<WebBrowser nNDifL>.send_json-3                                   => None
+[mupf] th-S ││········│┌─ Client<WebBrowser HiC32V>.decode_json-1                      ( '[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]' )
+[mupf] th-S ││········│└─ Client<WebBrowser HiC32V>.decode_json-1                        => [1, 2, 0, {'result': {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}}]
+[mupf] th-S ││········│┌─ _app.py/websocket_going_to_sleep-2                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-M ││┌─ Client<WebBrowser HiC32V>.send_json-3                                 ( [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}] )
+[mupf] th-S │││·······│└─ _app.py/websocket_going_to_sleep-2                             => None
+[mupf] th-M ││└─ Client<WebBrowser HiC32V>.send_json-3                                   => None
+[mupf] th-S ││········│┌─ create_send_task-2                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]' )
 [mupf] th-S ││········│└─ create_send_task-2                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,3,"*getcmds*",{"args":[],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ││········│┌─ Client<WebBrowser nNDifL>.decode_json-2                      ( '[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]' )
-[mupf] th-S ││········│└─ Client<WebBrowser nNDifL>.decode_json-2                        => [1, 3, 0, {'result': ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']}]
-[mupf] th-M ││┌─ Client<WebBrowser nNDifL>.summoned-0                                  (  )
-[mupf] th-M ││└─ Client<WebBrowser nNDifL>.summoned-0                                    => None
-[mupf] th-M │└─ App.summon_client-0                                                      => <WebBrowser nNDifL>
+[mupf] th-S ││········│┌─ Client<WebBrowser HiC32V>.decode_json-2                      ( '[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]' )
+[mupf] th-S ││········│└─ Client<WebBrowser HiC32V>.decode_json-2                        => [1, 3, 0, {'result': ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']}]
+[mupf] th-S ││········│┌─ _app.py/websocket_going_to_sleep-3                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-M ││┌─ Client<WebBrowser HiC32V>.summoned-0                                  (  )
+[mupf] th-S │││·······│└─ _app.py/websocket_going_to_sleep-3                             => None
+[mupf] th-M ││└─ Client<WebBrowser HiC32V>.summoned-0                                    => None
+[mupf] th-M │└─ App.summon_client-0                                                      => <WebBrowser HiC32V>
 [mupf] th-M └─ App.open_with_client-0                                                    => <App>
 [mupf] th-M ┌─ App.__enter__-1                                                         (  )
 [mupf] th-M │┌─ App.is_opened-2                                                        (  )
 [mupf] th-M │└─ App.is_opened-2                                                          => True
-[mupf] th-M └─ App.__enter__-1                                                           => <WebBrowser nNDifL>
-[mupf] th-M ┌─ Client<WebBrowser nNDifL>.send_json-4                                   ( [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}] )
-[mupf] th-S │·········│┌─ create_send_task-3                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │·········│└─ create_send_task-3                                             => None
+[mupf] th-M └─ App.__enter__-1                                                           => <WebBrowser HiC32V>
+[mupf] th-M ┌─ Client<WebBrowser HiC32V>.send_json-4                                   ( [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-3                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-M └─ Client<WebBrowser HiC32V>.send_json-4                                     => None
+[mupf] th-S ··········│└─ create_send_task-3                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M └─ Client<WebBrowser nNDifL>.send_json-4                                     => None
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ··········│┌─ Client<WebBrowser nNDifL>.decode_json-3                      ( '[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]' )
-[mupf] th-S ··········││┌─ Client<WebBrowser nNDifL>.get_remote_obj-0                  ( 1, None )
-[mupf] th-S ··········│││┌─ Client<WebBrowser nNDifL>.get_remote_obj-1                 ( None )
-[mupf] th-S ··········│││└─ Client<WebBrowser nNDifL>.get_remote_obj-1                   => None
-[mupf] th-S ··········││└─ Client<WebBrowser nNDifL>.get_remote_obj-1                    => <mupf._remote.RemoteObj object at 0x00000000039828D0>
-[mupf] th-S ··········│└─ Client<WebBrowser nNDifL>.decode_json-3                        => [1, 4, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000039828D0>}]
-[mupf] th-M ┌─ Client<WebBrowser nNDifL>.send_json-5                                   ( [0, 5, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}] )
-[mupf] th-S │·········│┌─ create_send_task-4                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[0,5,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]' )
-[mupf] th-S │·········│└─ create_send_task-4                                             => None
+[mupf] th-S ··········│┌─ Client<WebBrowser HiC32V>.decode_json-3                      ( '[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client<WebBrowser HiC32V>.get_remote_obj-0                  ( 1, None )
+[mupf] th-S ··········│││┌─ Client<WebBrowser HiC32V>.get_remote_obj-1                 ( None )
+[mupf] th-S ··········│││└─ Client<WebBrowser HiC32V>.get_remote_obj-1                   => None
+[mupf] th-S ··········││└─ Client<WebBrowser HiC32V>.get_remote_obj-1                    => <mupf._remote.RemoteObj object at 0x0000000003732550>
+[mupf] th-S ··········│└─ Client<WebBrowser HiC32V>.decode_json-3                        => [1, 4, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003732550>}]
+[mupf] th-S ··········│┌─ _app.py/websocket_going_to_sleep-4                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-M ┌─ Client<WebBrowser HiC32V>.send_json-5                                   ( [0, 5, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}] )
+[mupf] th-M └─ Client<WebBrowser HiC32V>.send_json-5                                     => None
+[mupf] th-S ··········│└─ _app.py/websocket_going_to_sleep-4                             => None
+[mupf] th-S ··········│┌─ create_send_task-4                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[0,5,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-S ··········│└─ create_send_task-4                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,5,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M └─ Client<WebBrowser nNDifL>.send_json-5                                     => None
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,5,0,["~",{"result":["~@",2,null]},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ··········│┌─ Client<WebBrowser nNDifL>.decode_json-4                      ( '[1,5,0,["~",{"result":["~@",2,null]},{"c":1}]]' )
-[mupf] th-S ··········││┌─ Client<WebBrowser nNDifL>.get_remote_obj-2                  ( 2, None )
-[mupf] th-S ··········│││┌─ Client<WebBrowser nNDifL>.get_remote_obj-3                 ( None )
-[mupf] th-S ··········│││└─ Client<WebBrowser nNDifL>.get_remote_obj-3                   => None
-[mupf] th-S ··········││└─ Client<WebBrowser nNDifL>.get_remote_obj-3                    => <mupf._remote.RemoteObj object at 0x0000000003982940>
-[mupf] th-S ··········│└─ Client<WebBrowser nNDifL>.decode_json-4                        => [1, 5, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003982940>}]
-[mupf] th-M ┌─ Client<WebBrowser nNDifL>.send_json-6                                   ( [2, 6, '*gc*', {'args': (1,), 'kwargs': {}}] )
-[mupf] th-M └─ Client<WebBrowser nNDifL>.send_json-6                                     => None
-[mupf] th-S ··········│┌─ create_send_task-5                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[2,6,"*gc*",{"args":[1],"kwargs":{}}]' )
-[mupf] th-M ┌─ Client<WebBrowser nNDifL>.send_json-7                                   ( [0, 7, '*set*', {'args': (["~@",2], 'innerHTML', 'Hello, World!'), 'kwargs': {}}] )
+[mupf] th-S ··········│┌─ Client<WebBrowser HiC32V>.decode_json-4                      ( '[1,5,0,["~",{"result":["~@",2,null]},{"c":1}]]' )
+[mupf] th-S ··········││┌─ Client<WebBrowser HiC32V>.get_remote_obj-2                  ( 2, None )
+[mupf] th-S ··········│││┌─ Client<WebBrowser HiC32V>.get_remote_obj-3                 ( None )
+[mupf] th-S ··········│││└─ Client<WebBrowser HiC32V>.get_remote_obj-3                   => None
+[mupf] th-S ··········││└─ Client<WebBrowser HiC32V>.get_remote_obj-3                    => <mupf._remote.RemoteObj object at 0x00000000037328D0>
+[mupf] th-S ··········│└─ Client<WebBrowser HiC32V>.decode_json-4                        => [1, 5, 0, {'result': <mupf._remote.RemoteObj object at 0x00000000037328D0>}]
+[mupf] th-S ··········│┌─ _app.py/websocket_going_to_sleep-5                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-S ··········│└─ _app.py/websocket_going_to_sleep-5                             => None
+[mupf] th-M ┌─ Client<WebBrowser HiC32V>.send_json-6                                   ( [2, 6, '*gc*', {'args': (1,), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-5                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[2,6,"*gc*",{"args":[1],"kwargs":{}}]' )
+[mupf] th-M └─ Client<WebBrowser HiC32V>.send_json-6                                     => None
+[mupf] th-M ┌─ Client<WebBrowser HiC32V>.send_json-7                                   ( [0, 7, '*set*', {'args': (["~@",2], 'innerHTML', 'Hello, World!'), 'kwargs': {}}] )
 [mupf] th-S │·········│└─ create_send_task-5                                             => None
+[mupf] th-M └─ Client<WebBrowser HiC32V>.send_json-7                                     => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,6,"*gc*",{"args":[1],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-M └─ Client<WebBrowser nNDifL>.send_json-7                                     => None
-[mupf] th-S ··········│┌─ create_send_task-6                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[0,7,"*set*",["~",{"args":[["~@",2],"innerHTML","Hello, World!"],"kwargs":{}},{"c":1}]]' )
+[mupf] th-S ··········│┌─ create_send_task-6                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[0,7,"*set*",["~",{"args":[["~@",2],"innerHTML","Hello, World!"],"kwargs":{}},{"c":1}]]' )
 [mupf] th-S ··········│└─ create_send_task-6                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,7,"*set*",["~",{"args":[["~@",2],"innerHTML","Hello, World!"],"kwargs":{}},{"c":1}]]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=1, data=b'[1,7,0,{"result":null}]', rsv1=False, rsv2=False, rsv3=False)
-[mupf] th-S ··········│┌─ Client<WebBrowser nNDifL>.decode_json-5                      ( '[1,7,0,{"result":null}]' )
-[mupf] th-S ··········│└─ Client<WebBrowser nNDifL>.decode_json-5                        => [1, 7, 0, {'result': None}]
-[mupf] th-M ┌─ Client<WebBrowser nNDifL>.send_json-8                                   ( [2, 8, '*gc*', {'args': (2,), 'kwargs': {}}] )
-[mupf] th-S │·········│┌─ create_send_task-7                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[2,8,"*gc*",{"args":[2],"kwargs":{}}]' )
-[mupf] th-M └─ Client<WebBrowser nNDifL>.send_json-8                                     => None
+[mupf] th-S ··········│┌─ Client<WebBrowser HiC32V>.decode_json-5                      ( '[1,7,0,{"result":null}]' )
+[mupf] th-S ··········│└─ Client<WebBrowser HiC32V>.decode_json-5                        => [1, 7, 0, {'result': None}]
+[mupf] th-S ··········│┌─ _app.py/websocket_going_to_sleep-6                           ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-S ··········│└─ _app.py/websocket_going_to_sleep-6                             => None
+[mupf] th-M ┌─ Client<WebBrowser HiC32V>.send_json-8                                   ( [2, 8, '*gc*', {'args': (2,), 'kwargs': {}}] )
+[mupf] th-S │·········│┌─ create_send_task-7                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[2,8,"*gc*",{"args":[2],"kwargs":{}}]' )
+[mupf] th-M └─ Client<WebBrowser HiC32V>.send_json-8                                     => None
 [mupf] th-S ··········│└─ create_send_task-7                                             => None
 [mupf] th-M ┌─ App.__exit__-0                                                          ( None, None, None )
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[2,8,"*gc*",{"args":[2],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
 [mupf] th-M │┌─ App.close-0                                                            (  )
-[mupf] th-M ││┌─ Client<WebBrowser nNDifL>.close-0                                     ( _dont_remove_from_app=True )
-[mupf] th-M │││┌─ Client<WebBrowser nNDifL>.send_json-9                                ( [0, 9, '*last*', {'args': (), 'kwargs': {}}] )
-[mupf] th-S ││││······│┌─ create_send_task-8                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x00000000036165C0>, '[0,9,"*last*",{"args":[],"kwargs":{}}]' )
-[mupf] th-M │││└─ Client<WebBrowser nNDifL>.send_json-9                                  => None
+[mupf] th-M ││┌─ Client<WebBrowser HiC32V>.close-0                                     ( _dont_remove_from_app=True )
+[mupf] th-M │││┌─ Client<WebBrowser HiC32V>.send_json-9                                ( [0, 9, '*last*', {'args': (), 'kwargs': {}}] )
+[mupf] th-S ││││······│┌─ create_send_task-8                                           ( <_WindowsSelectorEventLoop running=True closed=False debug=False>, <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20>, '[0,9,"*last*",{"args":[],"kwargs":{}}]' )
+[mupf] th-M │││└─ Client<WebBrowser HiC32V>.send_json-9                                  => None
 [mupf] th-S │││·······│└─ create_send_task-8                                             => None
 [websockets.protocol] server > Frame(fin=True, opcode=1, data=b'[0,9,"*last*",{"args":[],"kwargs":{}}]', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server < Frame(fin=True, opcode=8, data=b'\x03\xe8*last*', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server - state = CLOSING
 [websockets.protocol] server > Frame(fin=True, opcode=8, data=b'\x03\xe8*last*', rsv1=False, rsv2=False, rsv3=False)
 [websockets.protocol] server x half-closing TCP connection
-[mupf] th-S │││·······│┌─ log_websocket_request_end-0                                  (  )
-[mupf] th-S │││·······│└─ log_websocket_request_end-0                                    => None
-[websockets.protocol] server - event = eof_received()
-[mupf] th-M ││└─ Client<WebBrowser nNDifL>.close-0                                       => None
-[websockets.protocol] server - event = connection_lost(None)
+[mupf] th-S │││·······│┌─ _app.py/websocket_request_end-0                              ( <websockets.server.WebSocketServerProtocol object at 0x0000000003616A20> )
+[mupf] th-M ││└─ Client<WebBrowser HiC32V>.close-0                                       => None
+[mupf] th-S ││········│└─ _app.py/websocket_request_end-0                                => None
 [mupf] th-M │└─ App.close-0                                                              => None
+[websockets.protocol] server - event = eof_received()
+[mupf] th-M └─ App.__exit__-0                                                            => None
+[websockets.protocol] server - event = connection_lost(None)
 [websockets.protocol] server - state = CLOSED
 [websockets.protocol] server x code = 1000, reason = *last*
-[mupf] th-M └─ App.__exit__-0                                                            => None
 [websockets.protocol] server ! failing WebSocket connection in the CLOSED state: 1001 [no reason]
-[mupf] th-S ··········│┌─ log_event_loop_closed-0                                      (  )
-[mupf] th-S ··········│└─ log_event_loop_closed-0                                        => None
+[mupf] th-S ··········│┌─ _app.py/event_loop_closed-0                                  ( <_WindowsSelectorEventLoop running=False closed=True debug=False> )
+[mupf] th-S ··········│└─ _app.py/event_loop_closed-0                                    => None
 [mupf] th-S ··········└─ App._server_thread_body-0                                       => None
