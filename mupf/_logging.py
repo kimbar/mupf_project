@@ -9,7 +9,6 @@ import copy
 
 lock = threading.Lock()
 thread_number_by_threadid = {}
-call_count = {}    # FIXME: this will leak -- destroyed objects still keep track of their call count
 _tracks = []
 
 
@@ -101,7 +100,7 @@ class LoggableFunc:
         pass
 
     def on(self):
-        self.wrapper = LogFuncWrapper(self.name, self.parent, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
+        self.wrapper = LogFuncWrapper(self, self.name, self.parent, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
 
     def off(self):
         setattr(self.parent, self.func_name, self.wrapper._func)
@@ -110,11 +109,12 @@ class LoggableFunc:
 
 class LogFuncWrapper:
 
-    def __init__(self, log_name, parent, func_name, log_args, log_results, log_enter, log_exit):
+    def __init__(self, manager, log_name, parent, func_name, log_args, log_results, log_enter, log_exit):
         self._func = getattr(parent, func_name)
         if isinstance(self._func, LogFuncWrapper):
             return
         self._log_name = log_name
+        self._manager = manager
         self._func_name = func_name
         self._log_args = log_args
         self._log_result = log_results
@@ -122,6 +122,7 @@ class LogFuncWrapper:
         self._log_exit = log_exit
         self._parent = parent
         self._is_range = log_enter and log_exit
+        self._call_number = None
         setattr(parent, func_name, self)
 
     def __get__(self, obj, class_):
@@ -134,7 +135,8 @@ class LogFuncWrapper:
     def __call__(self, *args, **kwargs):
         global lock
         with lock:
-            call_count[self._log_name] = call_count.get(self._log_name,-1)+1
+            self._call_number = self._manager.call_count
+            self._manager.call_count += 1
             if self._is_range:
                 thread_number, thread_abr = self._identify_thread()
                 self.track = _find_free_track((thread_number-1)*10)
@@ -172,29 +174,27 @@ class LogFuncWrapper:
 
     def _precall_log(self, *args, **kwargs):
         thread_number, thread_abr = self._identify_thread()
-        call_number = call_count[self._log_name]
         if self._log_exit:
             tracks = _repr_tracks('start', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
-        msg = "{3} {0}─< {1}/{2}".format(tracks, self._log_name.replace('@',''), call_number, thread_abr)
+        msg = "{3} {0}─< {1}/{2}".format(tracks, self._log_name.replace('@',''), self._call_number, thread_abr)
         lmsg = max(((len(msg)-10)//20+2)*20,80)
         if self._log_args and (len(args) or len(kwargs)):
-            msg += " "*(lmsg-len(msg)) + "<- {}".format(", ".join([repr(a) for a in args]+[k+"="+repr(v) for k,v in kwargs.items()]))
+            msg += " "*(lmsg-len(msg)) + "<-   {}".format(", ".join([repr(a) for a in args]+[k+"="+repr(v) for k,v in kwargs.items()]))
         
         logging.getLogger('mupf').info(msg)
 
     def _postcall_log(self, result):
         thread_number, thread_abr = self._identify_thread()
-        call_number = call_count[self._log_name]
         if self._log_enter:
             tracks = _repr_tracks('end', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
-        msg = "{3} {0}─> {1}/{2}".format(tracks, self._log_name.replace('@',''), call_number, thread_abr)
+        msg = "{3} {0}─> {1}/{2}".format(tracks, self._log_name.replace('@',''), self._call_number, thread_abr)
         lmsg = max(((len(msg)-10)//20+2)*20,80)
         if self._log_result and result is not None:
-            msg += " "*(lmsg-len(msg)) + "-> {}".format(repr(result))
+            msg += " "*(lmsg-len(msg)) + "  -> {}".format(repr(result))
         
         logging.getLogger('mupf').info(msg)
 

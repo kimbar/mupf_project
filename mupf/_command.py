@@ -187,6 +187,6 @@ def create_command_class_for_client(client):
             return False
 
         def __repr__(self):
-            return "<{} {}>".format(getattr(self, '_cmd_name', '?'), getattr(self, '_ccid', '?'))
+            return "<[ {} {} {} ]>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'))
 
     return Command
