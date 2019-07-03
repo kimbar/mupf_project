@@ -70,13 +70,13 @@ def _repr_tracks(branch=None, branch_track=None):
     return result
 
 
-class LoggableFunc:
+class LoggableFuncManager:
 
     _loggables_by_name = {}
     _dangling_loggables = []
 
     def __init__(self, name, parent, target, func_name):
-        if name in LoggableFunc._loggables_by_name:
+        if name in LoggableFuncManager._loggables_by_name:
             raise ValueError('Loggable name `{}` already exists'.format(name))
         self.parent = parent
         self.target = target
@@ -88,11 +88,11 @@ class LoggableFunc:
         self.log_exit = True
         self.wrapper = None
         self.call_count = 0
-        LoggableFunc._dangling_loggables.append(self)
+        LoggableFuncManager._dangling_loggables.append(self)
 
     def add(self):
-        LoggableFunc._loggables_by_name[self.name] = self
-        LoggableFunc._dangling_loggables.remove(self)
+        LoggableFuncManager._loggables_by_name[self.name] = self
+        LoggableFuncManager._dangling_loggables.remove(self)
         return self
 
     @classmethod
@@ -205,20 +205,20 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
         if isinstance(x, types.FunctionType):
             log_name = log_name.replace('*',  x.__name__, 1)
             if x.__qualname__ != x.__name__:
-                x._methodtolog = LoggableFunc(log_name, None, x, x.__name__)
+                x._methodtolog = LoggableFuncManager(log_name, None, x, x.__name__)
                 x._methodtolog.log_args = log_args
                 x._methodtolog.log_results = log_results
                 x._methodtolog.log_enter = log_enter
                 x._methodtolog.log_exit = log_exit
             else:
-                lf = LoggableFunc(log_name, inspect.getmodule(x), x, x.__name__).add()
+                lf = LoggableFuncManager(log_name, inspect.getmodule(x), x, x.__name__).add()
                 lf.log_args = log_args
                 lf.log_results = log_results
                 lf.log_enter = log_enter
                 lf.log_exit = log_exit
         elif isinstance(x, classmethod):
             log_name = log_name.replace('*',  x.__func__.__name__, 1)
-            x._methodtolog = LoggableFunc(log_name, None, x, x.__func__.__name__)
+            x._methodtolog = LoggableFuncManager(log_name, None, x, x.__func__.__name__)
             x._methodtolog.log_args = log_args
             x._methodtolog.log_results = log_results
             x._methodtolog.log_enter = log_enter
@@ -238,18 +238,17 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
     return loggable_decorator
 
 class Loggable:
-
     def __init__(cls, name, bases, dict_):    # pylint: disable=no-self-argument
         lgd = loggable(log_name=name)
         lgd(cls)
-        for l in LoggableFunc._loggables_by_name.values():
+        for l in LoggableFuncManager._loggables_by_name.values():
             l.on()
 
 
-def enable_logging(filename):
-    logging.basicConfig(level=logging.INFO)
-    hand = logging.FileHandler(filename=filename, mode='w', encoding='utf-8')
-    hand.setFormatter(logging.Formatter(fmt='[%(name)s] %(message)s'))
+def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
+    logging.basicConfig(level=level)
+    hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
+    hand.setFormatter(logging.Formatter(fmt))
     logging.getLogger('').addHandler(hand)
-    for l in LoggableFunc._loggables_by_name.values():
+    for l in LoggableFuncManager._loggables_by_name.values():
         l.on()

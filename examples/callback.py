@@ -1,7 +1,7 @@
 import mupf
 import hashlib
 
-mupf.enable_logging('callback.log')
+mupf.log.enable('callback.log')
 
 # Event handler
 def button_click(event):
