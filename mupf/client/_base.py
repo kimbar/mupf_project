@@ -12,7 +12,9 @@ import queue
 from .._logging import loggable
 
 async def send_task_body(wbs, json):
+    log_sending_event('sending...', wbs, json)
     await wbs.send(json)
+    log_sending_event('sent')
 
 @loggable('client/_base.py/*')
 def create_send_task(evl, wbs, json):
@@ -64,7 +66,7 @@ class Client:
                 json,
             )
 
-    @loggable()
+    @loggable(log_enter=False)
     def __bool__(self):
         # for `while client:` syntax
         return self._healthy_connection
@@ -100,7 +102,7 @@ class Client:
             self._remote_obj_byid[(rid, ctxrid)] = rem_obj
             return rem_obj
 
-    @loggable(log_enter=False)
+    @loggable()
     def summoned(self):
         self._safe_dunders_feature = (F.safe_dunders in self.features)
         if F.strict_feature_list in self.features and self.features != self.app._features:
@@ -173,14 +175,17 @@ class Client:
         callback_task.run()
 
     @property
+    @loggable('* -> ', log_enter=False)
     def app(self):
         return self._app_wr()
 
     @property
+    @loggable('* -> ', log_enter=False)
     def cid(self):
         return self._cid
 
     @property
+    @loggable('* -> ', log_enter=False)
     def url(self):
         return "http://{domain}:{port}/#{cid}".format(
                 domain = self.app._host,
@@ -189,6 +194,8 @@ class Client:
             )
 
     def __repr__(self):
-        return "<{} {}>".format(type(self).__name__, getattr(self, 'cid', '?')[0:6])
+        return "<{} {}>".format(type(self).__name__, getattr(self, '_cid', '?')[0:6])
 
-        
+@loggable('client/_base.py/sending_event', log_exit=False)
+def log_sending_event(*args, **kwargs):
+    pass

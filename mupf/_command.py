@@ -152,11 +152,13 @@ def create_command_class_for_client(client):
             ]
 
         @property
+        @loggable('wait')
         def wait(self):
             self._is_resolved.wait()
             return self
 
         @property
+        @loggable('result -> ')
         def result(self):
             self.wait
             if self._is_error:
@@ -164,6 +166,7 @@ def create_command_class_for_client(client):
             return self._result
 
         @result.setter
+        @loggable('result := ')
         def result(self, result):
             if self._notification:
                 raise RuntimeError('cannot resolve notification')

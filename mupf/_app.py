@@ -88,7 +88,6 @@ class App:
         client.summoned()
         return client
 
-    # @loggable()
     def _server_thread_body(self):
         log_server_event('entering server thread body')
         self._event_loop = asyncio.new_event_loop()
