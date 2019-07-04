@@ -92,7 +92,7 @@ class App:
     def _server_thread_body(self):
         log_server_event('entering server thread body')
         self._event_loop = asyncio.new_event_loop()
-        log_server_event('creating event loop')
+        log_server_event('creating event loop', eloop=self._event_loop)
         asyncio.set_event_loop(self._event_loop)
         log_server_event('creating server object')
         start_server = websockets.serve(
@@ -109,7 +109,7 @@ class App:
             self._server_opened_mutex.set()
             log_server_event('server open state mutex set', server)
             self._event_loop.run_forever()
-            log_server_event('event loop main run ended', server)
+            log_server_event('event loop main run ended', server, eloop=self._event_loop)
         except OSError as err:
             log_server_event('server OSError', err, server)
             self._event_loop = err
@@ -122,9 +122,9 @@ class App:
                 server.close()
                 log_server_event('server closed', server)
                 self._event_loop.run_until_complete(server.wait_closed())
-                log_server_event('event loop completed', server)
+                log_server_event('event loop completed', server, eloop=self._event_loop)
                 self._event_loop.close()
-                log_server_event('event loop closed', server)
+                log_server_event('event loop closed', server, eloop=self._event_loop)
                 self._server_closed_mutex.set()
                 log_server_event('server close state mutex set', server)
         log_server_event('exiting server thread body', server)
