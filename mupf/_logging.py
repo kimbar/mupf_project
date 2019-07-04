@@ -75,17 +75,17 @@ class LoggableFuncManager:
     _loggables_by_name = {}
     _dangling_loggables = []
 
-    def __init__(self, name, parent, target, func_name):
+    def __init__(self, name, parent, target, func_name, log_args, log_results, log_enter, log_exit):
         if name in LoggableFuncManager._loggables_by_name:
             raise ValueError('Loggable name `{}` already exists'.format(name))
         self.parent = parent
         self.target = target
         self.name = name
         self.func_name = func_name
-        self.log_args = True
-        self.log_results = True
-        self.log_enter = True
-        self.log_exit = True
+        self.log_args = log_args
+        self.log_results = log_results
+        self.log_enter = log_enter
+        self.log_exit = log_exit
         self.wrapper = None
         self.call_count = 0
         LoggableFuncManager._dangling_loggables.append(self)
@@ -205,24 +205,13 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
         if isinstance(x, types.FunctionType):
             log_name = log_name.replace('*',  x.__name__, 1)
             if x.__qualname__ != x.__name__:
-                x._methodtolog = LoggableFuncManager(log_name, None, x, x.__name__)
-                x._methodtolog.log_args = log_args
-                x._methodtolog.log_results = log_results
-                x._methodtolog.log_enter = log_enter
-                x._methodtolog.log_exit = log_exit
+                x._methodtolog = LoggableFuncManager(log_name, None, x, x.__name__, log_args, log_results, log_enter, log_exit)
             else:
-                lf = LoggableFuncManager(log_name, inspect.getmodule(x), x, x.__name__).add()
-                lf.log_args = log_args
-                lf.log_results = log_results
-                lf.log_enter = log_enter
-                lf.log_exit = log_exit
+                lfm = LoggableFuncManager(log_name, inspect.getmodule(x), x, x.__name__, log_args, log_results, log_enter, log_exit)
+                lfm.add()
         elif isinstance(x, classmethod):
             log_name = log_name.replace('*',  x.__func__.__name__, 1)
-            x._methodtolog = LoggableFuncManager(log_name, None, x, x.__func__.__name__)
-            x._methodtolog.log_args = log_args
-            x._methodtolog.log_results = log_results
-            x._methodtolog.log_enter = log_enter
-            x._methodtolog.log_exit = log_exit
+            x._methodtolog = LoggableFuncManager(log_name, None, x, x.__func__.__name__, log_args, log_results, log_enter, log_exit)
         elif isinstance(x, type):
             log_name = log_name.replace('*',  x.__name__, 1)
             for prop_name in dir(x):
