@@ -11,10 +11,12 @@ import asyncio
 from . import _remote
 from . import _symbols as S
 
-lock = threading.Lock()
+lock = threading.RLock()
 thread_number_by_threadid = {}
 _tracks = []
 
+MIN_COLUMN_WIDTH = 90
+TAB_WIDTH = 20
 
 def _is_track_occupied(n):
     global _tracks
@@ -92,6 +94,7 @@ class LoggableFuncManager:
         self.log_exit = log_exit
         self.wrapper = None
         self.call_count = 0
+        self.property_name = None
         LoggableFuncManager._dangling_loggables.append(self)
 
     def add(self):
@@ -104,21 +107,25 @@ class LoggableFuncManager:
         pass
 
     def on(self):
-        self.wrapper = LogFuncWrapper(self, self.name, self.parent, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
+        self.wrapper = LogFuncWrapper(self, self.name, self.parent, self.property_name, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
 
     def off(self):
-        setattr(self.parent, self.func_name, self.wrapper._func)
+        setattr(self.parent, self.func_name, self.wrapper._func)   # FIXME for property
         self.wrapper = None
 
 
 class LogFuncWrapper:
 
-    def __init__(self, manager, log_name, parent, func_name, log_args, log_results, log_enter, log_exit):
-        self._func = getattr(parent, func_name)
+    def __init__(self, manager, log_name, parent, property_name, func_name, log_args, log_results, log_enter, log_exit):
+        if property_name is None:
+            self._func = getattr(parent, func_name)
+        else:
+            self._func = getattr(parent.__getattribute__(parent, property_name), func_name)
         if isinstance(self._func, LogFuncWrapper):
             return
         self._log_name = log_name
         self._manager = manager
+        self._property_name = property_name
         self._func_name = func_name
         self._log_args = log_args
         self._log_result = log_results
@@ -127,7 +134,14 @@ class LogFuncWrapper:
         self._parent = parent
         self._is_range = log_enter and log_exit
         self._call_number = None
-        setattr(parent, func_name, self)
+        self._obj_repr = ''
+        self.track = "?"
+        if self._property_name is None:
+            setattr(parent, func_name, self)
+        else:
+            prop = parent.__getattribute__(parent, self._property_name)
+            decor_name = {'fget':'getter', 'fset':'setter', 'fdel': 'deleter'}[func_name]
+            setattr(parent, self._property_name, getattr(prop, decor_name)(self))
 
     def __get__(self, obj, class_):
         method = copy.copy(self)
@@ -138,23 +152,36 @@ class LogFuncWrapper:
     
     def __call__(self, *args, **kwargs):
         global lock
+
+        if self._property_name is not None and not hasattr(self._func, '__self__'):
+            method = copy.copy(self)
+            method._func = method._func.__get__(args[0], self._parent)
+            method._obj_repr = enh_repr(args[0])
+            return method(*args[1:], **kwargs)
+
         with lock:
+
             self._call_number = self._manager.call_count
             self._manager.call_count += 1
             if self._is_range:
                 thread_number, thread_abr = self._identify_thread()
                 self.track = _find_free_track((thread_number-1)*10)
                 _reserve_track(self.track)
+
             if self._log_enter:
                 self._precall_log(*args, **kwargs)
 
         result = self._func(*args, **kwargs)
 
         with lock:
+        
             if self._log_exit:
                 self._postcall_log(result)
             if self._is_range:
                 _free_track(self.track)
+
+
+        
         return result
 
     def remove_logger(self, *args, **kwargs):
@@ -177,28 +204,32 @@ class LogFuncWrapper:
         return thread_number, thread_abr
 
     def _precall_log(self, *args, **kwargs):
+        global MIN_COLUMN_WIDTH, TAB_WIDTH
         thread_number, thread_abr = self._identify_thread()
         if self._log_exit:
             tracks = _repr_tracks('start', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
-        msg = "{3} {0}─< {1}/{2}".format(tracks, self._log_name.replace('@',''), self._call_number, thread_abr)
-        lmsg = max(((len(msg)-10)//20+2)*20,80)
+        msg = "{3} {0}─< {1}/{2}".format(tracks, self._log_name.replace('@', self._obj_repr), self._call_number, thread_abr)
+        lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
+        msg += " "*(lmsg-len(msg)) + "<┤   "
         if self._log_args and (len(args) or len(kwargs)):
-            msg += " "*(lmsg-len(msg)) + "<-   {}".format(", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()]))
+            msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
         
         logging.getLogger('mupf').info(msg)
 
     def _postcall_log(self, result):
+        global MIN_COLUMN_WIDTH, TAB_WIDTH
         thread_number, thread_abr = self._identify_thread()
         if self._log_enter:
             tracks = _repr_tracks('end', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
-        msg = "{3} {0}─> {1}/{2}".format(tracks, self._log_name.replace('@',''), self._call_number, thread_abr)
-        lmsg = max(((len(msg)-10)//20+2)*20,80)
+        msg = "{3} {0}─> {1}/{2}".format(tracks, self._log_name.replace('@', self._obj_repr), self._call_number, thread_abr)
+        lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
+        msg += " "*(lmsg-len(msg)) + " ├> "
         if self._log_result and result is not None:
-            msg += " "*(lmsg-len(msg)) + "  -> {}".format(enh_repr(result))
+            msg += enh_repr(result)
         
         logging.getLogger('mupf').info(msg)
 
@@ -219,16 +250,27 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
         elif isinstance(x, type):
             log_name = log_name.replace('*',  x.__name__, 1)
             for prop_name in dir(x):
-                property_ = x.__getattribute__(x, prop_name)
-                try:
-                    property_._methodtolog.name = log_name + '.' + property_._methodtolog.name
-                    property_._methodtolog.parent = x
-                    property_._methodtolog.add()
-                    del property_._methodtolog
-                except Exception as e:
-                    pass
+                member = x.__getattribute__(x, prop_name)
+                if isinstance(member, property):
+                    members = ((member.fget, 'fget'), (member.fset, 'fset'), (member.fdel, 'fdel'))
+                else:
+                    members = ((member, None),)
+                for member, subname in members:
+                    try:
+                        member._methodtolog.name = log_name + '.' + member._methodtolog.name
+                        member._methodtolog.parent = x
+                        if subname:
+                            member._methodtolog.property_name = member._methodtolog.func_name
+                            member._methodtolog.func_name = subname
+                        member._methodtolog.add()
+                        del member._methodtolog
+                    except Exception as e:
+                        pass
         return x
     return loggable_decorator
+
+def just_info(*msg):
+    logging.getLogger('mupf').info( "     "+_repr_tracks()+" ".join(map(str, msg)))
 
 class Loggable:
     def __init__(cls, name, bases, dict_):    # pylint: disable=no-self-argument
@@ -257,7 +299,8 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
         websockets.server.WebSocketServer: lambda x: "<WebSocket Server {:X}>".format(id(x)),
         websockets.server.WebSocketServerProtocol: lambda x: "<WebSocket Protocol {:X}>".format(id(x)),
         asyncio.selector_events.BaseSelectorEventLoop: lambda x: "<EventLoop{}>".format(" ".join(['']+[x for x in (('closed' if x.is_closed() else ''), ('' if x.is_running() else 'halted')) if x!=''])),
-        _remote.RemoteObj: lambda x: "<RemoteObj {} of {} at {:X}>".format(x[S.rid], x[S.client].cid[0:6], id(x)),
+        _remote.RemoteObj: lambda x: "<RemoteObj {} of {} at {:X}>".format(x[S.rid], x[S.client]._cid[0:6], id(x)),
+        websockets.http.Headers: lambda x: "<HTTP Header from {}>".format(x['Host']),
     }
     for l in LoggableFuncManager._loggables_by_name.values():
         l.on()
