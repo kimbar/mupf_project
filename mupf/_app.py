@@ -245,21 +245,21 @@ class App:
     async def _websocket_request(self, new_websocket, path):
         log_websocket_event('entering websocket request body', new_websocket, path=path)
         raw_msg = await new_websocket.recv()
-        log_websocket_event('websocket received result of *first*', new_websocket)
+        log_websocket_event('websocket received result of *first*', new_websocket, msg=raw_msg)
         msg = client.Client.decode_json_simple(raw_msg)
         result = msg[3]['result']
         cid = result['cid']
         the_client = self._clients_by_cid[cid]
         the_client._websocket = new_websocket
-        log_websocket_event('websocket assigned to client', new_websocket)
+        log_websocket_event('websocket assigned to client', new_websocket, client=the_client)
         the_client._user_agent = result['ua']
         
         # this line accepts a response from  `command('*first*')` because if the websocket is
         # open then the `*first` have been just executed
         the_client.command.resolve_by_id_mupf(ccid=0, result=None)
-        log_websocket_event('websocket awaiting for client...', new_websocket)
+        log_websocket_event('websocket awaiting for client...', new_websocket, client=the_client)
         the_client.await_connection()
-        log_websocket_event('websocket contacted by client', new_websocket)
+        log_websocket_event('websocket contacted by client', new_websocket, client=the_client)
         break_reason = None
         while True:
             log_websocket_event('websocket going to sleep', new_websocket)
@@ -289,6 +289,7 @@ class App:
             else:
                 pass
 
+        log_websocket_event('websocket communication breakdown', new_websocket, break_reason=break_reason)
         # here we are after communication breakdown
         the_client._healthy_connection = False
         if break_reason == '*last*':
