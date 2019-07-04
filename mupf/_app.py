@@ -18,7 +18,7 @@ from . import _enhjson as enhjson
 
 from ._logging import loggable
 
-@loggable('App')
+@loggable('app_py/*<>', log_path=False)
 class App:
     """
     Class for an app. Object represents a server and port, and a thread with an event-loop.
@@ -302,14 +302,17 @@ class App:
     def piggyback_call(self, function, *args):
         self._event_loop.call_soon_threadsafe(function, *args)
 
+    def log_short_repr(self):
+        return "<{:X}>".format(id(self))
+
     def __repr__(self):
-        return "<App>"
+        return "<App {:X}>".format(id(self))
 
 
-@loggable('_app.py/server_event', log_exit=False)
+@loggable('app_py/server_event', log_exit=False)
 def log_server_event(*args, **kwargs):
     pass
 
-@loggable('_app.py/websocket_event', log_exit=False)
+@loggable('app_py/websocket_event', log_exit=False)
 def log_websocket_event(*args, **kwargs):
     pass

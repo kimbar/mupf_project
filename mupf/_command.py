@@ -5,7 +5,7 @@ import time
 from ._remote import RemoteObj
 from ._logging import loggable, Loggable
 
-class MetaCommand(type, Loggable):
+class MetaCommand(type):
     """
     Class of all commands. Object represents all possible commands for a specific client. Object is a class.
 
@@ -26,8 +26,8 @@ class MetaCommand(type, Loggable):
     """
     
     def __init__(cls, name, bases, dict_):
-        type.__init__(cls, name, bases, dict_)
-        Loggable.__init__(cls, 'Command_of_{}@'.format(cls._client_wr().cid[0:6]), bases, dict_)
+        super().__init__(name, bases, dict_)
+        # Loggable.__init__(cls, 'command_py/Command<{}><>'.format(cls._client_wr()._cid[0:6]), bases, dict_, log_path=False)
 
     def __getattr__(cls, name):
         return cls(name)    #pylint: disable=no-value-for-parameter
@@ -62,12 +62,13 @@ class MetaCommand(type, Loggable):
 def log_resolving(cmd):
     pass
 
-@loggable()
+@loggable('command_py/*')
 def create_command_class_for_client(client):
     """
     Return a class "binded" to the `client`.
     """
     
+    @loggable('command_py/*<{0}><>'.format(client._cid[0:6]), log_path=False)
     class Command(metaclass=MetaCommand):
         """
         Class of all possible commands for a specific client. Object represents a specific (named) command.
@@ -95,7 +96,7 @@ def create_command_class_for_client(client):
             self._result = None
             self._is_error = False
 
-        @loggable()
+        @loggable('()')
         def __call__(self, *args, **kwargs):
             # TODO: notifications can be send multiple times and commands only once!
             if self._cmd_name not in Command._legal_names:
@@ -152,13 +153,13 @@ def create_command_class_for_client(client):
             ]
 
         @property
-        @loggable('wait')
+        @loggable()
         def wait(self):
             self._is_resolved.wait()
             return self
 
         @property
-        @loggable('result -> ')
+        @loggable('result.:')
         def result(self):
             self.wait
             if self._is_error:
@@ -166,7 +167,7 @@ def create_command_class_for_client(client):
             return self._result
 
         @result.setter
-        @loggable('result := ')
+        @loggable('result.=')
         def result(self, result):
             if self._notification:
                 raise RuntimeError('cannot resolve notification')
@@ -189,7 +190,10 @@ def create_command_class_for_client(client):
                 return self._result
             return False
 
+        def log_short_repr(self):
+            return "<{}>".format(getattr(self, '_ccid', '?'))
+
         def __repr__(self):
-            return "<[ {} {} {} ]>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'))
+            return "<Command {} {} {} >".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'))
 
     return Command

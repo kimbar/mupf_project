@@ -72,7 +72,7 @@ class RemoteJsonEsc:
     def __repr__(self):
         return '["~@",{}]'.format(self.rid)
 
-@loggable('CallbackTask')
+@loggable('remote_py/*<>')
 class CallbackTask:
     # TODO: this is very much a work in progress, serious rethinking
     # of this class is needed
@@ -96,6 +96,9 @@ class CallbackTask:
             return
         if self._noun == '*close*':
             return
+
+    def log_short_repr(self):
+        return "<{}>".format(getattr(self, '_ccid', '?'))
 
     def __repr__(self):
         return "<CallbackTask {} {} {}>".format(getattr(self, '_noun', '?'), getattr(self, '_ccid', '?'), getattr(self, '_func', '-'))

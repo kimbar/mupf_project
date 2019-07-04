@@ -16,11 +16,11 @@ async def send_task_body(wbs, json):
     await wbs.send(json)
     log_sending_event('sent')
 
-@loggable('client/_base.py/*')
+@loggable('client/base_py/*')
 def create_send_task(evl, wbs, json):
     evl.create_task(send_task_body(wbs, json))
 
-@loggable('Client@')
+@loggable('client/base_py/*<>', log_path=False)
 class Client:
     """
     Object represents a window of a browser.
@@ -28,7 +28,7 @@ class Client:
     It is not called "Window", because `window` is already a top-level object of the JavaSript side, and this object is
     a little more than that. A `RemoteObj` of `window` can be easily obtained by `client.window`.
     """
-    @loggable('*')
+    @loggable()
     def __init__(self, app, client_id):
         self._app_wr = weakref.ref(app)
         self._cid = client_id
@@ -175,17 +175,17 @@ class Client:
         callback_task.run()
 
     @property
-    @loggable('* -> ', log_enter=False)
+    @loggable('*.:', log_enter=False)
     def app(self):
         return self._app_wr()
 
     @property
-    @loggable('* -> ', log_enter=False)
+    @loggable('*.:', log_enter=False)
     def cid(self):
         return self._cid
 
     @property
-    @loggable('* -> ', log_enter=False)
+    @loggable('*.:', log_enter=False)
     def url(self):
         return "http://{domain}:{port}/#{cid}".format(
                 domain = self.app._host,
@@ -196,6 +196,6 @@ class Client:
     def __repr__(self):
         return "<{} {}>".format(type(self).__name__, getattr(self, '_cid', '?')[0:6])
 
-@loggable('client/_base.py/sending_event', log_exit=False)
+@loggable('client/base_py/sending_event', log_exit=False)
 def log_sending_event(*args, **kwargs):
     pass

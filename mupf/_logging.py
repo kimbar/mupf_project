@@ -14,6 +14,7 @@ from . import _symbols as S
 lock = threading.RLock()
 thread_number_by_threadid = {}
 _tracks = []
+_logging_enabled = False
 
 MIN_COLUMN_WIDTH = 90
 TAB_WIDTH = 20
@@ -81,11 +82,14 @@ class LoggableFuncManager:
     _loggables_by_name = {}
     _dangling_loggables = []
 
-    def __init__(self, name, parent, target, func_name, log_args, log_results, log_enter, log_exit):
+    def __init__(self, name, parent, target, func_name, log_args, log_results, log_enter, log_exit, log_path):
         if name in LoggableFuncManager._loggables_by_name:
             raise ValueError('Loggable name `{}` already exists'.format(name))
         self.parent = parent
         self.target = target
+        self.log_path = log_path
+        self._name = None
+        self.printed_name = None
         self.name = name
         self.func_name = func_name
         self.log_args = log_args
@@ -97,9 +101,24 @@ class LoggableFuncManager:
         self.property_name = None
         LoggableFuncManager._dangling_loggables.append(self)
 
-    def add(self):
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+        if self.log_path:
+            self.printed_name = value
+        else:
+            m = re.match(r".*/([^/]*)", value)
+            self.printed_name = m.group(1)
+
+    def add(self, on=False):
         LoggableFuncManager._loggables_by_name[self.name] = self
         LoggableFuncManager._dangling_loggables.remove(self)
+        if on:
+            self.on()
         return self
 
     @classmethod
@@ -107,11 +126,12 @@ class LoggableFuncManager:
         pass
 
     def on(self):
-        self.wrapper = LogFuncWrapper(self, self.name, self.parent, self.property_name, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
+        # Here oryginal (good) wrapper is lost if turned on second time
+        self.wrapper = LogFuncWrapper(self, self.printed_name, self.parent, self.property_name, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
 
-    def off(self):
-        setattr(self.parent, self.func_name, self.wrapper._func)   # FIXME for property
-        self.wrapper = None
+    # def off(self):
+    #     setattr(self.parent, self.func_name, self.wrapper._func)   # FIXME for property
+    #     self.wrapper = None
 
 
 class LogFuncWrapper:
@@ -147,7 +167,7 @@ class LogFuncWrapper:
         method = copy.copy(self)
         method._func = method._func.__get__(obj, class_)
         if obj is not None:
-            method._log_name = method._log_name.replace('@', enh_repr(obj), 1)
+            method._log_name = method._log_name.replace('<>', enh_repr(obj, short=True), 1)
         return method
     
     def __call__(self, *args, **kwargs):
@@ -156,32 +176,27 @@ class LogFuncWrapper:
         if self._property_name is not None and not hasattr(self._func, '__self__'):
             method = copy.copy(self)
             method._func = method._func.__get__(args[0], self._parent)
-            method._obj_repr = enh_repr(args[0])
+            method._obj_repr = enh_repr(args[0], short=True)
             return method(*args[1:], **kwargs)
 
         with lock:
-
             self._call_number = self._manager.call_count
             self._manager.call_count += 1
             if self._is_range:
                 thread_number, thread_abr = self._identify_thread()
                 self.track = _find_free_track((thread_number-1)*10)
                 _reserve_track(self.track)
-
             if self._log_enter:
                 self._precall_log(*args, **kwargs)
 
         result = self._func(*args, **kwargs)
 
         with lock:
-        
             if self._log_exit:
                 self._postcall_log(result)
             if self._is_range:
                 _free_track(self.track)
 
-
-        
         return result
 
     def remove_logger(self, *args, **kwargs):
@@ -210,9 +225,9 @@ class LogFuncWrapper:
             tracks = _repr_tracks('start', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
-        msg = "{3} {0}─< {1}/{2}".format(tracks, self._log_name.replace('@', self._obj_repr), self._call_number, thread_abr)
+        msg = "{3} {0}─< {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
         lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
-        msg += " "*(lmsg-len(msg)) + "<┤   "
+        msg += " "*(lmsg-len(msg)) + "<┤  "
         if self._log_args and (len(args) or len(kwargs)):
             msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
         
@@ -225,7 +240,7 @@ class LogFuncWrapper:
             tracks = _repr_tracks('end', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
-        msg = "{3} {0}─> {1}/{2}".format(tracks, self._log_name.replace('@', self._obj_repr), self._call_number, thread_abr)
+        msg = "{3} {0}─> {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
         lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
         msg += " "*(lmsg-len(msg)) + " ├> "
         if self._log_result and result is not None:
@@ -234,21 +249,22 @@ class LogFuncWrapper:
         logging.getLogger('mupf').info(msg)
 
 
-def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_exit=True):
+def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_exit=True, log_path=True):
     def loggable_decorator(x):
-        nonlocal log_name, log_args, log_results, log_enter, log_exit
+        global _logging_enabled
+        nonlocal log_name, log_args, log_results, log_enter, log_exit, log_path
         if isinstance(x, types.FunctionType):
-            log_name = log_name.replace('*',  x.__name__, 1)
+            log_name = log_name.replace('*',  x.__name__.strip('_'), 1)
             if x.__qualname__ != x.__name__:
-                x._methodtolog = LoggableFuncManager(log_name, None, x, x.__name__, log_args, log_results, log_enter, log_exit)
+                x._methodtolog = LoggableFuncManager(log_name, None, x, x.__name__, log_args, log_results, log_enter, log_exit, log_path)
             else:
-                lfm = LoggableFuncManager(log_name, inspect.getmodule(x), x, x.__name__, log_args, log_results, log_enter, log_exit)
-                lfm.add()
+                lfm = LoggableFuncManager(log_name, inspect.getmodule(x), x, x.__name__, log_args, log_results, log_enter, log_exit, log_path)
+                lfm.add(on=_logging_enabled)
         elif isinstance(x, classmethod):
-            log_name = log_name.replace('*',  x.__func__.__name__, 1)
-            x._methodtolog = LoggableFuncManager(log_name, None, x, x.__func__.__name__, log_args, log_results, log_enter, log_exit)
+            log_name = log_name.replace('*',  x.__func__.__name__.strip('_'), 1)
+            x._methodtolog = LoggableFuncManager(log_name, None, x, x.__func__.__name__, log_args, log_results, log_enter, log_exit, log_path)
         elif isinstance(x, type):
-            log_name = log_name.replace('*',  x.__name__, 1)
+            log_name = log_name.replace('*',  x.__name__.strip('_'), 1)
             for prop_name in dir(x):
                 member = x.__getattribute__(x, prop_name)
                 if isinstance(member, property):
@@ -257,12 +273,13 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
                     members = ((member, None),)
                 for member, subname in members:
                     try:
+                        member._methodtolog.log_path = log_path
                         member._methodtolog.name = log_name + '.' + member._methodtolog.name
                         member._methodtolog.parent = x
                         if subname:
                             member._methodtolog.property_name = member._methodtolog.func_name
                             member._methodtolog.func_name = subname
-                        member._methodtolog.add()
+                        member._methodtolog.add(on=_logging_enabled)
                         del member._methodtolog
                     except Exception as e:
                         pass
@@ -273,8 +290,8 @@ def just_info(*msg):
     logging.getLogger('mupf').info( "     "+_repr_tracks()+" ".join(map(str, msg)))
 
 class Loggable:
-    def __init__(cls, name, bases, dict_):    # pylint: disable=no-self-argument
-        lgd = loggable(log_name=name)
+    def __init__(cls, name, bases, dict_, log_path=True):    # pylint: disable=no-self-argument
+        lgd = loggable(log_name=name, log_path=log_path)
         lgd(cls)
         for l in LoggableFuncManager._loggables_by_name.values():
             l.on()
@@ -282,15 +299,20 @@ class Loggable:
 
 _enh_repr_classes = {}
 
-def enh_repr(x):
+def enh_repr(x, short=False):
     global _enh_repr_classes
     for class_, func in _enh_repr_classes.items():
         if isinstance(x, class_):
             return func(x)
+    if short:
+        try:
+            return x.log_short_repr()
+        except Exception:
+            pass
     return repr(x)
 
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
-    global _enh_repr_classes
+    global _enh_repr_classes, _logging_enabled
     logging.basicConfig(level=level)
     hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
     hand.setFormatter(logging.Formatter(fmt))
@@ -304,3 +326,4 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
     }
     for l in LoggableFuncManager._loggables_by_name.values():
         l.on()
+    _logging_enabled = True
