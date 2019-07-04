@@ -6,6 +6,10 @@ import re
 import types
 import inspect
 import copy
+import websockets
+import asyncio
+from . import _remote
+from . import _symbols as S
 
 lock = threading.Lock()
 thread_number_by_threadid = {}
@@ -129,7 +133,7 @@ class LogFuncWrapper:
         method = copy.copy(self)
         method._func = method._func.__get__(obj, class_)
         if obj is not None:
-            method._log_name = method._log_name.replace('@', repr(obj), 1)
+            method._log_name = method._log_name.replace('@', enh_repr(obj), 1)
         return method
     
     def __call__(self, *args, **kwargs):
@@ -181,7 +185,7 @@ class LogFuncWrapper:
         msg = "{3} {0}─< {1}/{2}".format(tracks, self._log_name.replace('@',''), self._call_number, thread_abr)
         lmsg = max(((len(msg)-10)//20+2)*20,80)
         if self._log_args and (len(args) or len(kwargs)):
-            msg += " "*(lmsg-len(msg)) + "<-   {}".format(", ".join([repr(a) for a in args]+[k+"="+repr(v) for k,v in kwargs.items()]))
+            msg += " "*(lmsg-len(msg)) + "<-   {}".format(", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()]))
         
         logging.getLogger('mupf').info(msg)
 
@@ -194,7 +198,7 @@ class LogFuncWrapper:
         msg = "{3} {0}─> {1}/{2}".format(tracks, self._log_name.replace('@',''), self._call_number, thread_abr)
         lmsg = max(((len(msg)-10)//20+2)*20,80)
         if self._log_result and result is not None:
-            msg += " "*(lmsg-len(msg)) + "  -> {}".format(repr(result))
+            msg += " "*(lmsg-len(msg)) + "  -> {}".format(enh_repr(result))
         
         logging.getLogger('mupf').info(msg)
 
@@ -234,10 +238,26 @@ class Loggable:
             l.on()
 
 
+_enh_repr_classes = {}
+
+def enh_repr(x):
+    global _enh_repr_classes
+    for class_, func in _enh_repr_classes.items():
+        if isinstance(x, class_):
+            return func(x)
+    return repr(x)
+
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
+    global _enh_repr_classes
     logging.basicConfig(level=level)
     hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
     hand.setFormatter(logging.Formatter(fmt))
     logging.getLogger('').addHandler(hand)
+    _enh_repr_classes = {
+        websockets.server.WebSocketServer: lambda x: "<WebSocket Server {:X}>".format(id(x)),
+        websockets.server.WebSocketServerProtocol: lambda x: "<WebSocket Protocol {:X}>".format(id(x)),
+        asyncio.selector_events.BaseSelectorEventLoop: lambda x: "<EventLoop{}>".format(" ".join(['']+[x for x in (('closed' if x.is_closed() else ''), ('' if x.is_running() else 'halted')) if x!=''])),
+        _remote.RemoteObj: lambda x: "<RemoteObj {} of {} at {:X}>".format(x[S.rid], x[S.client].cid[0:6], id(x)),
+    }
     for l in LoggableFuncManager._loggables_by_name.values():
         l.on()
