@@ -55,9 +55,9 @@ def _repr_tracks(branch=None, branch_track=None):
                     result += "│"
                 elif n == branch_track:
                     if branch == 'start':
-                        result += "┌"
+                        result += "╭"
                     elif branch == 'end':
-                        result += "└"
+                        result += "╰"
                     else:
                         result += "├"
                 elif n > branch_track:
