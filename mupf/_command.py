@@ -3,7 +3,7 @@ import threading
 from ._enhjson import EnhancedBlock, encode
 import time
 from ._remote import RemoteObj
-from ._logging import loggable, Loggable
+from ._logging import loggable
 
 class MetaCommand(type):
     """
@@ -27,7 +27,6 @@ class MetaCommand(type):
     
     def __init__(cls, name, bases, dict_):
         super().__init__(name, bases, dict_)
-        # Loggable.__init__(cls, 'command_py/Command<{}><>'.format(cls._client_wr()._cid[0:6]), bases, dict_, log_path=False)
 
     def __getattr__(cls, name):
         return cls(name)    #pylint: disable=no-value-for-parameter
@@ -40,7 +39,6 @@ class MetaCommand(type):
                 if unres[-1]._is_resolved.is_set():
                     raise RuntimeError("Command already resolved")
             for cmd in unres:
-                log_resolving(cmd)
                 cmd._is_error = isinstance(result, Exception)
                 cmd._result = result
             cls._unresolved.clear()
@@ -58,17 +56,15 @@ class MetaCommand(type):
                 cls._resolved_in_advance.append(ccid)
             else:
                 cls._unresolved[ccid].result = result
+                
 
-def log_resolving(cmd):
-    pass
-
-@loggable('command_py/*')
+@loggable('command.py/*')
 def create_command_class_for_client(client):
     """
     Return a class "binded" to the `client`.
     """
     
-    @loggable('command_py/*<{0}><>'.format(client._cid[0:6]), log_path=False)
+    @loggable('command.py/*<{0}><>'.format(client._cid[0:6]), log_path=False)
     class Command(metaclass=MetaCommand):
         """
         Class of all possible commands for a specific client. Object represents a specific (named) command.
@@ -159,7 +155,7 @@ def create_command_class_for_client(client):
             return self
 
         @property
-        @loggable('result.:')
+        @loggable('*.:')
         def result(self):
             self.wait
             if self._is_error:
@@ -167,7 +163,7 @@ def create_command_class_for_client(client):
             return self._result
 
         @result.setter
-        @loggable('result.=')
+        @loggable('*.=')
         def result(self, result):
             if self._notification:
                 raise RuntimeError('cannot resolve notification')

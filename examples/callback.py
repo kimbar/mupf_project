@@ -2,6 +2,8 @@ import mupf
 import hashlib
 
 mupf.log.enable('callback.log')
+mupf.log.THREAD_TAB_WIDTH = 0
+mupf.log.MIN_COLUMN_WIDTH = 75
 
 # Event handler
 def button_click(event):

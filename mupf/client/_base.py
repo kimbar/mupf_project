@@ -20,11 +20,11 @@ async def send_task_body(wbs, json):
     finally:
         log_sending_event('end')
 
-@loggable('client/base_py/*')
+@loggable('client/base.py/*')
 def create_send_task(evl, wbs, json):
     evl.create_task(send_task_body(wbs, json))
 
-@loggable('client/base_py/*<>', log_path=False)
+@loggable('client/base.py/*<>', log_path=False)
 class Client:
     """
     Object represents a window of a browser.
@@ -200,6 +200,6 @@ class Client:
     def __repr__(self):
         return "<{} {}>".format(type(self).__name__, getattr(self, '_cid', '?')[0:6])
 
-@loggable('client/base_py/sending_event', joined=True)
+@loggable('client/base.py/sending_event', joined=True)
 def log_sending_event(part, *args, **kwargs):
     pass

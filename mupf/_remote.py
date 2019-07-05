@@ -72,7 +72,7 @@ class RemoteJsonEsc:
     def __repr__(self):
         return '["~@",{}]'.format(self.rid)
 
-@loggable('remote_py/*<>')
+@loggable('remote.py/*<>')
 class CallbackTask:
     # TODO: this is very much a work in progress, serious rethinking
     # of this class is needed

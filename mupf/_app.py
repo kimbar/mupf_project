@@ -18,7 +18,7 @@ from . import _enhjson as enhjson
 
 from ._logging import loggable
 
-@loggable('app_py/*<>', log_path=False)
+@loggable('app.py/*<>', log_path=False)
 class App:
     """
     Class for an app. Object represents a server and port, and a thread with an event-loop.
@@ -309,10 +309,10 @@ class App:
         return "<App {:X}>".format(id(self))
 
 
-@loggable('app_py/server_event', log_exit=False)
+@loggable('app.py/server_event', log_exit=False)
 def log_server_event(*args, **kwargs):
     pass
 
-@loggable('app_py/websocket_event', log_exit=False)
+@loggable('app.py/websocket_event', log_exit=False)
 def log_websocket_event(*args, **kwargs):
     pass
