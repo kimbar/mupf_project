@@ -18,6 +18,7 @@ _logging_enabled = False
 
 MIN_COLUMN_WIDTH = 90
 TAB_WIDTH = 20
+rounded_graph_corners = True
 
 def _is_track_occupied(n):
     global _tracks
@@ -46,7 +47,7 @@ def _find_free_track(min_=0):
     return min_
 
 def _repr_tracks(branch=None, branch_track=None):
-    global _tracks
+    global _tracks, rounded_graph_corners
     result = ""
     for n, track in enumerate(_tracks):
         if track:
@@ -55,9 +56,9 @@ def _repr_tracks(branch=None, branch_track=None):
                     result += "│"
                 elif n == branch_track:
                     if branch == 'start':
-                        result += "╭"
+                        result += "╭" if rounded_graph_corners else "┌"
                     elif branch == 'end':
-                        result += "╰"
+                        result += "╰" if rounded_graph_corners else "└"
                     else:
                         result += "├"
                 elif n > branch_track:
@@ -100,6 +101,7 @@ class LoggableFuncManager:
         self.wrapper = None
         self.call_count = 0
         self.property_name = None
+        self.property_family = {'fget': None, 'fset': None, 'fdel': None}
         LoggableFuncManager._dangling_loggables.append(self)
 
     @property
@@ -127,8 +129,9 @@ class LoggableFuncManager:
         pass
 
     def on(self):
-        # Here oryginal (good) wrapper is lost if turned on second time
         self.wrapper = LogFuncWrapper(self, self.printed_name, self.parent, self.property_name, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit, self.joined)
+        if isinstance(self.wrapper._func, LogFuncWrapper):
+            self.wrapper = self.wrapper._func
         if self.name == self.printed_name:
             just_info('logging: + {}'.format(self._name))
         else:
@@ -139,9 +142,14 @@ class LoggableFuncManager:
             just_info('logging: - {}'.format(self._name))
         else:
             just_info('logging: - {}     (as {})'.format(self._name, self.printed_name))
-    #     setattr(self.parent, self.func_name, self.wrapper._func)   # FIXME for property
-    #     self.wrapper = None
+        if self.wrapper.remove_yourself():
+            # just_info('logging: full removal of propperty {}     (as {})'.format(self._name, self.printed_name))
+            for sibling in self.property_family.values():
+                if sibling is not None and sibling != 'self':
+                    sibling.wrapper = None
+        self.wrapper = None
 
+            
 
 class LogFuncWrapper:
 
@@ -219,8 +227,20 @@ class LogFuncWrapper:
 
         return result
 
-    def remove_logger(self, *args, **kwargs):
-        setattr(self._parent, self._func_name, self._func)
+    def remove_yourself(self, *args, **kwargs) -> bool:
+        # return value: it is property, and it was completely removed
+        if self._property_name is None:
+            setattr(self._parent, self._func_name, self._func)
+            return False
+        else:
+            prop = self._parent.__getattribute__(self._parent, self._property_name)
+            num = ['fget', 'fset', 'fdel'].index(self._func_name)
+            is_wrapped = list(map(lambda x: isinstance(x,LogFuncWrapper), [prop.fget, prop.fset, prop.fdel]))
+            if is_wrapped[num]:
+                decor_name = ['getter', 'setter', 'deleter'][num]
+                setattr(self._parent, self._property_name, getattr(prop, decor_name)(self._func))
+                is_wrapped[num] = False
+            return not any(is_wrapped)
 
     def _identify_thread(self):
         global thread_number_by_threadid
@@ -315,6 +335,10 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
                         if subname:
                             member._methodtolog.property_name = member._methodtolog.func_name
                             member._methodtolog.func_name = subname
+                            member._methodtolog.property_family[subname] = 'self'
+                            for lost_sibling in LoggableFuncManager._loggables_by_name.values():
+                                if lost_sibling.parent == x and lost_sibling.property_name == member._methodtolog.property_name:
+                                    lost_sibling.property_family[subname] = member._methodtolog
                         member._methodtolog.add(on=_logging_enabled)
                         del member._methodtolog
                     except Exception as e:
