@@ -313,12 +313,13 @@ def enh_repr(x, short=False):
     if short:
         try:
             result = x.log_short_repr()
+            result = '<' + result.lstrip('<').rstrip('>').replace('<',"!").replace('>',"!").replace('/',"!").replace('.',"!") + '>'
         except Exception:
             pass
     for class_, func in _enh_repr_classes.items():
         if isinstance(x, class_):
             result = func(x)
-    return '<' + result.lstrip('<').rstrip('>').replace('<',"!").replace('>',"!").replace('/',"!").replace('.',"!") + '>'
+    return result
 
 
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
