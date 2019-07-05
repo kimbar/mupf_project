@@ -82,7 +82,7 @@ class LoggableFuncManager:
     _loggables_by_name = {}
     _dangling_loggables = []
 
-    def __init__(self, name, parent, target, func_name, log_args, log_results, log_enter, log_exit, log_path):
+    def __init__(self, name, parent, target, func_name, log_args, log_results, log_enter, log_exit, log_path, joined):
         if name in LoggableFuncManager._loggables_by_name:
             raise ValueError('Loggable name `{}` already exists'.format(name))
         self.parent = parent
@@ -96,6 +96,7 @@ class LoggableFuncManager:
         self.log_results = log_results
         self.log_enter = log_enter
         self.log_exit = log_exit
+        self.joined = joined
         self.wrapper = None
         self.call_count = 0
         self.property_name = None
@@ -127,7 +128,7 @@ class LoggableFuncManager:
 
     def on(self):
         # Here oryginal (good) wrapper is lost if turned on second time
-        self.wrapper = LogFuncWrapper(self, self.printed_name, self.parent, self.property_name, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
+        self.wrapper = LogFuncWrapper(self, self.printed_name, self.parent, self.property_name, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit, self.joined)
         if self.name == self.printed_name:
             just_info('logging: + {}'.format(self._name))
         else:
@@ -144,7 +145,7 @@ class LoggableFuncManager:
 
 class LogFuncWrapper:
 
-    def __init__(self, manager, log_name, parent, property_name, func_name, log_args, log_results, log_enter, log_exit):
+    def __init__(self, manager, log_name, parent, property_name, func_name, log_args, log_results, log_enter, log_exit, joined):
         if property_name is None:
             self._func = getattr(parent, func_name)
         else:
@@ -159,8 +160,11 @@ class LogFuncWrapper:
         self._log_result = log_results
         self._log_enter = log_enter
         self._log_exit = log_exit
+        self._joined = joined
+        if joined:
+            self._log_enter = self._log_exit = False
         self._parent = parent
-        self._is_range = log_enter and log_exit
+        self._is_range = self._log_enter and self._log_exit
         self._call_number = None
         self._obj_repr = ''
         self.track = "?"
@@ -189,20 +193,28 @@ class LogFuncWrapper:
 
         with lock:
             self._call_number = self._manager.call_count
-            self._manager.call_count += 1
-            if self._is_range:
+            if (not self._joined) or args[0] == 'end':
+                self._manager.call_count += 1
+            if self._is_range or (self._joined and args[0] == 'start'):
                 thread_number, thread_abr = self._identify_thread()
                 self.track = _find_free_track((thread_number-1)*10)
                 _reserve_track(self.track)
-            if self._log_enter:
-                self._precall_log(*args, **kwargs)
+            if self._log_enter or (self._joined and args[0] == 'start'):
+                if self._joined:
+                    self._precall_log(*args[1:], **kwargs)
+                else:
+                    self._precall_log(*args, **kwargs)
 
         result = self._func(*args, **kwargs)
 
         with lock:
-            if self._log_exit:
+            if self._log_exit and not self._joined:
                 self._postcall_log(result)
-            if self._is_range:
+            if (self._joined and args[0] == 'end'):
+                self._postcall_log(*args[1:], **kwargs)
+            if self._joined and args[0] == 'mid':
+                self._midcall_log(*args[1:], **kwargs)
+            if self._is_range or (self._joined and args[0] == 'end'):
                 _free_track(self.track)
 
         return result
@@ -229,7 +241,7 @@ class LogFuncWrapper:
     def _precall_log(self, *args, **kwargs):
         global MIN_COLUMN_WIDTH, TAB_WIDTH
         thread_number, thread_abr = self._identify_thread()
-        if self._log_exit:
+        if self._log_exit or self._joined:
             tracks = _repr_tracks('start', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
@@ -244,39 +256,49 @@ class LogFuncWrapper:
         
         logging.getLogger('mupf').info(msg)
 
-    def _postcall_log(self, result):
+    def _postcall_log(self, *args, **kwargs):
         global MIN_COLUMN_WIDTH, TAB_WIDTH
         thread_number, thread_abr = self._identify_thread()
-        if self._log_enter:
+        if self._log_enter or self._joined:
             tracks = _repr_tracks('end', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
         msg = "{3} {0}─> {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
         lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
         msg += " "*(lmsg-len(msg)) + " ├> "
-        if result is not None:
+        if (len(args) or len(kwargs)) and (len(kwargs) or len(args)!=1 or args[0] is not None):
             if self._log_result:
-                msg += enh_repr(result)
+                msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
             else:
                 msg += "..."
-        
+        logging.getLogger('mupf').info(msg)
+
+    def _midcall_log(self, *args, **kwargs):
+        global MIN_COLUMN_WIDTH, TAB_WIDTH
+        thread_number, thread_abr = self._identify_thread()
+        tracks = _repr_tracks('mid', self.track)
+        msg = "{3} {0}─╴ {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
+        lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
+        msg += " "*(lmsg-len(msg)) + " ├╴ "
+        if (len(args) or len(kwargs)):
+            msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
         logging.getLogger('mupf').info(msg)
 
 
-def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_exit=True, log_path=True):
+def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_exit=True, log_path=True, joined=False):
     def loggable_decorator(x):
         global _logging_enabled
-        nonlocal log_name, log_args, log_results, log_enter, log_exit, log_path
+        nonlocal log_name, log_args, log_results, log_enter, log_exit, log_path, joined
         if isinstance(x, types.FunctionType):
             log_name = log_name.replace('*',  x.__name__.strip('_'), 1)
             if x.__qualname__ != x.__name__:
-                x._methodtolog = LoggableFuncManager(log_name, None, x, x.__name__, log_args, log_results, log_enter, log_exit, log_path)
+                x._methodtolog = LoggableFuncManager(log_name, None, x, x.__name__, log_args, log_results, log_enter, log_exit, log_path, joined)
             else:
-                lfm = LoggableFuncManager(log_name, inspect.getmodule(x), x, x.__name__, log_args, log_results, log_enter, log_exit, log_path)
+                lfm = LoggableFuncManager(log_name, inspect.getmodule(x), x, x.__name__, log_args, log_results, log_enter, log_exit, log_path, joined)
                 lfm.add(on=_logging_enabled)
         elif isinstance(x, classmethod):
             log_name = log_name.replace('*',  x.__func__.__name__.strip('_'), 1)
-            x._methodtolog = LoggableFuncManager(log_name, None, x, x.__func__.__name__, log_args, log_results, log_enter, log_exit, log_path)
+            x._methodtolog = LoggableFuncManager(log_name, None, x, x.__func__.__name__, log_args, log_results, log_enter, log_exit, log_path, joined)
         elif isinstance(x, type):
             log_name = log_name.replace('*',  x.__name__.strip('_'), 1)
             for prop_name in dir(x):

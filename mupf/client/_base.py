@@ -12,9 +12,13 @@ import queue
 from .._logging import loggable
 
 async def send_task_body(wbs, json):
-    log_sending_event('sending...', wbs, json)
-    await wbs.send(json)
-    log_sending_event('sent')
+    log_sending_event('start', wbs, json)
+    try:
+        await wbs.send(json)
+    except Exception as err:
+        log_sending_event('mid', 'Exception:', err)
+    finally:
+        log_sending_event('end')
 
 @loggable('client/base_py/*')
 def create_send_task(evl, wbs, json):
@@ -196,6 +200,6 @@ class Client:
     def __repr__(self):
         return "<{} {}>".format(type(self).__name__, getattr(self, '_cid', '?')[0:6])
 
-@loggable('client/base_py/sending_event', log_exit=False)
-def log_sending_event(*args, **kwargs):
+@loggable('client/base_py/sending_event', joined=True)
+def log_sending_event(part, *args, **kwargs):
     pass
