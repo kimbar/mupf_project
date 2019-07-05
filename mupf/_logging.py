@@ -235,9 +235,12 @@ class LogFuncWrapper:
             tracks = _repr_tracks().ljust((thread_number-1)*10) + ' '
         msg = "{3} {0}─< {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
         lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
-        msg += " "*(lmsg-len(msg)) + "<┤  "
-        if self._log_args and (len(args) or len(kwargs)):
-            msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
+        msg += " "*(lmsg-len(msg)) + "<┤  "            
+        if (len(args) or len(kwargs)):
+            if self._log_args:
+                msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
+            else:
+                msg += "..."
         
         logging.getLogger('mupf').info(msg)
 
@@ -251,8 +254,11 @@ class LogFuncWrapper:
         msg = "{3} {0}─> {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
         lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
         msg += " "*(lmsg-len(msg)) + " ├> "
-        if self._log_result and result is not None:
-            msg += enh_repr(result)
+        if result is not None:
+            if self._log_result:
+                msg += enh_repr(result)
+            else:
+                msg += "..."
         
         logging.getLogger('mupf').info(msg)
 
