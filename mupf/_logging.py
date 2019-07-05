@@ -128,8 +128,16 @@ class LoggableFuncManager:
     def on(self):
         # Here oryginal (good) wrapper is lost if turned on second time
         self.wrapper = LogFuncWrapper(self, self.printed_name, self.parent, self.property_name, self.func_name, self.log_args, self.log_results, self.log_enter, self.log_exit)
+        if self.name == self.printed_name:
+            just_info('logging: + {}'.format(self._name))
+        else:
+            just_info('logging: + {}     (as {})'.format(self._name, self.printed_name))
 
-    # def off(self):
+    def off(self):
+        if self.name == self.printed_name:
+            just_info('logging: - {}'.format(self._name))
+        else:
+            just_info('logging: - {}     (as {})'.format(self._name, self.printed_name))
     #     setattr(self.parent, self.func_name, self.wrapper._func)   # FIXME for property
     #     self.wrapper = None
 
