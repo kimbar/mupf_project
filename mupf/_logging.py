@@ -8,7 +8,6 @@ import inspect
 import copy
 import websockets
 import asyncio
-from . import _remote
 from . import _symbols as S
 
 lock = threading.RLock()
@@ -444,6 +443,7 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
     hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
     hand.setFormatter(logging.Formatter(fmt))
     logging.getLogger('').addHandler(hand)
+    from . import _remote
     _enh_repr_classes = {
         websockets.server.WebSocketServer: lambda x: "<WebSocket Server {:X}>".format(id(x)),
         websockets.server.WebSocketServerProtocol: lambda x: "<WebSocket Protocol {:X}>".format(id(x)),

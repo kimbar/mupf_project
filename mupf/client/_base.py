@@ -1,5 +1,5 @@
 import weakref
-from .._command import create_command_class_for_client
+from .. import _command
 import mupf.exceptions as exceptions
 import time
 from .._remote import RemoteObj, CallbackJsonEsc, CallbackTask
@@ -46,7 +46,7 @@ class Client:
         self._preconnection_stash = []
         self._healthy_connection = True
         self._safe_dunders_feature = False
-        self.command = create_command_class_for_client(self)
+        self.command = _command.create_command_class_for_client(self)
         self.window = RemoteObj(0, self)
         self._remote_obj_byid = weakref.WeakValueDictionary()
         self._clbid_by_callbacks = {}
