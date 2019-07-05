@@ -191,9 +191,9 @@ def create_command_class_for_client(client):
             return False
 
         def log_short_repr(self):
-            return "<{}>".format(getattr(self, '_ccid', '?'))
+            return "<{}-{:X}>".format(getattr(self, '_ccid', '?'), id(self))
 
         def __repr__(self):
-            return "<Command {} {} {} >".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'))
+            return "<Command {} {} {} {:X}>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'), id(self))
 
     return Command

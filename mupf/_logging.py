@@ -301,15 +301,17 @@ _enh_repr_classes = {}
 
 def enh_repr(x, short=False):
     global _enh_repr_classes
-    for class_, func in _enh_repr_classes.items():
-        if isinstance(x, class_):
-            return func(x)
+    result = repr(x)
     if short:
         try:
-            return x.log_short_repr()
+            result = x.log_short_repr()
         except Exception:
             pass
-    return repr(x)
+    for class_, func in _enh_repr_classes.items():
+        if isinstance(x, class_):
+            result = func(x)
+    return '<' + result.lstrip('<').rstrip('>').replace('<',"!").replace('>',"!").replace('/',"!").replace('.',"!") + '>'
+
 
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
     global _enh_repr_classes, _logging_enabled
