@@ -130,8 +130,7 @@ class LoggableFuncManager:
         if self.log_path:
             self.printed_name = value
         else:
-            m = re.match(r".*/([^/]*)", value)
-            self.printed_name = m.group(1)
+            self.printed_name = build_path([parse_path(value)[-1]])
 
     def add(self, on=False):
         """ Add the manager to the registry
@@ -468,6 +467,9 @@ def parse_path(path):
                 result.append([[]])
             st_obj = i+1
     return result
+
+def build_path(tree):
+    return "/".join([".".join([obj[0]+"".join(["<{}>".format(supl) for supl in obj[1:]]) for obj in pathpart]) for pathpart in tree])
 
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
     global _enh_repr_classes, _logging_enabled
