@@ -284,38 +284,42 @@ class LogFuncWrapper:
             thread_abr = 'th-?'
         return thread_number, thread_abr
 
+    @staticmethod
+    def _make_line(thread_abr, tracks, branch_end, name, ruler):
+        global MIN_COLUMN_WIDTH, TAB_WIDTH
+        msg = "{0} {1}─{2} {3}".format(thread_abr, tracks, branch_end, name)
+        lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
+        msg += " "*(lmsg-len(msg)) + ruler
+        return msg
+
+    def _make_name(self):
+        return "{}/{}".format(self._log_name.replace('<>', self._obj_repr), self._call_number)
+
     def _precall_log(self, *args, **kwargs):
         """ Log what's before the call
         """
-        global MIN_COLUMN_WIDTH, TAB_WIDTH
         thread_number, thread_abr = self._identify_thread()
         if self._log_exit or self._joined:
             tracks = _repr_tracks('start', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*THREAD_TAB_WIDTH) + ' '
-        msg = "{3} {0}─< {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
-        lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
-        msg += " "*(lmsg-len(msg)) + "<┤  "            
+        msg = self._make_line(thread_abr, tracks, '<', self._make_name(), "<┤  ")         
         if (len(args) or len(kwargs)):
             if self._log_args:
                 msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
             else:
                 msg += "..."
-        
         logging.getLogger('mupf').info(msg)
 
     def _postcall_log(self, *args, **kwargs):
         """ Log what's after the call
         """
-        global MIN_COLUMN_WIDTH, TAB_WIDTH
         thread_number, thread_abr = self._identify_thread()
         if self._log_enter or self._joined:
             tracks = _repr_tracks('end', self.track)
         else:
             tracks = _repr_tracks().ljust((thread_number-1)*THREAD_TAB_WIDTH) + ' '
-        msg = "{3} {0}─> {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
-        lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
-        msg += " "*(lmsg-len(msg)) + " ├> "
+        msg = self._make_line(thread_abr, tracks, '>', self._make_name(), " ├> ")
         if (len(args) or len(kwargs)) and (len(kwargs) or len(args)!=1 or args[0] is not None):
             if self._log_result:
                 msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
@@ -326,12 +330,9 @@ class LogFuncWrapper:
     def _midcall_log(self, *args, **kwargs):
         """ Log in the middle of the graph when `joined` version is on
         """
-        global MIN_COLUMN_WIDTH, TAB_WIDTH
         thread_number, thread_abr = self._identify_thread()
         tracks = _repr_tracks('mid', self.track)
-        msg = "{3} {0}─╴ {1}.{2}".format(tracks, self._log_name.replace('<>', self._obj_repr), self._call_number, thread_abr)
-        lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
-        msg += " "*(lmsg-len(msg)) + " ├╴ "
+        msg = self._make_line(thread_abr, tracks, '╴', self._make_name(), " ├╴ ")
         if (len(args) or len(kwargs)):
             msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
         logging.getLogger('mupf').info(msg)
