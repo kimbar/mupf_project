@@ -438,6 +438,37 @@ def enh_repr(x, short=False):
             result = func(x)
     return result
 
+def parse_path(path):
+    result = [[[]]]
+    path += '\u0003'
+    st_obj = 0
+    st_supl = None
+    in_supl= False
+    for i, c in enumerate(path):
+        if c == '<':
+            if st_obj is not None:
+                result[-1][-1].append(path[st_obj:i])
+                st_obj = None
+            in_supl = True
+            st_supl = i
+            continue
+        if c == '>' and in_supl:
+            in_supl = False
+            result[-1][-1].append(path[st_supl+1:i])
+            st_supl = None
+            continue
+        if c == '.' or c == '/' or c == '\u0003':
+            if st_obj is not None:
+                result[-1][-1].append(path[st_obj:i])
+            st_obj = i+1
+            if c == '.':
+                result[-1].append([])
+        if c == '/' or c == '\u0003':
+            if c == '/':
+                result.append([[]])
+            st_obj = i+1
+    return result
+
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
     global _enh_repr_classes, _logging_enabled
     logging.basicConfig(level=level)
