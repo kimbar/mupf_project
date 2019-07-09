@@ -10,11 +10,13 @@ import websockets
 import asyncio
 from . import _symbols as S
 
+
 lock = threading.RLock()
 thread_number_by_threadid = {}    # FIXME: this is the old way of things -- to rethink
 _tracks = []
 _logging_enabled = False
 _enh_repr_classes = {}
+_filters = []
 
 MIN_COLUMN_WIDTH = 90    # minimum width of the column with names of functions
 TAB_WIDTH = 20           # if the width is not enough, this much is added in one go
@@ -140,7 +142,10 @@ class LoggableFuncManager:
         LoggableFuncManager._loggables_by_name[self.name] = self
         LoggableFuncManager._dangling_loggables.remove(self)
         if on:
-            self.on()
+            if _should_be_on(self._name) == '+':
+                self.on()
+            else:
+                self.off()
         return self
 
     def on(self):
@@ -165,7 +170,8 @@ class LoggableFuncManager:
             just_info('logging: - {}'.format(self._name))
         else:
             just_info('logging: - {}     (as {})'.format(self._name, self.printed_name))
-        self.wrapper.remove_yourself()
+        if self.wrapper is not None:
+            self.wrapper.remove_yourself()
         self.wrapper = None
 
 
@@ -471,7 +477,53 @@ def parse_path(path):
 def build_path(tree):
     return "/".join([".".join([obj[0]+"".join(["<{}>".format(supl) for supl in obj[1:]]) for obj in pathpart]) for pathpart in tree])
 
-def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
+def _make_regexp_from_filter(f):
+    tree = parse_path(f)
+    for pathpart in tree:
+        for obj in pathpart:
+            class_ = re.split(r'(\*+)', obj[0])
+            class_.append('')
+            for i in range(len(class_)//2):
+                class_[2*i] = re.escape(class_[2*i])
+                star_count = len(class_[2*i+1])
+                if star_count == 1:
+                    class_[2*i+1] = r'[^/.<]*'
+                elif star_count == 2:
+                    class_[2*i+1] = r'[^/]*'
+                elif star_count == 3:
+                    class_[2*i+1] = r'.*'
+                elif star_count >= 4:
+                    raise ValueError('too many stars')
+            obj[0] = "".join(class_) + r'(?:<[^>]*>)*'
+            for supl_no in range(len(obj)-1):
+                obj[supl_no+1] = "<" +re.escape(obj[supl_no+1]) + r'>(?:<[^>]*>)*'
+    return re.compile(build_path(tree) + r'.*')
+
+def _append_filter(f):
+    global _filters
+    f = f.lstrip()
+    marker = f[0]
+    f = f[1:].strip()
+    reg = _make_regexp_from_filter(f)
+    _filters.append((marker, reg))
+
+def _should_be_on(path):
+    global _filters
+    state = "-"
+    for f in _filters:
+        if f[1].match(path):
+            state = f[0]
+    return state
+
+def refresh():
+    for l in LoggableFuncManager._loggables_by_name.values():
+        if _should_be_on(l.name) == '+':
+            l.on()
+        else:
+            l.off()
+
+
+def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, filters=('+ ***',)):
     global _enh_repr_classes, _logging_enabled
     logging.basicConfig(level=level)
     hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
@@ -485,6 +537,7 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO):
         _remote.RemoteObj: lambda x: "<RemoteObj {} of {} at {:X}>".format(x[S.rid], x[S.client]._cid[0:6], id(x)),
         websockets.http.Headers: lambda x: "<HTTP Header from {}>".format(x['Host']),
     }
-    for l in LoggableFuncManager._loggables_by_name.values():
-        l.on()
+    for f in filters:
+        _append_filter(f)
+    refresh()
     _logging_enabled = True
