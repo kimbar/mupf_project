@@ -18,7 +18,12 @@ from . import _enhjson as enhjson
 
 from ._logging import loggable
 
-@loggable('app.py/*<>', log_path=False)
+@loggable(
+    'app.py/*<>',
+    log_path = False,
+    short = lambda self: "<{:X}>".format(id(self)),
+    long = lambda self: "<App {:X}>".format(id(self)),
+)
 class App:
     """
     Class for an app. Object represents a server and port, and a thread with an event-loop.
@@ -302,12 +307,12 @@ class App:
     def piggyback_call(self, function, *args):
         self._event_loop.call_soon_threadsafe(function, *args)
 
-    def log_short_repr(self):
-        return "<{:X}>".format(id(self))
-
     def __repr__(self):
         return "<App {:X}>".format(id(self))
 
+#
+# `_logging.py` hooks
+#
 
 @loggable('app.py/server_event', log_exit=False)
 def log_server_event(*args, **kwargs):
@@ -316,3 +321,34 @@ def log_server_event(*args, **kwargs):
 @loggable('app.py/websocket_event', log_exit=False)
 def log_websocket_event(*args, **kwargs):
     pass
+
+loggable(
+    outer_class = websockets.server.WebSocketServer,
+    short = lambda self: "<WebSocket Server {:X}>".format(id(self)),
+    long = None,
+)
+
+loggable(
+    outer_class = websockets.server.WebSocketServerProtocol,
+    short = lambda self: "<WebSocket Protocol {:X}>".format(id(self)),
+    long = None,
+)
+
+def _eventloop_logger(evl):
+    if evl.is_closed():
+        return "<EventLoop closed>"
+    if not evl.is_running():
+        return "<EventLoop halted>"
+    return "<EventLoop>"
+
+loggable(
+    outer_class = asyncio.selector_events.BaseSelectorEventLoop,
+    short = _eventloop_logger,
+    long = None,
+)
+
+loggable(
+    outer_class = websockets.http.Headers,
+    short = lambda self: "<HTTP Header from {}>".format(self['Host']),
+    long = None,
+)

@@ -72,7 +72,10 @@ class RemoteJsonEsc:
     def __repr__(self):
         return '["~@",{}]'.format(self.rid)
 
-@loggable('remote.py/*<>')
+@loggable(
+    'remote.py/*<>',
+    short = lambda self: "<{}>".format(getattr(self, '_ccid', '?'))
+)
 class CallbackTask:
     # TODO: this is very much a work in progress, serious rethinking
     # of this class is needed
@@ -95,10 +98,7 @@ class CallbackTask:
             self._client.send_json([6, self._ccid, 0, answer])
             return
         if self._noun == '*close*':
-            return
-
-    def log_short_repr(self):
-        return "<{}>".format(getattr(self, '_ccid', '?'))
+            return        
 
     def __repr__(self):
         return "<CallbackTask {} {} {}>".format(getattr(self, '_noun', '?'), getattr(self, '_ccid', '?'), getattr(self, '_func', '-'))
@@ -118,3 +118,10 @@ def _make_escapable(value):
         return value[S.json_esc_interface]
     except Exception:
         return value
+
+
+loggable(
+    outer_class = RemoteObj,
+    short = lambda self: "<RemoteObj {} of {} at {:X}>".format(self[S.rid], self[S.client]._cid[0:6], id(self)),
+    long = None,
+)

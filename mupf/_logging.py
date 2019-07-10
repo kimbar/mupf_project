@@ -342,15 +342,31 @@ class LogFuncWrapper:
         logging.getLogger('mupf').info(msg)
 
 
-def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_exit=True, log_path=True, joined=False):
+def loggable(
+    log_name='*',
+    log_args=True,
+    log_results=True,
+    log_enter=True,
+    log_exit=True,
+    log_path=True,
+    joined=False,
+    short=None,
+    long=None,
+    outer_class = None,
+):
     """ Decorator with parameters
     """
+    if outer_class is not None:
+        if short is not None:
+                _enh_repr_classes[outer_class] = short
+        return
+
     def loggable_decorator(x):
         """ Actual decorator
 
         It decorates functions/methods/property accesors, but also classes with any of the above.
         """
-        global _logging_enabled
+        global _logging_enabled, _enh_repr_classes
         nonlocal log_name, log_args, log_results, log_enter, log_exit, log_path, joined
         # If it is a function or method
         if isinstance(x, types.FunctionType):
@@ -414,6 +430,9 @@ def loggable(log_name='*', log_args=True, log_results=True, log_enter=True, log_
                     except Exception:
                         # It was not a decorated method (modt of the time it is not), so we do nothing
                         pass
+            #
+            if short is not None:
+                _enh_repr_classes[x] = short
         # After decoration we return the original method/function, so the class/module has exactly the
         # same structure as it would have it wasn't decorated at all. All the information needed is stored
         # in the managers now. When the logging is turned on, the wrappers are created, and module/class
@@ -528,15 +547,6 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, 
     hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
     hand.setFormatter(logging.Formatter(fmt))
     logging.getLogger('').addHandler(hand)
-    from . import _remote
-    from . import _symbols as S
-    _enh_repr_classes = {
-        websockets.server.WebSocketServer: lambda x: "<WebSocket Server {:X}>".format(id(x)),
-        websockets.server.WebSocketServerProtocol: lambda x: "<WebSocket Protocol {:X}>".format(id(x)),
-        asyncio.selector_events.BaseSelectorEventLoop: lambda x: "<EventLoop{}>".format(" ".join(['']+[x for x in (('closed' if x.is_closed() else ''), ('' if x.is_running() else 'halted')) if x!=''])),
-        _remote.RemoteObj: lambda x: "<RemoteObj {} of {} at {:X}>".format(x[S.rid], x[S.client]._cid[0:6], id(x)),
-        websockets.http.Headers: lambda x: "<HTTP Header from {}>".format(x['Host']),
-    }
     for f in filters:
         _append_filter(f)
     refresh()

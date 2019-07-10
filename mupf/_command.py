@@ -64,7 +64,11 @@ def create_command_class_for_client(client):
     Return a class "binded" to the `client`.
     """
     
-    @loggable('command.py/*<{0}><>'.format(client._cid[0:6]), log_path=False)
+    @loggable(
+        'command.py/*<{0}><>'.format(client._cid[0:6]),
+        log_path = False,
+        short = lambda self: "<{}-{:X}>".format(getattr(self, '_ccid', '?'), id(self)),
+    )
     class Command(metaclass=MetaCommand):
         """
         Class of all possible commands for a specific client. Object represents a specific (named) command.
@@ -185,9 +189,6 @@ def create_command_class_for_client(client):
             if self._is_error:
                 return self._result
             return False
-
-        def log_short_repr(self):
-            return "<{}-{:X}>".format(getattr(self, '_ccid', '?'), id(self))
 
         def __repr__(self):
             return "<Command {} {} {} {:X}>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'), id(self))
