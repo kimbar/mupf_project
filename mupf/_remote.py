@@ -74,7 +74,8 @@ class RemoteJsonEsc:
 
 @loggable(
     'remote.py/*<>',
-    short = lambda self: "<{}>".format(getattr(self, '_ccid', '?'))
+    short = lambda self: "<{}>".format(getattr(self, '_ccid', '?')),
+    long = lambda self: "<CallbackTask {} {} {}>".format(getattr(self, '_noun', '?'), getattr(self, '_ccid', '?'), getattr(self, '_func', '-'))
 )
 class CallbackTask:
     # TODO: this is very much a work in progress, serious rethinking
@@ -100,9 +101,6 @@ class CallbackTask:
         if self._noun == '*close*':
             return        
 
-    def __repr__(self):
-        return "<CallbackTask {} {} {}>".format(getattr(self, '_noun', '?'), getattr(self, '_ccid', '?'), getattr(self, '_func', '-'))
-
 
 class CallbackJsonEsc:
     def __init__(self, clbid):
@@ -122,6 +120,5 @@ def _make_escapable(value):
 
 loggable(
     outer_class = RemoteObj,
-    short = lambda self: "<RemoteObj {} of {} at {:X}>".format(self[S.rid], self[S.client]._cid[0:6], id(self)),
-    long = None,
+    long = lambda self: "<RemoteObj {} of {} at {:X}>".format(self[S.rid], self[S.client]._cid[0:6], id(self)),
 )

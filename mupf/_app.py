@@ -324,14 +324,12 @@ def log_websocket_event(*args, **kwargs):
 
 loggable(
     outer_class = websockets.server.WebSocketServer,
-    short = lambda self: "<WebSocket Server {:X}>".format(id(self)),
-    long = None,
+    long = lambda self: "<WebSocket Server {:X}>".format(id(self)),
 )
 
 loggable(
     outer_class = websockets.server.WebSocketServerProtocol,
-    short = lambda self: "<WebSocket Protocol {:X}>".format(id(self)),
-    long = None,
+    long = lambda self: "<WebSocket Protocol {:X}>".format(id(self)),
 )
 
 def _eventloop_logger(evl):
@@ -343,12 +341,10 @@ def _eventloop_logger(evl):
 
 loggable(
     outer_class = asyncio.selector_events.BaseSelectorEventLoop,
-    short = _eventloop_logger,
-    long = None,
+    long = _eventloop_logger,
 )
 
 loggable(
     outer_class = websockets.http.Headers,
-    short = lambda self: "<HTTP Header from {}>".format(self['Host']),
-    long = None,
+    long = lambda self: "<HTTP Header from {}>".format(self['Host']),
 )

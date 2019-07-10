@@ -68,6 +68,7 @@ def create_command_class_for_client(client):
         'command.py/*<{0}><>'.format(client._cid[0:6]),
         log_path = False,
         short = lambda self: "<{}-{:X}>".format(getattr(self, '_ccid', '?'), id(self)),
+        long = lambda self: "<Command {} {} {} {:X}>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'), id(self)),
     )
     class Command(metaclass=MetaCommand):
         """
@@ -189,8 +190,5 @@ def create_command_class_for_client(client):
             if self._is_error:
                 return self._result
             return False
-
-        def __repr__(self):
-            return "<Command {} {} {} {:X}>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'), id(self))
 
     return Command
