@@ -16,7 +16,7 @@ from ._macro import MacroByteStream
 from . import _features as F
 from . import _enhjson as enhjson
 
-from ._logging import loggable
+from .log import loggable
 
 @loggable(
     'app.py/*<>',

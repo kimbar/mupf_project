@@ -1,3 +1,8 @@
+import re
+
+from . import _main as main
+
+
 def parse_path(path):
     result = [[[]]]
     path += '\u0003'
@@ -54,18 +59,16 @@ def _make_regexp_from_filter(f):
                 obj[supl_no+1] = "<" +re.escape(obj[supl_no+1]) + r'>(?:<[^>]*>)*'
     return re.compile(build_path(tree) + r'.*')
 
-def _append_filter(f):
-    global _filters
+def append_filter(f):
     f = f.lstrip()
     marker = f[0]
     f = f[1:].strip()
     reg = _make_regexp_from_filter(f)
-    _filters.append((marker, reg))
+    main._filters.append((marker, reg))
 
-def _should_be_on(path):
-    global _filters
+def should_be_on(path):
     state = "-"
-    for f in _filters:
+    for f in main._filters:
         if f[1].match(path):
             state = f[0]
     return state

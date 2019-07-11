@@ -1,3 +1,8 @@
+from . import _main as main
+from . import _wrapper
+from ._wrapper import LogFuncWrapper
+from . import _names as names
+
 class LoggableFuncManager:
     """ Object represents a POSIBILITY of logging of a function/method/property
 
@@ -36,10 +41,10 @@ class LoggableFuncManager:
     @name.setter
     def name(self, value):
         self._name = value
-        if self.verbosity_manager.log_path:
+        if self.verbosity_manager._log_path:
             self.printed_name = value
         else:
-            self.printed_name = build_path([parse_path(value)[-1]])
+            self.printed_name = names.build_path([names.parse_path(value)[-1]])
 
     def add(self, on=False):
         """ Add the manager to the registry
@@ -49,7 +54,7 @@ class LoggableFuncManager:
         LoggableFuncManager._loggables_by_name[self.name] = self
         LoggableFuncManager._dangling_loggables.remove(self)
         if on:
-            if _should_be_on(self._name) == '+':
+            if names.should_be_on(self._name) == '+':
                 self.on()
             else:
                 self.off()
@@ -64,9 +69,9 @@ class LoggableFuncManager:
         if isinstance(self.wrapper._func, LogFuncWrapper):
             self.wrapper = self.wrapper._func
         if self.name == self.printed_name:
-            just_info('logging: + {}'.format(self._name))
+            main.just_info('logging: + {}'.format(self._name))
         else:
-            just_info('logging: + {}     (as {})'.format(self._name, self.printed_name))
+            main.just_info('logging: + {}     (as {})'.format(self._name, self.printed_name))
 
     def off(self):
         """ Turn off logging for this manager
@@ -74,9 +79,16 @@ class LoggableFuncManager:
         Calls already in progress will be logged
         """
         if self.name == self.printed_name:
-            just_info('logging: - {}'.format(self._name))
+            main.just_info('logging: - {}'.format(self._name))
         else:
-            just_info('logging: - {}     (as {})'.format(self._name, self.printed_name))
+            main.just_info('logging: - {}     (as {})'.format(self._name, self.printed_name))
         if self.wrapper is not None:
             self.wrapper.remove_yourself()
         self.wrapper = None
+
+def refresh():
+    for l in LoggableFuncManager._loggables_by_name.values():
+        if names.should_be_on(l.name) == '+':
+            l.on()
+        else:
+            l.off()

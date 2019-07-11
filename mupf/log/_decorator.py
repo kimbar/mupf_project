@@ -1,3 +1,11 @@
+import types
+import inspect
+
+from . import _verbosity as verbosity
+from ._verbosity import VerbosityManager
+from ._manager import LoggableFuncManager
+from . import _main as main
+
 def loggable(
     log_name='*',
     log_args=True,
@@ -25,9 +33,9 @@ def loggable(
             # Assigning a short repr for outer class is meaningless because an outer class can
             # never be a producer of a log (it have no decortated methods). But maybe short and long
             # will be used somwhere else.
-            _short_class_repr[outer_class] = short
+            verbosity.short_class_repr[outer_class] = short
         if long is not None:
-            _long_class_repr[outer_class] = long
+            verbosity.long_class_repr[outer_class] = long
         return
 
     verbosity_manager = VerbosityManager(
@@ -44,7 +52,6 @@ def loggable(
 
         It decorates functions/methods/property accesors, but also classes with any of the above.
         """
-        global _logging_enabled, _short_class_repr, _long_class_repr
         nonlocal log_name, verbosity_manager, short, long
         # If it is a function or method
         if isinstance(x, types.FunctionType):
@@ -71,7 +78,7 @@ def loggable(
                     verbosity_manager = verbosity_manager,
                 )
                 # That's it for a function, so it can be added to the registry
-                lfm.add(on=_logging_enabled)
+                lfm.add(on=main._logging_enabled)
         elif isinstance(x, classmethod):
             # if it is a class method, the manager is created similarily as for a method, only the name must be digged
             # a one step deeper
@@ -117,7 +124,7 @@ def loggable(
                             # Function name is now one of the accesor functions: `fget`, `fset` or `fdel`
                             member._methodtolog.func_name = subname
                         # The method is finnaly properly set up and can be added to the registry
-                        member._methodtolog.add(on=_logging_enabled)
+                        member._methodtolog.add(on=main._logging_enabled)
                         # This temporary member is no longer needed
                         del member._methodtolog
                     except Exception:
@@ -126,9 +133,9 @@ def loggable(
             # When we decorate a class we can assign a logging "repr"s here. One is "short" and one
             # is "long". For descriptin see docstring of `enh_repr` function.
             if short is not None:
-                _short_class_repr[x] = short
+                verbosity.short_class_repr[x] = short
             if long is not None:
-                _long_class_repr[x] = long
+                verbosity.long_class_repr[x] = long
         # After decoration we return the original method/function, so the class/module has exactly the
         # same structure as it would have it wasn't decorated at all. All the information needed is stored
         # in the managers now. When the logging is turned on, the wrappers are created, and module/class

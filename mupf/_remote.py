@@ -1,7 +1,7 @@
 from . import _symbols as S
 import weakref
 
-from ._logging import loggable
+from .log import loggable
 
 class MetaRemoteObj(type):
 

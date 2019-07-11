@@ -3,7 +3,7 @@ import threading
 from ._enhjson import EnhancedBlock, encode
 import time
 from ._remote import RemoteObj
-from ._logging import loggable
+from .log import loggable
 
 class MetaCommand(type):
     """

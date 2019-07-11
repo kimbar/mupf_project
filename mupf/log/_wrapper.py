@@ -1,3 +1,10 @@
+import copy
+import logging
+import threading
+from . import _verbosity as verbosity
+from . import _tracks as tracks
+from ._main import lock, THREAD_TAB_WIDTH, TAB_WIDTH, MIN_COLUMN_WIDTH, thread_number_by_threadid
+
 class LogFuncWrapper:
     """ Object is a wrapper for a callable that calls the callable but also logs
 
@@ -31,43 +38,39 @@ class LogFuncWrapper:
             setattr(parent, self._property_name, getattr(prop, decor_name)(self))
 
     def __get__(self, obj, class_):
-        method = copy.copy(self)
+        method = copy.deepcopy(self)
         method._func = method._func.__get__(obj, class_)
         if obj is not None:
-            method._log_name = method._log_name.replace('<>', enh_repr(obj, short=True), 1)
+            method._printed_name = method._printed_name.replace('<>', verbosity.enh_repr(obj, short=True), 1)
         return method
     
     def __call__(self, *args, **kwargs):
-        global lock, THREAD_TAB_WIDTH
 
         # This part simulates `__get__` for a property.
         if self._property_name is not None and not hasattr(self._func, '__self__'):
             method = copy.copy(self)
             # bind the function with object
             method._func = method._func.__get__(args[0], self._parent)
-            method._obj_repr = enh_repr(args[0], short=True)
+            method._obj_repr = verbosity.enh_repr(args[0], short=True)
             # rerun itself (copy), but w/o first argument (self)
             return method(*args[1:], **kwargs)
 
         with lock:
             self._verbosity_manager = copy.copy(self._manager.verbosity_manager)
-            if self._verbosity_manager._joined:
-                self._verbosity_manager.set_joined_part(args[0])
+            # if self._verbosity_manager._joined:
+            #     self._verbosity_manager.set_joined_part(args[0])
             
             self._call_number = self._manager.call_count
-            # if (not self._joined) or args[0] == 'end':
-            if self._verbosity_manager.do_inc_call_count():
+            if (not self._verbosity_manager._joined) or args[0] == 'end':
                 self._manager.call_count += 1
 
-            self.track = self._verbosity_manager.get_track()
-            # if self._is_range or (self._joined and args[0] == 'start'):
-            if self._verbosity_manager.do_need_new_track():
+            if self._verbosity_manager._is_range or (self._verbosity_manager._joined and args[0] == 'start'):
                 thread_number, thread_abr = self._identify_thread()
-                self.track = _find_free_track((thread_number-1)*THREAD_TAB_WIDTH)
-                _reserve_track(self.track)
+                self.track = tracks.find_free((thread_number-1)*THREAD_TAB_WIDTH)
+                tracks.reserve(self.track)
 
-            if self._log_enter or (self._joined and args[0] == 'start'):
-                if self._joined:
+            if self._verbosity_manager._log_enter or (self._verbosity_manager._joined and args[0] == 'start'):
+                if self._verbosity_manager._joined:
                     self._precall_log(*args[1:], **kwargs)
                 else:
                     self._precall_log(*args, **kwargs)
@@ -76,14 +79,14 @@ class LogFuncWrapper:
         result = self._func(*args, **kwargs)
 
         with lock:
-            if self._log_exit and not self._joined:
+            if self._verbosity_manager._log_exit and not self._verbosity_manager._joined:
                 self._postcall_log(result)
-            if (self._joined and args[0] == 'end'):
+            if (self._verbosity_manager._joined and args[0] == 'end'):
                 self._postcall_log(*args[1:], **kwargs)
-            if self._joined and args[0] == 'mid':
+            if self._verbosity_manager._joined and args[0] == 'mid':
                 self._midcall_log(*args[1:], **kwargs)
-            if self._is_range or (self._joined and args[0] == 'end'):
-                _free_track(self.track)
+            if self._verbosity_manager._is_range or (self._verbosity_manager._joined and args[0] == 'end'):
+                tracks.free(self.track)
 
         return result
 
@@ -116,27 +119,26 @@ class LogFuncWrapper:
 
     @staticmethod
     def _make_line(thread_abr, tracks, branch_end, name, ruler):
-        global MIN_COLUMN_WIDTH, TAB_WIDTH
         msg = "{0} {1}─{2} {3}".format(thread_abr, tracks, branch_end, name)
         lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
         msg += " "*(lmsg-len(msg)) + ruler
         return msg
 
     def _make_name(self):
-        return "{}/{}".format(self._log_name.replace('<>', self._obj_repr), self._call_number)
+        return "{}/{}".format(self._printed_name.replace('<>', self._obj_repr), self._call_number)
 
     def _precall_log(self, *args, **kwargs):
         """ Log what's before the call
         """
         thread_number, thread_abr = self._identify_thread()
-        if self._log_exit or self._joined:
-            tracks = _repr_tracks('start', self.track)
+        if self._verbosity_manager._log_exit or self._verbosity_manager._joined:
+            line_tracks = tracks.write('start', self.track)
         else:
-            tracks = _repr_tracks().ljust((thread_number-1)*THREAD_TAB_WIDTH) + ' '
-        msg = self._make_line(thread_abr, tracks, '<', self._make_name(), "<┤  ")         
+            line_tracks = tracks.write().ljust((thread_number-1)*THREAD_TAB_WIDTH) + ' '
+        msg = self._make_line(thread_abr, line_tracks, '<', self._make_name(), "<┤  ")         
         if (len(args) or len(kwargs)):
-            if self._log_args:
-                msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
+            if self._verbosity_manager._log_args:
+                msg += ", ".join([verbosity.enh_repr(a) for a in args]+[k+"="+verbosity.enh_repr(v) for k,v in kwargs.items()])
             else:
                 msg += "..."
         logging.getLogger('mupf').info(msg)
@@ -145,14 +147,14 @@ class LogFuncWrapper:
         """ Log what's after the call
         """
         thread_number, thread_abr = self._identify_thread()
-        if self._log_enter or self._joined:
-            tracks = _repr_tracks('end', self.track)
+        if self._verbosity_manager._log_enter or self._verbosity_manager._joined:
+            line_tracks = tracks.write('end', self.track)
         else:
-            tracks = _repr_tracks().ljust((thread_number-1)*THREAD_TAB_WIDTH) + ' '
-        msg = self._make_line(thread_abr, tracks, '>', self._make_name(), " ├> ")
+            line_tracks = tracks.write().ljust((thread_number-1)*THREAD_TAB_WIDTH) + ' '
+        msg = self._make_line(thread_abr, line_tracks, '>', self._make_name(), " ├> ")
         if (len(args) or len(kwargs)) and (len(kwargs) or len(args)!=1 or args[0] is not None):
-            if self._log_result:
-                msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
+            if self._verbosity_manager._log_results:
+                msg += ", ".join([verbosity.enh_repr(a) for a in args]+[k+"="+verbosity.enh_repr(v) for k,v in kwargs.items()])
             else:
                 msg += "..."
         logging.getLogger('mupf').info(msg)
@@ -161,8 +163,8 @@ class LogFuncWrapper:
         """ Log in the middle of the graph when `joined` version is on
         """
         thread_number, thread_abr = self._identify_thread()
-        tracks = _repr_tracks('mid', self.track)
-        msg = self._make_line(thread_abr, tracks, '╴', self._make_name(), " ├╴ ")
+        line_tracks = tracks.write('mid', self.track)
+        msg = self._make_line(thread_abr, line_tracks, '╴', self._make_name(), " ├╴ ")
         if (len(args) or len(kwargs)):
-            msg += ", ".join([enh_repr(a) for a in args]+[k+"="+enh_repr(v) for k,v in kwargs.items()])
+            msg += ", ".join([verbosity.enh_repr(a) for a in args]+[k+"="+verbosity.enh_repr(v) for k,v in kwargs.items()])
         logging.getLogger('mupf').info(msg)

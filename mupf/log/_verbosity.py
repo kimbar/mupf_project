@@ -1,3 +1,7 @@
+
+short_class_repr = {}
+long_class_repr = {}
+
 class VerbosityManager:
     def __init__(self, log_args, log_results, log_enter, log_exit, log_path, joined):
         self._log_args = log_args
@@ -6,11 +10,12 @@ class VerbosityManager:
         self._log_exit = log_exit
         self._log_path = log_path
         self._joined = joined
+        self._is_range = self._log_enter and self._log_exit
 
     @classmethod
     def from_string(cls, s):
         pass
-        return cls(...)
+        # return cls(...)
 
 
 def enh_repr(x, short=False):
@@ -22,12 +27,12 @@ def enh_repr(x, short=False):
     If there is no short version, long one is used. When there is neither a standard
     `repr()` function is used.
     """
-    global _short_class_repr, _long_class_repr
+    global short_class_repr, long_class_repr
     if short:
-        for class_, func in _short_class_repr.items():
+        for class_, func in short_class_repr.items():
             if isinstance(x, class_):
                 return func(x)
-    for class_, func in _long_class_repr.items():
+    for class_, func in long_class_repr.items():
         if isinstance(x, class_):
             return func(x)
     return repr(x)
