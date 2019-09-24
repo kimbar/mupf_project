@@ -149,8 +149,7 @@ dynamically created.
 
 Since childless managers require some additional code to function they are
 constructed as classes derived from `LogManager` class, however they remain
-singletons. New class must implement `on_on` (TODO: reconsider this to be just
-the `__init__`) method where borrowing happen, optionally `on_off` method for
-clean up, and `on_event` method where sentinels events land. It can request a
-(prefiltered) list of `get_simple_managers`, a `new_writer` or iterate through
-existing `writers`.
+singletons. New class must implement `on` method where borrowing happen,
+optionally `off` method for clean up, and `on_event` method where sentinels
+events land. It can request information about logging system and own writers
+through `LogManager` methods.
