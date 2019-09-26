@@ -27,9 +27,9 @@ overhead is kept when not logging. The simple manager that created the sentinel
 is its **parent**. Other managers that use the sentinel are its **aunts**. All
 aunts are childless − this requirement is superficial and could be removed, but
 is there for simplicity of the system. When a childless manager is switched on
-it request from one or more simple managers to **borrow** their sentinels. If
+it request from one or more simple managers to **employ** their sentinels. If
 the simple manager of the requested sentinel is not switched on at the moment
-it flags sentinel state as "borrowed" but does not switch on itself. The
+it flags sentinel state as "employed" but does not switch on itself. The
 relation parent-sentinel is one-to-one, and relation aunt-sentinel
 many-to-many.
 
@@ -38,10 +38,9 @@ sentinel is called. The sentinel reports this (**enter**) event to its parent
 and aunts and then immediately calls the wrapped function. When the function
 finishes, the sentinel once again reports (**exit**) event to its parent and
 aunts and returns the function return value. Enter and exit events are
-unambiguously paired (**HOW**: the counting number of a writer) in the eyes of
-parents and aunts.
+unambiguously paired by **call_id** in the eyes of parents and aunts.
 
-Managers, when informed by their sentinels (own or borrowed) about enter and
+Managers, when informed by their sentinels (own or employed) about enter and
 exit events produce, update or destroy some writer objects. A writer object
 directly represents few lines in the logging output. Each line represents a
 single (enter or exit) event of a sentinel. The lines are graphically connected
@@ -85,7 +84,7 @@ arguments or results and logging both only clutters the log.) Moreover, a
 simple manager always logs an event. If a more flexible manager is needed (for
 example one that logs only erroneous results and good ones passes silently) an
 additional childless manager must be created that implements this logic. A
-childless manager can after all borrow just a single sentinel to implement this
+childless manager can after all employ just a single sentinel to implement this
 behaviour. This approach clearly separates managers directly connected to some
 piece of code (simple) and those operating on higher level of application logic
 (childless).
@@ -110,7 +109,8 @@ created entities such as objects or files. A writer at its creation inherits
 the address from its manager, who fills in specifiers and appends the address
 with one last part (**currently subpart - to change**). The last part is a
 counter of writers produced by the manager. This writer address is written
-after the tracks in a logfile.
+after the tracks in a logfile. For a simple manager the counter of writers is
+equal to call_id of events.
 
 ```txt
 ╭─< app.py/App<36252B0>.enter/1
@@ -149,7 +149,7 @@ dynamically created.
 
 Since childless managers require some additional code to function they are
 constructed as classes derived from `LogManager` class, however they remain
-singletons. New class must implement `on` method where borrowing happen,
+singletons. New class must implement `on` method where employing happen,
 optionally `off` method for clean up, and `on_event` method where sentinels
 events land. It can request information about logging system and own writers
 through `LogManager` methods.

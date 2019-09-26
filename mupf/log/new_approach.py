@@ -12,7 +12,7 @@ class LogManager:
         self.printed_addr = None
         self.addr = addr
         self._state = None
-        self._call_count = 0               # how many counts of this manager's function has been done
+        self._writer_count = 0               # how many counts of this manager's function has been done
         self._writers = {}
 
     @property
@@ -68,8 +68,10 @@ class LogManager:
     def on_event(self, event):
         raise NotImplementedError('`LogManager.on_event()` not in `{}`'.format(self))
 
-    def new_writer(self, id_):
-        wr = LogWriter()
+    def new_writer(self):
+        id_ = self._writer_count
+        self._writer_count += 1  # TODO: thread safeing
+        wr = LogWriter(id_)
         self._writers[id_] = wr   # TODO: more sophisticated
         return wr
 
@@ -118,27 +120,24 @@ class LogSimpleManager(LogManager):
         self.sentinel = None
         super().off()
 
-    def borrow(self, aunt, nickname):
+    def employ(self, aunt, nickname=None):
         self.aunt_nicknames[aunt] = nickname
 
-    def let_go(self, aunt):
+    def dismiss(self, aunt):
         del self.aunt_nicknames[aunt]
 
     def on_event(self, event):
         if event.entering():
-            call_id = self._call_count
-            self._call_count += 1  # TODO: thread safeing
-            wr = self.new_writer(id_=call_id)
+            wr = self.new_writer()
+            event._call_id = wr.id_
             wr.write(", ".join([verbosity.enh_repr(a) for a in event.args]+[k+"="+verbosity.enh_repr(v) for k,v in event.kwargs.items()]))
         else:
-            wr = self.find_writer(id_=event._call_id)
+            wr = self.find_writer(id_=event.call_id)
             wr.write(verbosity.enh_repr(event.result), finish=True)
         
         for aunt, nickname in self.aunt_nicknames.items():
             event._sentinel_nickname = nickname
             aunt.on_event(event)
-        
-        return call_id
 
 
 class LogSentinel:
@@ -158,9 +157,13 @@ class LogSentinel:
         # self.track = "?"
 
     def __call__(self, *args, **kwargs):
-        call_id = self._manager.on_event(LogEvent(None, self._func, args, kwargs, None))
+        ev = LogEvent(None, self._func, args, kwargs, None)
+        self._manager.on_event(ev)
+
         result = self._func(*args, **kwargs)
-        self._manager.on_event(LogEvent(call_id, self._func, args, kwargs, result))
+
+        ev = LogEvent(ev.call_id, self._func, args, kwargs, result)
+        self._manager.on_event(ev)
         return result
 
     def remove_yourself(self):
@@ -228,10 +231,10 @@ class LogEvent:
         self._sentinel_nickname = None
 
     def entering(self, sentinel_nickname=None):
-        return self._call_id is None and self._sentinel_nickname == sentinel_nickname
+        return self._call_id is None and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
 
     def exiting(self, sentinel_nickname=None):
-        return self._call_id is not None and self._sentinel_nickname == sentinel_nickname
+        return self._call_id is not None and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
 
     @property
     def result(self):
@@ -239,8 +242,14 @@ class LogEvent:
             return self._fresult
         raise AttributeError('No `result` on enter event')
 
+    @property
+    def call_id(self):
+        return self._call_id
 
 class LogWriter:
+
+    def __init__(self, id_):
+        self.id_ = id_
     
     def write(self, text, finish=False):
         pass
