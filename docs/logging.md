@@ -12,8 +12,8 @@ threads
 Overview
 --------
 
-The subsystem consist of three main parts: The **manager**, **sentinel** and
-**writer** objects.
+The subsystem consist of four main parts: The **manager**, **sentinel**,
+**event** and **writer** objects.
 
 Manager objects are entry points for the user. Each manager have a unique
 **address** by which the manager can be switched on or off. A manager is called
@@ -35,10 +35,11 @@ many-to-many.
 
 When a sentinel is in place and the wrapped function would be called the
 sentinel is called. The sentinel reports this (**enter**) event to its parent
-and aunts and then immediately calls the wrapped function. When the function
-finishes, the sentinel once again reports (**exit**) event to its parent and
-aunts and returns the function return value. Enter and exit events are
-unambiguously paired by **call_id** in the eyes of parents and aunts.
+and aunts by passing an event object and then immediately calls the wrapped
+function. When the function finishes, the sentinel once again reports
+(**exit**) event to its parent and aunts and returns the function return value.
+Enter and exit events are unambiguously paired by **call_id** in the eyes of
+parents and aunts.
 
 Managers, when informed by their sentinels (own or employed) about enter and
 exit events produce, update or destroy some writer objects. A writer object

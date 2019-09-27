@@ -70,10 +70,10 @@ class LogManager:
     def on_event(self, event):
         raise NotImplementedError('`LogManager.on_event()` not in `{}`'.format(self))
 
-    def new_writer(self):
+    def new_writer(self, style):
         id_ = self._writer_count
         self._writer_count += 1  # TODO: thread safeing
-        wr = writer.LogWriter(id_)
+        wr = writer.LogWriter(id_, self._addr, style)
         self._writers[id_] = wr   # TODO: more sophisticated
         return wr
 
@@ -130,7 +130,7 @@ class LogSimpleManager(LogManager):
 
     def on_event(self, event):
         if event.entering():
-            wr = self.new_writer()
+            wr = self.new_writer(writer.LogWriterStyle.inner)
             event._call_id = wr.id_
             wr.write(", ".join([writer.enh_repr(a) for a in event.args]+[k+"="+writer.enh_repr(v) for k,v in event.kwargs.items()]))
         else:

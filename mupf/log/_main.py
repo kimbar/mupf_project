@@ -10,6 +10,12 @@ import types
 
 import websockets
 
+# This must be before package imports or circular import occurs
+MIN_COLUMN_WIDTH = 90    # minimum width of the column with names of functions
+TAB_WIDTH = 20           # if the width is not enough, this much is added in one go
+THREAD_TAB_WIDTH = 10    # the spacing for another thread graph column
+rounded_graph_corners = True   # format of the graph ┌─ or ╭─
+
 from . import _address as address
 from . import _tracks as tracks
 from . import _manager as manager
@@ -20,10 +26,6 @@ _logging_enabled = False
 
 _filters = []
 
-MIN_COLUMN_WIDTH = 90    # minimum width of the column with names of functions
-TAB_WIDTH = 20           # if the width is not enough, this much is added in one go
-THREAD_TAB_WIDTH = 10    # the spacing for another thread graph column
-rounded_graph_corners = True   # format of the graph ┌─ or ╭─
 
 # TODO: move this to `_writer.py`
 def just_info(*msg):
