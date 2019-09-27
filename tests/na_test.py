@@ -1,10 +1,10 @@
-from mupf.log import new_approach
+from mupf import log
 
-@new_approach.loggable()
+@log.loggable('test_1')
 def test_func(x, y):
     return x+y
 
-new_approach.LogManager._managers_by_addr['test_func'].on()
+log.enable('out_test.log')
 
 if __name__ == '__main__':
 
