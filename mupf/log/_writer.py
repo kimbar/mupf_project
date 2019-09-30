@@ -1,53 +1,61 @@
 from . import _tracks as tracks
 from ._main import THREAD_TAB_WIDTH, TAB_WIDTH, MIN_COLUMN_WIDTH
-from enum import Enum
+from enum import IntEnum
 
 short_class_repr = {}
 long_class_repr = {}
 
 
-class LogWriterStyle(Enum):
+class LogWriterStyle(IntEnum):
     inner = 0
     outer = 1
+    multi_line = 0
+    single_line = 2
 
 
 class LogWriter:
 
     def __init__(self, id_, printed_addr, style=LogWriterStyle.inner):
-        self._track = tracks.find_free()
-        tracks.reserve(self._track)
+        if style & LogWriterStyle.single_line:
+            self._track = None
+        else:
+            self._track = tracks.find_free()
+            tracks.reserve(self._track)
         self.id_ = id_
         self._printed_addr = printed_addr
         self._linecount = 0
-        if style == LogWriterStyle.inner:
-            self._branch_ends = '<>'
-        else:
+        if style & LogWriterStyle.outer:
             self._branch_ends = '><'
-    
-    def write(self, text, finish=False):
-        if self._linecount == 0:
-            branch = 'start'
-            branch_end = self._branch_ends[0]
-        elif finish:
-            branch = 'end'
-            branch_end = self._branch_ends[1]
         else:
-            branch = 'mid'
-            branch_end = '─'
+            self._branch_ends = '<>'
+    
+    def write(self, text=None, finish=False):
+        if self._track is None:
+            branch = None
+            branch_end = self._branch_ends[1 if finish else 0]
+        else:
+            if self._linecount == 0:
+                branch = 'start'
+                branch_end = self._branch_ends[0]
+            elif finish:
+                branch = 'end'
+                branch_end = self._branch_ends[1]
+            else:
+                branch = 'mid'
+                branch_end = '─'
         
         line = _make_line(
             group = '1234',
             tracks = tracks.write(branch, self._track),
             branch_end = branch_end,
             address = '{}/{}'.format(self._printed_addr, self.id_),
-            ruler = ' |> ' if branch_end == '>' else '<|  ',
+            ruler = ' ├> ' if branch_end == '>' else '<┤  ',
             details = text,
         )
-
         print(line)
 
         self._linecount += 1
-        if finish:
+        if self._track is not None and finish:
             tracks.free(self._track)
 
 
@@ -72,6 +80,8 @@ def enh_repr(x, short=False):
 
 def _make_line(group, tracks, branch_end, address, ruler, details):
     msg = "{0} {1}─{2} {3}".format(group, tracks, branch_end, address)
+    if details is None:
+        details = ""
     lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
     msg += " "*(lmsg-len(msg)) + ruler + details
     return msg

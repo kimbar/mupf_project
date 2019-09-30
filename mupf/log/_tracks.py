@@ -35,8 +35,8 @@ def find_free(min_=0):
 def write(branch=None, branch_track=None):
     """ Print tracks for a single line
 
-    The line is connected to the line (branched) if `branch` number is given. The track number
-    `branch` should be occupied. `branch_track` can have three values: `"start"` or `"end"` if the
+    The line is connected to the line (branched) if `branch_track` number is given. The track number
+    `branch_track` should be occupied. `branch` can have three values: `"start"` or `"end"` if the
     branch should strart or end the track, and any other value (preffered `"mid"`) if the branch
     should only attach to a track.
     """

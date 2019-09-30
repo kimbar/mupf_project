@@ -86,7 +86,7 @@ class LogSimpleManager(LogManager):
 
     _dangling_simple_managers = []
 
-    def __init__(self, addr, log_path, func_parent, func_name):
+    def __init__(self, addr, log_path, func_parent, func_name, verbosity_settings):
         self.func_parent = func_parent              # the object (class or module) that holds the method/function/property
         self.func_name = func_name        # the name of the function that is wrapped
         
@@ -95,6 +95,12 @@ class LogSimpleManager(LogManager):
         self.aunt_nicknames = {}
         self._employed = False
         self._silent_events_count = 0
+
+        self._log_args = verbosity_settings['log_args']
+        self._log_results = verbosity_settings['log_results']
+        self._log_enter = verbosity_settings['log_enter']
+        self._log_exit = verbosity_settings['log_exit']
+        self._log_path = verbosity_settings['log_path']
 
         super().__init__(addr, log_path)
         LogSimpleManager._dangling_simple_managers.append(self)
@@ -156,12 +162,23 @@ class LogSimpleManager(LogManager):
     def on_event(self, event):
         if self._state:
             if event.entering():
-                wr = self.new_writer(event.sentinel._printed_addr, writer.LogWriterStyle.inner)
+                wr = self.new_writer(
+                    event.sentinel._printed_addr,
+                    writer.LogWriterStyle.inner+(writer.LogWriterStyle.multi_line if (self._log_enter and self._log_exit) else writer.LogWriterStyle.single_line)
+                )
                 event._call_id = wr.id_
-                wr.write(", ".join([writer.enh_repr(a) for a in event.args]+[k+"="+writer.enh_repr(v) for k,v in event.kwargs.items()]))
+                if self._log_enter:
+                    if self._log_args:
+                        wr.write(", ".join([writer.enh_repr(a) for a in event.args]+[k+"="+writer.enh_repr(v) for k,v in event.kwargs.items()]))
+                    else:
+                        wr.write()
             else:
                 wr = self.find_writer(id_=event.call_id)
-                wr.write(writer.enh_repr(event.result), finish=True)
+                if self._log_exit:
+                    if self._log_results:
+                        wr.write(writer.enh_repr(event.result), finish=True)
+                    else:
+                        wr.write(finish=True)
         elif event.entering():
             # There is no writer, because the sentinel is only employed
             # but the event still needs a `call_id_`. A negative number is given

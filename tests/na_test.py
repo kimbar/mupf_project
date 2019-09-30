@@ -12,7 +12,7 @@ def test_func2(g):
 @log.loggable('test.py/K<obj>', log_path=False)
 class K:
     
-    @log.loggable('test_init')
+    @log.loggable('test_init', log_exit=False)
     def __init__(self, x):
         self._x = x
 
@@ -21,12 +21,12 @@ class K:
         return test_func(self._x, a)
 
     @property
-    @log.loggable('test_prop_x.:')
+    @log.loggable('test_prop_x.:', log_enter=False)
     def x(self):
         return self._x
 
     @x.setter
-    @log.loggable('test_prop_x.=')
+    @log.loggable('test_prop_x.=', log_results=False)
     def x(self, value):
         self._x = value
 

@@ -13,10 +13,10 @@ def loggable(
     log_enter=True,
     log_exit=True,
     log_path=True,
-    joined=False,
     short=None,
     long=None,
-    outer_class = None,
+    outer_class=None,
+    joined=True, # FIXME: to remove
 ):
     """ All-purpose decorator/function for setting up logging for "loggables"
 
@@ -30,12 +30,33 @@ def loggable(
     if log_addr[0:4] != 'test':
         return lambda x: x
 
+    # A class that is not in our control (like a class imported from another module) that can be
+    # an argument or result of our code, can be assigned a "short" and "long" "repr". For description
+    # see docstring of `enh_repr`. This kind of class is called "outer".
+    if outer_class is not None:
+        if short is not None:
+            # Assigning a short repr for outer class is meaningless because an outer class can
+            # never be a producer of a log (it have no decortated methods). But maybe short and long
+            # will be used somwhere else.
+            writer.short_class_repr[outer_class] = short
+        if long is not None:
+            writer.long_class_repr[outer_class] = long
+        return
+
+    verbosity_settings = dict(
+        log_args = log_args,
+        log_results = log_results,
+        log_enter = log_enter,
+        log_exit = log_exit,
+        log_path = log_path,
+    )
+
     def loggable_decorator(x):
         """ Actual decorator for "loggables"
 
         It decorates functions/methods/property accesors, but also classes with any of the above.
         """
-        nonlocal log_addr
+        nonlocal log_addr, verbosity_settings
         # If it is a function or method
         if isinstance(x, types.FunctionType):
             # replace the wildcard `*` in the given name with the actual name of the function
@@ -48,17 +69,19 @@ def loggable(
                 # the class of this method was not decorated as it should.
                 x._methodtolog = LogSimpleManager(
                     addr = log_addr,
-                    log_path = True,
+                    log_path = log_path,
                     func_parent = None,
                     func_name = x.__name__,
+                    verbosity_settings = verbosity_settings,
                 )
             else:
                 # standalone function, so module can be given for a parent
                 lfm = LogSimpleManager(
                     addr = log_addr,
-                    log_path = True,
+                    log_path = log_path,
                     func_parent = inspect.getmodule(x),
                     func_name = x.__name__,
+                    verbosity_settings = verbosity_settings,
                 )
                 # That's it for a function, so it can be added to the registry
                 # lfm.add(auto_on=main._logging_enabled)
@@ -69,9 +92,10 @@ def loggable(
             log_addr = log_addr.replace('*',  x.__func__.__name__.strip('_'), 1)
             x._methodtolog = LogSimpleManager(
                 addr = log_addr,
-                log_path = True,
+                log_path = log_path,
                 func_parent = None,
                 func_name = x.__func__.__name__,
+                verbosity_settings = verbosity_settings,
             )
         elif isinstance(x, type):
             # Finally a class is decorated. Now we will hopefully collect all the managers that were temporarily 
