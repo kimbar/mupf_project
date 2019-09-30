@@ -93,7 +93,7 @@ class LogPropertySentinel(LogSentinel):
             return super().__call__(*args, **kwargs)
         else:
             method_sentinel = self.copy()
-            method_sentinel._func = self._func.__get__(args[0], self._func_parent),
-            # method_sentinel._obj_repr = verbosity.enh_repr(args[0], short=True)
+            method_sentinel._func = self._func.__get__(args[0], self._func_parent)
+            method_sentinel._printed_addr = address.build_path(self._manager.printed_addr_tree, dict(obj=writer.enh_repr(args[0], short=True)))
             # rerun itself (copy), but w/o first argument (self)
             return method_sentinel(*args[1:], **kwargs)

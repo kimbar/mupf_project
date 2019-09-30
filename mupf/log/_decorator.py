@@ -102,11 +102,10 @@ def loggable(
                         member._methodtolog.func_parent = x
                         # if `subname` we are in a property
                         if subname:
-                            # what was stored before in the manager as a name is in fact the name of property
+                            # what was stored before in the manager as a name is in fact was the name of property
                             # so it has to be rewriten
-                            member._methodtolog.property_name = member._methodtolog.func_name
+                            member._methodtolog.set_as_property_manager(member._methodtolog.func_name, subname)
                             # Function name is now one of the accesor functions: `fget`, `fset` or `fdel`
-                            member._methodtolog.func_name = subname
                         # The method is finnaly properly set up and can be added to the registry
                         member._methodtolog.add(auto_on=main._logging_enabled)
                         # This temporary member is no longer needed

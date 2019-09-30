@@ -105,8 +105,9 @@ class LogSimpleManager(LogManager):
         LogSimpleManager._dangling_simple_managers.remove(self)
         return True
 
-    def set_as_property_manager(self, property_name):
+    def set_as_property_manager(self, property_name, func_name):
         self.property_name = property_name
+        self.func_name = func_name
 
     def _soft_on(self):
         """ Only activate sentinel, do not turn on logging

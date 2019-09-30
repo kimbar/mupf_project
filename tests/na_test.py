@@ -20,6 +20,16 @@ class K:
     def met(self, a):
         return test_func(self._x, a)
 
+    @property
+    @log.loggable('test_prop_x.:')
+    def x(self):
+        return self._x
+
+    @x.setter
+    @log.loggable('test_prop_x.=')
+    def x(self, value):
+        self._x = value
+
 
 log.enable('out_test.log')
 print(log._manager.LogManager._managers_by_addr)
@@ -33,3 +43,7 @@ if __name__ == '__main__':
     w = K(123)
     k.met(2009)
     w.met(-100)
+
+    w.x = 783612
+
+    print(w.x, k.x)
