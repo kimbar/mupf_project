@@ -30,8 +30,8 @@ is there for simplicity of the system. When a childless manager is switched on
 it request from one or more simple managers to **employ** their sentinels. If
 the simple manager of the requested sentinel is not switched on at the moment
 it flags sentinel state as "employed" but does not switch on itself. The
-relation parent-sentinel is one-to-one, and relation aunt-sentinel
-many-to-many.
+relation parent-sentinel is one-to-one[[1]](#many-sentinels), and relation
+aunt-sentinel many-to-many.
 
 When a sentinel is in place and the wrapped function would be called the
 sentinel is called. The sentinel reports this (**enter**) event to its parent
@@ -154,3 +154,10 @@ singletons. New class must implement `on` method where employing happen,
 optionally `off` method for clean up, and `on_event` method where sentinels
 events land. It can request information about logging system and own writers
 through `LogManager` methods.
+
+<a name="many-sentinels">[1]</a> In fact, the relation is one-to-many. Callable
+objects (functions, methods) are often copied. For example the `__get__`
+interface of a function bounds it into a method of an object. If the source
+object is wrapped in a sentinel, the copy should also be wrppped in one.
+Therefore, more than one sentinel can exist for a manager. However, there is
+always the first sentinel, wrapped around the source method in the class.

@@ -34,8 +34,8 @@ def parse_path(path):
             st_obj = i+1
     return result
 
-def build_path(tree):
-    return "/".join([".".join([obj[0]+"".join(["<{}>".format(supl) for supl in obj[1:]]) for obj in pathpart]) for pathpart in tree])
+def build_path(tree, specifiers={}):
+    return "/".join([".".join([obj[0]+"".join(["<{}>".format(specifiers.get(supl, supl)) for supl in obj[1:]]) for obj in pathpart]) for pathpart in tree])
 
 def _make_regexp_from_filter(f):
     tree = parse_path(f)

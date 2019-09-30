@@ -13,11 +13,11 @@ class LogWriterStyle(Enum):
 
 class LogWriter:
 
-    def __init__(self, id_, manager_addr, style=LogWriterStyle.inner):
+    def __init__(self, id_, printed_addr, style=LogWriterStyle.inner):
         self._track = tracks.find_free()
         tracks.reserve(self._track)
         self.id_ = id_
-        self._manager_addr = manager_addr
+        self._printed_addr = printed_addr
         self._linecount = 0
         if style == LogWriterStyle.inner:
             self._branch_ends = '<>'
@@ -39,7 +39,7 @@ class LogWriter:
             group = '1234',
             tracks = tracks.write(branch, self._track),
             branch_end = branch_end,
-            address = '{}/{}'.format(self._manager_addr, self.id_),
+            address = '{}/{}'.format(self._printed_addr, self.id_),
             ruler = ' |> ' if branch_end == '>' else '<|  ',
             details = text,
         )
@@ -68,7 +68,7 @@ def enh_repr(x, short=False):
     for class_, func in long_class_repr.items():
         if isinstance(x, class_):
             return func(x)
-    return repr(x)
+    return repr(x).lstrip('<').rstrip('>')
 
 def _make_line(group, tracks, branch_end, address, ruler, details):
     msg = "{0} {1}─{2} {3}".format(group, tracks, branch_end, address)

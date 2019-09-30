@@ -1,5 +1,7 @@
-
+import copy
 from ._event import LogEvent
+from . import _writer as writer
+from . import _address as address
 
 class LogSentinel:
 
@@ -12,23 +14,34 @@ class LogSentinel:
         self._manager = manager
         self._func_parent = func_parent
         self._func_name = func_name
+        self._printed_addr = manager.printed_addr
         # self._verbosity_manager = None
         # self._call_number = None
         # self._obj_repr = ''
         # self.track = "?"
 
     def __call__(self, *args, **kwargs):
-        ev = LogEvent(None, self._func, args, kwargs, None)
+        ev = LogEvent(None, self, self._func, args, kwargs, None)
         self._manager.on_event(ev)
 
         result = self._func(*args, **kwargs)
 
-        ev = LogEvent(ev.call_id, self._func, args, kwargs, result)
+        ev = LogEvent(ev.call_id, self, self._func, args, kwargs, result)
         self._manager.on_event(ev)
         return result
 
     def remove_yourself(self):
         raise NotImplementedError('`LogSentinel.remove_yourself()` not in `{}`'.format(self))
+
+    def copy(self):
+        # Here some registration of a copy can be made in the manager
+        # but for now it seems not to be needed
+        return LogSentinel(
+            manager = self._manager,
+            func_parent = self._func_parent,
+            func_name = self._func_name,
+            func = self._func,
+        )
 
 
 class LogFunctionSentinel(LogSentinel):
@@ -40,6 +53,13 @@ class LogFunctionSentinel(LogSentinel):
 
     def remove_yourself(self):
         setattr(self._func_parent, self._func_name, self._func)
+
+    def __get__(self, obj, class_):
+        method_sentinel = self.copy()
+        method_sentinel._func = self._func.__get__(obj, class_)
+        if obj is not None:
+            method_sentinel._printed_addr = address.build_path(self._manager.printed_addr_tree, dict(obj=writer.enh_repr(obj, short=True)))
+        return method_sentinel
 
 
 class LogPropertySentinel(LogSentinel):
@@ -68,14 +88,12 @@ class LogPropertySentinel(LogSentinel):
         if hasattr(self._func, '__self__'):
             # This is probably inaccessible, because the function is always wrapped in
             # the `LogSentinel` below?
+            # It is a remnant from the old approach where `__call__` was a general
+            # entry point for a sentinel, now it is separated by `LogPropertySentinel` vs `LogFunctionSentinel`
             return super().__call__(*args, **kwargs)
         else:
-            method_sentinel = LogSentinel(
-                manager = self._manager,
-                func_parent = self._func_parent,
-                func_name = self._func_name,
-                func = self._func.__get__(args[0], self._func_parent),
-            )
+            method_sentinel = self.copy()
+            method_sentinel._func = self._func.__get__(args[0], self._func_parent),
             # method_sentinel._obj_repr = verbosity.enh_repr(args[0], short=True)
             # rerun itself (copy), but w/o first argument (self)
             return method_sentinel(*args[1:], **kwargs)

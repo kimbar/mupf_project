@@ -3,8 +3,9 @@
 
 class LogEvent:
 
-    def __init__(self, call_id, func, fargs, fkwargs, fresult):
+    def __init__(self, call_id, sentinel, func, fargs, fkwargs, fresult):
         self._call_id = call_id
+        self._sentinel = sentinel
         self._func = func
         self._fargs = fargs
         self._fkwargs = fkwargs
@@ -34,3 +35,7 @@ class LogEvent:
     @property
     def kwargs(self):
         return self._fkwargs
+
+    @property
+    def sentinel(self):
+        return self._sentinel

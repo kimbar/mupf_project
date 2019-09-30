@@ -25,9 +25,11 @@ class LogManager:
     def addr(self, value):
         self._addr = value
         if self.log_path:
+            self.printed_addr_tree = address.parse_path(value)
             self.printed_addr = value
         else:
-            self.printed_addr = address.build_path([address.parse_path(value)[-1]])
+            self.printed_addr_tree = [address.parse_path(value)[-1]]
+            self.printed_addr = address.build_path(self.printed_addr_tree)
 
     def log_state_change(self, state):
         if self._addr == self.printed_addr:
@@ -70,10 +72,10 @@ class LogManager:
     def on_event(self, event):
         raise NotImplementedError('`LogManager.on_event()` not in `{}`'.format(self))
 
-    def new_writer(self, style):
+    def new_writer(self, event, style):
         id_ = self._writer_count
         self._writer_count += 1  # TODO: thread safeing
-        wr = writer.LogWriter(id_, self._addr, style)
+        wr = writer.LogWriter(id_, event.sentinel._printed_addr, style)
         self._writers[id_] = wr   # TODO: more sophisticated
         return wr
 
@@ -130,7 +132,7 @@ class LogSimpleManager(LogManager):
 
     def on_event(self, event):
         if event.entering():
-            wr = self.new_writer(writer.LogWriterStyle.inner)
+            wr = self.new_writer(event, writer.LogWriterStyle.inner)
             event._call_id = wr.id_
             wr.write(", ".join([writer.enh_repr(a) for a in event.args]+[k+"="+writer.enh_repr(v) for k,v in event.kwargs.items()]))
         else:
