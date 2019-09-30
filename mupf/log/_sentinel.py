@@ -14,7 +14,7 @@ class LogSentinel:
         self._manager = manager
         self._func_parent = func_parent
         self._func_name = func_name
-        self._printed_addr = manager.printed_addr
+        self._printed_addr = address.build_path(self._manager.printed_addr_tree)
         # self._verbosity_manager = None
         # self._call_number = None
         # self._obj_repr = ''

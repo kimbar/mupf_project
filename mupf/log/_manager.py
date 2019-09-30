@@ -11,7 +11,7 @@ class LogManager:
     def __init__(self, addr, log_path=True):
         self.log_path = log_path
         self._addr = None
-        self.printed_addr = None
+        self.printed_addr_tree = None
         self.addr = addr
         self._state = None
         self._writer_count = 0               # how many counts of this manager's function has been done
@@ -26,16 +26,15 @@ class LogManager:
         self._addr = value
         if self.log_path:
             self.printed_addr_tree = address.parse_path(value)
-            self.printed_addr = value
         else:
             self.printed_addr_tree = [address.parse_path(value)[-1]]
-            self.printed_addr = address.build_path(self.printed_addr_tree)
 
     def log_state_change(self, state):
-        if self._addr == self.printed_addr:
+        printed_addr = address.build_path(self.printed_addr_tree)
+        if self._addr == printed_addr:
             main.just_info('logging: {} {}'.format(state, self._addr))
         else:
-            main.just_info('logging: {} {}     (as {})'.format(state, self._addr, self.printed_addr))
+            main.just_info('logging: {} {}     (as {})'.format(state, self._addr, printed_addr))
 
     def on(self):
         """ Turn on logging for this manager
@@ -72,10 +71,10 @@ class LogManager:
     def on_event(self, event):
         raise NotImplementedError('`LogManager.on_event()` not in `{}`'.format(self))
 
-    def new_writer(self, event, style):
+    def new_writer(self, printed_addr, style):
         id_ = self._writer_count
         self._writer_count += 1  # TODO: thread safeing
-        wr = writer.LogWriter(id_, event.sentinel._printed_addr, style)
+        wr = writer.LogWriter(id_, printed_addr, style)
         self._writers[id_] = wr   # TODO: more sophisticated
         return wr
 
@@ -94,6 +93,8 @@ class LogSimpleManager(LogManager):
         self.sentinel = None               # the wrapper for function doing the actual logging
         self.property_name = None         # property name if the function is actually an accesor of property
         self.aunt_nicknames = {}
+        self._employed = False
+        self._silent_events_count = 0
 
         super().__init__(addr, log_path)
         LogSimpleManager._dangling_simple_managers.append(self)
@@ -107,7 +108,11 @@ class LogSimpleManager(LogManager):
     def set_as_property_manager(self, property_name):
         self.property_name = property_name
 
-    def on(self):
+    def _soft_on(self):
+        """ Only activate sentinel, do not turn on logging
+        """
+        if self.sentinel is not None:
+            return
         if self.property_name is None:
             self.sentinel = LogFunctionSentinel(self, self.func_parent, self.func_name)
         else:
@@ -116,29 +121,52 @@ class LogSimpleManager(LogManager):
         # this loop makes `on()` method idempotent
         while not self.sentinel.is_first_level:
             self.sentinel = self.sentinel._func
+
+    def on(self):
+        self._soft_on()
         super().on()
 
-    def off(self):
+    def _soft_off(self):
+        """ Only deactivate sentinel
+        """
+        if self._employed:
+            return
         if self.sentinel is not None:
             self.sentinel.remove_yourself()
         self.sentinel = None
+    
+    def off(self):
+        self._soft_off()
         super().off()
 
     def employ(self, aunt, nickname=None):
         self.aunt_nicknames[aunt] = nickname
+        self._employed = True
+        if self.sentinel is None:
+            self._soft_on()
 
     def dismiss(self, aunt):
         del self.aunt_nicknames[aunt]
+        if len(self.aunt_nicknames) == 0:
+            self._employed = False
+        if self._state == False:
+            self._soft_off()
 
     def on_event(self, event):
-        if event.entering():
-            wr = self.new_writer(event, writer.LogWriterStyle.inner)
-            event._call_id = wr.id_
-            wr.write(", ".join([writer.enh_repr(a) for a in event.args]+[k+"="+writer.enh_repr(v) for k,v in event.kwargs.items()]))
-        else:
-            wr = self.find_writer(id_=event.call_id)
-            wr.write(writer.enh_repr(event.result), finish=True)
-        
+        if self._state:
+            if event.entering():
+                wr = self.new_writer(event.sentinel._printed_addr, writer.LogWriterStyle.inner)
+                event._call_id = wr.id_
+                wr.write(", ".join([writer.enh_repr(a) for a in event.args]+[k+"="+writer.enh_repr(v) for k,v in event.kwargs.items()]))
+            else:
+                wr = self.find_writer(id_=event.call_id)
+                wr.write(writer.enh_repr(event.result), finish=True)
+        elif event.entering():
+            # There is no writer, because the sentinel is only employed
+            # but the event still needs a `call_id_`. A negative number is given
+            event._call_id = -1 - self._silent_events_count
+            self._silent_events_count += 1
+            
         for aunt, nickname in self.aunt_nicknames.items():
             event._sentinel_nickname = nickname
             aunt.on_event(event)

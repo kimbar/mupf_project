@@ -9,7 +9,7 @@ def test_func2(g):
     return g+100
 
 
-@log.loggable('test_3<obj>')
+@log.loggable('test.py/K<obj>', log_path=False)
 class K:
     
     @log.loggable('test_init')
