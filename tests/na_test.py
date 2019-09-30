@@ -31,7 +31,7 @@ class K:
         self._x = value
 
 
-log.enable('out_test.log')
+log.enable('out_test.log', graph_style='rounded')
 print(log._manager.LogManager._managers_by_addr)
 
 if __name__ == '__main__':

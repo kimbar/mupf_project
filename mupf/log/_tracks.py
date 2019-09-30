@@ -1,6 +1,12 @@
 from . import _main as main
 
 _tracks = []
+_styles = dict(
+    default = "│┌└├┼─┤><",
+    rounded = "│╭╰├┼─┤▶◀",
+    simple =  "|,`|+-|><",
+)
+_glyphs = _styles['default']
 
 def is_occupied(n):
     """ Check if track is already taken """
@@ -32,6 +38,7 @@ def find_free(min_=0):
         min_ += 1
     return min_
 
+
 def write(branch=None, branch_track=None):
     """ Print tracks for a single line
 
@@ -40,24 +47,26 @@ def write(branch=None, branch_track=None):
     branch should strart or end the track, and any other value (preffered `"mid"`) if the branch
     should only attach to a track.
     """
-    global _tracks
+    global _tracks, _glyphs
+    # │ ╭ ╰ ├ ┼ ─ ┤ > <
+    # 0 1 2 3 4 5 6 7 8
     result = ""
     for n, track in enumerate(_tracks):
         if track:
             if branch:
                 if n < branch_track:
-                    result += "│"
+                    result += _glyphs[0]
                 elif n == branch_track:
                     if branch == 'start':
-                        result += "╭" if main.rounded_graph_corners else "┌"
+                        result += _glyphs[1]
                     elif branch == 'end':
-                        result += "╰" if main.rounded_graph_corners else "└"
+                        result += _glyphs[2]
                     else:
-                        result += "├"
+                        result += _glyphs[3]
                 elif n > branch_track:
-                    result += "┼"
+                    result += _glyphs[4]
             else:
-                result += "│"
+                result += _glyphs[0]
         else:
             if branch:
                 if n < branch_track:
@@ -65,7 +74,7 @@ def write(branch=None, branch_track=None):
                 elif n == branch_track:
                     result += "?"
                 elif n > branch_track:
-                    result += "─"
+                    result += _glyphs[5]
             else:
                 result += " "
     return result

@@ -24,10 +24,12 @@ class LogWriter:
         self.id_ = id_
         self._printed_addr = printed_addr
         self._linecount = 0
+        # │ ╭ ╰ ├ ┼ ─ ┤ > <
+        # 0 1 2 3 4 5 6 7 8
         if style & LogWriterStyle.outer:
-            self._branch_ends = '><'
+            self._branch_ends = tracks._glyphs[7]+tracks._glyphs[8]
         else:
-            self._branch_ends = '<>'
+            self._branch_ends = tracks._glyphs[8]+tracks._glyphs[7]
     
     def write(self, text=None, finish=False):
         if self._track is None:
@@ -42,14 +44,14 @@ class LogWriter:
                 branch_end = self._branch_ends[1]
             else:
                 branch = 'mid'
-                branch_end = '─'
+                branch_end = tracks._glyphs[5]
         
         line = _make_line(
             group = '1234',
             tracks = tracks.write(branch, self._track),
             branch_end = branch_end,
             address = '{}/{}'.format(self._printed_addr, self.id_),
-            ruler = ' ├> ' if branch_end == '>' else '<┤  ',
+            ruler = (' '+tracks._glyphs[3]+tracks._glyphs[7]) if branch_end == tracks._glyphs[7] else (tracks._glyphs[8]+tracks._glyphs[6]+' '),
             details = text,
         )
         print(line)
@@ -83,5 +85,5 @@ def _make_line(group, tracks, branch_end, address, ruler, details):
     if details is None:
         details = ""
     lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
-    msg += " "*(lmsg-len(msg)) + ruler + details
+    msg += " "*(lmsg-len(msg)) + ruler + ' ' + details
     return msg
