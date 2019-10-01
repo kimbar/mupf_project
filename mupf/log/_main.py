@@ -36,7 +36,7 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, 
     hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
     hand.setFormatter(logging.Formatter(fmt))
     logging.getLogger('').addHandler(hand)
-    tracks._glyphs = tracks._styles.get(graph_style, 'default')
+    tracks.set_style(tracks._styles.get(graph_style, 'default'))
     for f in filters:
         address.append_filter(f)
     manager.refresh()

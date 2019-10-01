@@ -2,11 +2,25 @@ from . import _main as main
 
 _tracks = []
 _styles = dict(
-    default = "│┌└├┼─┤><",
-    rounded = "│╭╰├┼─┤▶◀",
-    simple =  "|,`|+-|><",
+    _reference = "|,`}+-{><",
+    default =    "│┌└├┼─┤><",
+    rounded =    "│╭╰├┼─┤▶◀",
+    simple =     "|,`|+-|><",
 )
-_glyphs = _styles['default']
+glyphs = {}
+ligatures = {}
+
+def set_style(characters):
+    global ligatures, glyphs, _styles
+    if len(characters) != len(_styles['_reference']):
+        raise ValueError('Wrong length of character set')
+    glyphs = {_styles['_reference'][i]:characters[i] for i in range(len(characters))}
+    ligatures = {lig: "".join(characters[_styles['_reference'].index(ch)] for ch in lig) for lig in (
+        "<-", "->", "<{", "}>"
+    )}
+
+set_style(_styles['default'])
+
 
 def is_occupied(n):
     """ Check if track is already taken """
@@ -55,18 +69,18 @@ def write(branch=None, branch_track=None):
         if track:
             if branch:
                 if n < branch_track:
-                    result += _glyphs[0]
+                    result += glyphs["|"]
                 elif n == branch_track:
                     if branch == 'start':
-                        result += _glyphs[1]
+                        result += glyphs[","]
                     elif branch == 'end':
-                        result += _glyphs[2]
+                        result += glyphs["`"]
                     else:
-                        result += _glyphs[3]
+                        result += glyphs["}"]
                 elif n > branch_track:
-                    result += _glyphs[4]
+                    result += glyphs["+"]
             else:
-                result += _glyphs[0]
+                result += glyphs["|"]
         else:
             if branch:
                 if n < branch_track:
@@ -74,7 +88,7 @@ def write(branch=None, branch_track=None):
                 elif n == branch_track:
                     result += "?"
                 elif n > branch_track:
-                    result += _glyphs[5]
+                    result += glyphs["-"]
             else:
                 result += " "
     return result
