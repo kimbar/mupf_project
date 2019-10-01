@@ -16,14 +16,12 @@ class LogWriterStyle(IntEnum):
 class LogWriter:
 
     def __init__(self, id_, printed_addr, style=LogWriterStyle.inner):
-        if style & LogWriterStyle.single_line:
-            self._track = None
-        else:
-            self._track = tracks.find_free()
-            tracks.reserve(self._track)
+        self._track = tracks.find_free()
+        tracks.reserve(self._track)    
         self.id_ = id_
         self._printed_addr = printed_addr
         self._linecount = 0
+        self._single_line = style & LogWriterStyle.single_line
         # │ ╭ ╰ ├ ┼ ─ ┤ > <
         # 0 1 2 3 4 5 6 7 8
         if style & LogWriterStyle.outer:
@@ -32,8 +30,8 @@ class LogWriter:
             self._branch_ends = (tracks.ligatures["<-"], tracks.ligatures["->"])
     
     def write(self, text=None, finish=False):
-        if self._track is None:
-            branch = None
+        if self._single_line:
+            branch = "."
             branch_end = self._branch_ends[1 if finish else 0]
         else:
             if self._linecount == 0:
@@ -57,7 +55,7 @@ class LogWriter:
         print(line)
 
         self._linecount += 1
-        if self._track is not None and finish:
+        if self._single_line or finish:
             tracks.free(self._track)
 
 

@@ -2,10 +2,10 @@ from . import _main as main
 
 _tracks = []
 _styles = dict(
-    _reference = "|,`}+-{><",
-    default =    "│┌└├┼─┤><",
-    rounded =    "│╭╰├┼─┤▶◀",
-    simple =     "|,`|+-|><",
+    _reference = "|,`}+-{><.",
+    default =    "│┌└├┼─┤><⋅",
+    rounded =    "│╭╰├┼─┤▶◀⋅",
+    simple =     "|,`|+-|><-",
 )
 glyphs = {}
 ligatures = {}
@@ -58,8 +58,8 @@ def write(branch=None, branch_track=None):
 
     The line is connected to the line (branched) if `branch_track` number is given. The track number
     `branch_track` should be occupied. `branch` can have three values: `"start"` or `"end"` if the
-    branch should strart or end the track, and any other value (preffered `"mid"`) if the branch
-    should only attach to a track.
+    branch should strart or end the track, `"mid"` if the branch should only attach to a track. Any
+    other value (preffered `"."`) to only mark the track for single line.
     """
     global _tracks, _glyphs
     # │ ╭ ╰ ├ ┼ ─ ┤ > <
@@ -75,8 +75,10 @@ def write(branch=None, branch_track=None):
                         result += glyphs[","]
                     elif branch == 'end':
                         result += glyphs["`"]
-                    else:
+                    elif branch == 'mid':
                         result += glyphs["}"]
+                    else:
+                        result += glyphs["."]
                 elif n > branch_track:
                     result += glyphs["+"]
             else:

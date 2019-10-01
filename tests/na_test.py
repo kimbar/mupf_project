@@ -26,7 +26,7 @@ class K:
         return self._x
 
     @x.setter
-    @log.loggable('test_prop_x.=', log_results=False)
+    @log.loggable('test_prop_x.=', log_exit=False)
     def x(self, value):
         self._x = value
 
