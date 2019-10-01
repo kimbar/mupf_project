@@ -3,9 +3,9 @@ from . import _main as main
 _tracks = []
 _styles = dict(
     _reference = "|,`}+-{><.",
-    default =    "│┌└├┼─┤><⋅",
-    rounded =    "│╭╰├┼─┤▶◀⋅",
-    simple =     "|,`|+-|><-",
+    default =    "│┌└├┼─┤><·",
+    rounded =    "│╭╰├┼─┤▶◀·",
+    simple =     "|,`|+-|><*",
 )
 glyphs = {}
 ligatures = {}
@@ -61,9 +61,7 @@ def write(branch=None, branch_track=None):
     branch should strart or end the track, `"mid"` if the branch should only attach to a track. Any
     other value (preffered `"."`) to only mark the track for single line.
     """
-    global _tracks, _glyphs
-    # │ ╭ ╰ ├ ┼ ─ ┤ > <
-    # 0 1 2 3 4 5 6 7 8
+    global _tracks, glyphs
     result = ""
     for n, track in enumerate(_tracks):
         if track:
