@@ -14,6 +14,7 @@ import websockets
 MIN_COLUMN_WIDTH = 90    # minimum width of the column with names of functions
 TAB_WIDTH = 20           # if the width is not enough, this much is added in one go
 THREAD_TAB_WIDTH = 10    # the spacing for another thread graph column
+GROUP_WIDTH = 10
 
 from . import _address as address
 from . import _tracks as tracks
@@ -41,3 +42,6 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, 
         address.append_filter(f)
     manager.refresh()
     _logging_enabled = True
+
+def group_selector(event):
+    return event.thread_name[0:4]

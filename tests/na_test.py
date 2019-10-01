@@ -1,4 +1,5 @@
 from mupf import log
+import threading
 
 @log.loggable('test_1')
 def test_func(x, y):
@@ -8,6 +9,8 @@ def test_func(x, y):
 def test_func2(g):
     return g+100
 
+
+T = threading.Thread(name='Server', target=test_func, args=(56,89))
 
 @log.loggable('test.py/K<obj>', log_path=False)
 class K:
@@ -40,6 +43,7 @@ if __name__ == '__main__':
         test_func(k, 7)
 
     k = K(34)
+    T.start()
     w = K(123)
     k.met(2009)
     w.met(-100)

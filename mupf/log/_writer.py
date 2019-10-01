@@ -15,9 +15,10 @@ class LogWriterStyle(IntEnum):
 
 class LogWriter:
 
-    def __init__(self, id_, printed_addr, style=LogWriterStyle.inner):
-        self._track = tracks.find_free()
-        tracks.reserve(self._track)    
+    def __init__(self, id_, printed_addr, style=LogWriterStyle.inner, group="Main"):
+        self._group = group
+        self._track = tracks.find_free(min_=tracks.get_group_indent(group))
+        tracks.reserve(self._track)
         self.id_ = id_
         self._printed_addr = printed_addr
         self._linecount = 0
@@ -45,7 +46,7 @@ class LogWriter:
                 branch_end = tracks.glyphs["-"]+tracks.glyphs["-"]
         
         line = _make_line(
-            group = '1234',
+            group = self._group,
             tracks = tracks.write(branch, self._track),
             branch_end = branch_end,
             address = '{}/{}'.format(self._printed_addr, self.id_),

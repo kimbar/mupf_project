@@ -2,6 +2,7 @@ import copy
 from ._event import LogEvent
 from . import _writer as writer
 from . import _address as address
+import threading
 
 class LogSentinel:
 
@@ -21,12 +22,14 @@ class LogSentinel:
         # self.track = "?"
 
     def __call__(self, *args, **kwargs):
-        ev = LogEvent(None, self, self._func, args, kwargs, None)
+        ev = LogEvent(None, self, self._func, args, kwargs, None, threading.current_thread())
         self._manager.on_event(ev)
+        call_id = ev.call_id
+        del ev
 
         result = self._func(*args, **kwargs)
 
-        ev = LogEvent(ev.call_id, self, self._func, args, kwargs, result)
+        ev = LogEvent(call_id, self, self._func, args, kwargs, result, threading.current_thread())
         self._manager.on_event(ev)
         return result
 

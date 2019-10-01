@@ -3,13 +3,14 @@
 
 class LogEvent:
 
-    def __init__(self, call_id, sentinel, func, fargs, fkwargs, fresult):
+    def __init__(self, call_id, sentinel, func, fargs, fkwargs, fresult, thread):
         self._call_id = call_id
         self._sentinel = sentinel
         self._func = func
         self._fargs = fargs
         self._fkwargs = fkwargs
         self._fresult = fresult
+        self._thread = thread
         self._sentinel_nickname = None
 
     def entering(self, sentinel_nickname=None):
@@ -39,3 +40,11 @@ class LogEvent:
     @property
     def sentinel(self):
         return self._sentinel
+
+    @property
+    def thread(self):
+        return self._thread
+
+    @property
+    def thread_name(self):
+        return self._thread.name
