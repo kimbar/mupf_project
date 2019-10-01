@@ -1,5 +1,5 @@
 from . import _tracks as tracks
-from ._main import THREAD_TAB_WIDTH, TAB_WIDTH, MIN_COLUMN_WIDTH
+from ._main import THREAD_TAB_WIDTH, TAB_WIDTH, MIN_COLUMN_WIDTH, log_mutex
 from enum import IntEnum
 
 short_class_repr = {}
@@ -17,8 +17,7 @@ class LogWriter:
 
     def __init__(self, id_, printed_addr, style=LogWriterStyle.inner, group="Main"):
         self._group = group
-        self._track = tracks.find_free(min_=tracks.get_group_indent(group))
-        tracks.reserve(self._track)
+        self._track = None    
         self.id_ = id_
         self._printed_addr = printed_addr
         self._linecount = 0
@@ -45,19 +44,23 @@ class LogWriter:
                 branch = 'mid'
                 branch_end = tracks.glyphs["-"]+tracks.glyphs["-"]
         
-        line = _make_line(
-            group = self._group,
-            tracks = tracks.write(branch, self._track),
-            branch_end = branch_end,
-            address = '{}/{}'.format(self._printed_addr, self.id_),
-            ruler = (' '+tracks.ligatures["}>"]) if branch_end == tracks.ligatures['->'] else (tracks.ligatures["<{"]+' '),
-            details = text,
-        )
-        print(line)
+        with log_mutex:
+            if self._track is None:
+                self._track = tracks.find_free(min_=tracks.get_group_indent(self._group))
+                tracks.reserve(self._track)
+            line = _make_line(
+                group = self._group,
+                tracks = tracks.write(branch, self._track),
+                branch_end = branch_end,
+                address = '{}/{}'.format(self._printed_addr, self.id_),
+                ruler = (' '+tracks.ligatures["}>"]) if branch_end == tracks.ligatures['->'] else (tracks.ligatures["<{"]+' '),
+                details = text,
+            )
+            print(line)
 
-        self._linecount += 1
-        if self._single_line or finish:
-            tracks.free(self._track)
+            self._linecount += 1
+            if self._single_line or finish:
+                tracks.free(self._track)
 
 
 def enh_repr(x, short=False):

@@ -1,8 +1,10 @@
 from mupf import log
 import threading
+import time
 
 @log.loggable('test_1')
 def test_func(x, y):
+    time.sleep(x)
     return x+test_func2(y)
 
 @log.loggable('test_2')
@@ -10,7 +12,7 @@ def test_func2(g):
     return g+100
 
 
-T = threading.Thread(name='Server', target=test_func, args=(56,89))
+
 
 @log.loggable('test.py/K<obj>', log_path=False)
 class K:
@@ -21,7 +23,7 @@ class K:
 
     @log.loggable('test_method')
     def met(self, a):
-        return test_func(self._x, a)
+        return test_func(0., a)
 
     @property
     @log.loggable('test_prop_x.:', log_enter=False)
@@ -35,12 +37,13 @@ class K:
 
 
 log.enable('out_test.log', graph_style='rounded')
-print(log._manager.LogManager._managers_by_addr)
+
+T = threading.Thread(name='Server', target=test_func, args=(0.01,89))
 
 if __name__ == '__main__':
 
     for k in range(3,5):
-        test_func(k, 7)
+        test_func(0., 7)
 
     k = K(34)
     T.start()
@@ -50,4 +53,4 @@ if __name__ == '__main__':
 
     w.x = 783612
 
-    print(w.x, k.x)
+    u = w.x + k.x
