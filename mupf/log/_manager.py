@@ -2,13 +2,14 @@ from . import _address as address
 from . import _main as main
 from . import _writer as writer
 from ._sentinel import LogFunctionSentinel, LogPropertySentinel
+from ._event import LogEvent
 
 
 class LogManager:
 
     _managers_by_addr = {}
     
-    def __init__(self, addr, log_path=True):
+    def __init__(self, addr, log_path=True, hidden=False):
         self.log_path = log_path
         self._addr = None
         self.printed_addr_tree = None
@@ -16,6 +17,7 @@ class LogManager:
         self._state = None
         self._writer_count = 0               # how many counts of this manager's function has been done
         self._writers = {}
+        self._hidden = hidden
 
     @property
     def addr(self):
@@ -42,6 +44,8 @@ class LogManager:
 
         Calls already in progress won't be logged
         """
+        if self._hidden:
+            return
         if self._state != True:
             self.log_state_change('+')
         self._state = True
@@ -83,12 +87,30 @@ class LogManager:
     def find_writer(self, id_):
         return self._writers[id_]
 
+    def employ_from_simple_manager(self, empl_addr, nickname=None):
+        self._managers_by_addr[empl_addr].employ(self, nickname)
+        # FIXME: Serching here should be through `address` module
+
+    @staticmethod
+    def group_selector(event):
+        return main.group_selector(event)
+
+    @staticmethod
+    def format_args(fargs=None, fkwargs=None):
+        if isinstance(fargs, LogEvent):
+            return ", ".join([writer.enh_repr(a) for a in fargs.args]+[k+"="+writer.enh_repr(v) for k,v in fargs.kwargs.items()])
+        if fargs is None:
+            fargs = []
+        if fkwargs is None:
+            fkwargs = {}
+        return ", ".join([writer.enh_repr(a) for a in fargs]+[k+"="+writer.enh_repr(v) for k,v in fkwargs.items()])
+
 
 class LogSimpleManager(LogManager):
 
     _dangling_simple_managers = []
 
-    def __init__(self, addr, log_path, func_parent, func_name, verbosity_settings):
+    def __init__(self, addr, log_path, func_parent, func_name, verbosity_settings, hidden):
         self.func_parent = func_parent              # the object (class or module) that holds the method/function/property
         self.func_name = func_name        # the name of the function that is wrapped
         
@@ -104,7 +126,7 @@ class LogSimpleManager(LogManager):
         self._log_exit = verbosity_settings['log_exit']
         self._log_path = verbosity_settings['log_path']
 
-        super().__init__(addr, log_path)
+        super().__init__(addr, log_path, hidden)
         LogSimpleManager._dangling_simple_managers.append(self)
     
     def add(self, auto_on=False):
@@ -172,7 +194,7 @@ class LogSimpleManager(LogManager):
                 event._call_id = wr.id_
                 if self._log_enter:
                     if self._log_args:
-                        wr.write(", ".join([writer.enh_repr(a) for a in event.args]+[k+"="+writer.enh_repr(v) for k,v in event.kwargs.items()]))
+                        wr.write(self.format_args(event))
                     else:
                         wr.write()
             else:

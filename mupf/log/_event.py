@@ -2,6 +2,7 @@ class LogEvent:
 
     def __init__(self, call_id, sentinel, func, fargs, fkwargs, fresult, thread):
         self._call_id = call_id
+        self._entering = (call_id is None)
         self._sentinel = sentinel
         self._func = func
         self._fargs = fargs
@@ -11,10 +12,10 @@ class LogEvent:
         self._sentinel_nickname = None
 
     def entering(self, sentinel_nickname=None):
-        return self._call_id is None and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
+        return self._entering and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
 
     def exiting(self, sentinel_nickname=None):
-        return self._call_id is not None and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
+        return not self._entering and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
 
     @property
     def result(self):

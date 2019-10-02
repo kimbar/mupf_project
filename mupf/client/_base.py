@@ -10,7 +10,7 @@ from .. import _enhjson as enhjson
 from .. import _features as F
 from .. import _symbols as S
 from .._remote import CallbackJsonEsc, CallbackTask, RemoteObj
-from ..log import loggable
+from ..log import loggable, LogManager, LogWriterStyle
 
 
 async def send_task_body(wbs, json):
@@ -203,6 +203,30 @@ class Client:
                 cid = self.cid,
             )
 
-@loggable('client/base.py/sending_event', joined=True)
+@loggable('client/base.py/sending_event', hidden=True)
 def log_sending_event(part, *args, **kwargs):
     pass
+
+
+@loggable('client/base.py/send_task_body')
+class LogSentTaskBody(LogManager):
+    
+    current_writer_id = None
+
+    def on(self):
+        self.employ_from_simple_manager('client/base.py/sending_event')
+        super().on()
+
+    def on_event(self, event):
+        
+        if event.entering():
+            finish = False
+            if event.args[0] == 'start':
+                wr = self.new_writer(self.addr, LogWriterStyle.inner+LogWriterStyle.multi_line, group=self.group_selector(event))
+                self.current_writer_id = wr.id_
+            else:
+                wr = self.find_writer(id_=self.current_writer_id)
+                if event.args[0] == 'end':
+                    finish = True
+                    self.current_writer_id = None
+            wr.write(self.format_args(event.args[1:], event.kwargs), finish)
