@@ -1,6 +1,3 @@
-
-
-
 class LogEvent:
 
     def __init__(self, call_id, sentinel, func, fargs, fkwargs, fresult, thread):

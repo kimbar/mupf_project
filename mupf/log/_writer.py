@@ -1,6 +1,8 @@
-from . import _tracks as tracks
-from ._main import THREAD_TAB_WIDTH, TAB_WIDTH, MIN_COLUMN_WIDTH, log_mutex
+import logging
 from enum import IntEnum
+
+from . import _tracks as tracks
+from ._main import MIN_COLUMN_WIDTH, TAB_WIDTH, THREAD_TAB_WIDTH, log_mutex
 
 short_class_repr = {}
 long_class_repr = {}
@@ -22,14 +24,12 @@ class LogWriter:
         self._printed_addr = printed_addr
         self._linecount = 0
         self._single_line = style & LogWriterStyle.single_line
-        # │ ╭ ╰ ├ ┼ ─ ┤ > <
-        # 0 1 2 3 4 5 6 7 8
         if style & LogWriterStyle.outer:
             self._branch_ends = (tracks.ligatures["->"], tracks.ligatures["<-"])
         else:
             self._branch_ends = (tracks.ligatures["<-"], tracks.ligatures["->"])
     
-    def write(self, text=None, finish=False):
+    def write(self, text="", finish=False):
         if self._single_line:
             branch = "."
             branch_end = self._branch_ends[1 if finish else 0]
@@ -43,25 +43,32 @@ class LogWriter:
             else:
                 branch = 'mid'
                 branch_end = tracks.glyphs["-"]+tracks.glyphs["-"]
+
+        ruler = (' '+tracks.ligatures["}>"]) if branch_end == tracks.ligatures['->'] else (tracks.ligatures["<{"]+' ')
         
         with log_mutex:
             if self._track is None:
                 self._track = tracks.find_free(min_=tracks.get_group_indent(self._group))
                 tracks.reserve(self._track)
-            line = _make_line(
-                group = self._group,
-                tracks = tracks.write(branch, self._track),
-                branch_end = branch_end,
-                address = '{}/{}'.format(self._printed_addr, self.id_),
-                ruler = (' '+tracks.ligatures["}>"]) if branch_end == tracks.ligatures['->'] else (tracks.ligatures["<{"]+' '),
-                details = text,
+
+            line = "{0} {1}{2} {3}".format(
+                self._group,
+                tracks.write(branch, self._track),
+                branch_end,
+                '{}/{}'.format(self._printed_addr, self.id_),
             )
-            print(line)
+            len_line = max(((len(line)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
+            line += " "*(len_line-len(line)) + ruler + ' ' + text
+
+            logging.getLogger('mupf').info(line)
 
             self._linecount += 1
             if self._single_line or finish:
                 tracks.free(self._track)
 
+def just_info(*msg):
+    """ Print a log line, but respecting the graph """
+    logging.getLogger('mupf').info( "     "+tracks.write()+" ".join(map(str, msg)))
 
 def enh_repr(x, short=False):
     """ Enhanced repr(esentation) for objects, nice in logging
@@ -81,11 +88,3 @@ def enh_repr(x, short=False):
         if isinstance(x, class_):
             return func(x)
     return repr(x).lstrip('<').rstrip('>')
-
-def _make_line(group, tracks, branch_end, address, ruler, details):
-    msg = "{0} {1}{2} {3}".format(group, tracks, branch_end, address)
-    if details is None:
-        details = ""
-    lmsg = max(((len(msg)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
-    msg += " "*(lmsg-len(msg)) + ruler + ' ' + details
-    return msg

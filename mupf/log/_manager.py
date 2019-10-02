@@ -31,10 +31,11 @@ class LogManager:
 
     def log_state_change(self, state):
         printed_addr = address.build_path(self.printed_addr_tree)
-        if self._addr == printed_addr:
-            main.just_info('logging: {} {}'.format(state, self._addr))
-        else:
-            main.just_info('logging: {} {}     (as {})'.format(state, self._addr, printed_addr))
+        with main.log_mutex:
+            if self._addr == printed_addr:
+                writer.just_info('logging: {} {}'.format(state, self._addr))
+            else:
+                writer.just_info('logging: {} {}     (as {})'.format(state, self._addr, printed_addr))
 
     def on(self):
         """ Turn on logging for this manager
@@ -58,7 +59,7 @@ class LogManager:
         """ Add the manager to the registry
         """
         if self._addr in LogManager._managers_by_addr:
-            main.just_info('ERROR: Adding `{}` manager failed - address already exists'.format(self._addr))
+            writer.just_info('ERROR: Adding `{}` manager failed - address already exists'.format(self._addr))
             return False
         LogManager._managers_by_addr[self._addr] = self
         if auto_on:
@@ -72,8 +73,9 @@ class LogManager:
         raise NotImplementedError('`LogManager.on_event()` not in `{}`'.format(self))
 
     def new_writer(self, printed_addr, style, group):
-        id_ = self._writer_count
-        self._writer_count += 1  # TODO: thread safeing
+        with main.log_mutex:
+            id_ = self._writer_count
+            self._writer_count += 1
         wr = writer.LogWriter(id_, printed_addr, style, group)
         self._writers[id_] = wr   # TODO: more sophisticated
         return wr
@@ -183,8 +185,9 @@ class LogSimpleManager(LogManager):
         elif event.entering():
             # There is no writer, because the sentinel is only employed
             # but the event still needs a `call_id_`. A negative number is given
-            event._call_id = -1 - self._silent_events_count
-            self._silent_events_count += 1
+            with main.log_mutex:
+                event._call_id = -1 - self._silent_events_count
+                self._silent_events_count += 1
             
         for aunt, nickname in self.aunt_nicknames.items():
             event._sentinel_nickname = nickname
@@ -192,11 +195,12 @@ class LogSimpleManager(LogManager):
 
 
 def refresh():
-    for l in LogManager._managers_by_addr.values():
-        if address.should_be_on(l.addr) == '+':
-            l.on()
-        else:
-            l.off()
+    with main.log_mutex:
+        for l in LogManager._managers_by_addr.values():
+            if address.should_be_on(l.addr) == '+':
+                l.on()
+            else:
+                l.off()
 
 # class LoggableFuncManager:
 #     """ Object represents a POSIBILITY of logging of a function/method/property

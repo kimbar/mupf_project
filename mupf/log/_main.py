@@ -1,14 +1,5 @@
-import asyncio
-import copy
-import inspect
 import logging
-import os
-import re
-import sys
 import threading
-import types
-
-import websockets
 
 # This must be before package imports or circular import occurs
 MIN_COLUMN_WIDTH = 90    # minimum width of the column with names of functions
@@ -22,16 +13,10 @@ from . import _tracks as tracks
 from . import _manager as manager
 
 lock = threading.Lock()
-thread_number_by_threadid = {}    # FIXME: this is the old way of things -- to rethink
 _logging_enabled = False
 
 _filters = []
 
-
-# TODO: move this to `_writer.py`
-def just_info(*msg):
-    """ Print a log line, but respecting the graph """
-    logging.getLogger('mupf').info( "     "+tracks.write()+" ".join(map(str, msg)))
 
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, filters=('+ ***',), graph_style='default'):
     logging.basicConfig(level=level)
