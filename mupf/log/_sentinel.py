@@ -1,8 +1,10 @@
 import copy
-from ._event import LogEvent
-from . import _writer as writer
-from . import _address as address
 import threading
+
+from . import _address as address
+from . import _writer as writer
+from ._event import LogEvent
+
 
 class LogSentinel:
 
@@ -16,10 +18,6 @@ class LogSentinel:
         self._func_parent = func_parent
         self._func_name = func_name
         self._printed_addr = address.build_path(self._manager.printed_addr_tree)
-        # self._verbosity_manager = None
-        # self._call_number = None
-        # self._obj_repr = ''
-        # self.track = "?"
 
     def __call__(self, *args, **kwargs):
         ev = LogEvent(None, self, self._func, args, kwargs, None, threading.current_thread())

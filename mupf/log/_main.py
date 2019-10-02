@@ -9,14 +9,11 @@ GROUP_WIDTH = 10
 log_mutex = threading.RLock()
 
 from . import _address as address
-from . import _tracks as tracks
 from . import _manager as manager
+from . import _tracks as tracks
 
-lock = threading.Lock()
 _logging_enabled = False
-
 _filters = []
-
 
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, filters=('+ ***',), graph_style='default'):
     logging.basicConfig(level=level)
@@ -31,5 +28,3 @@ def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, 
 
 def group_selector(event):
     return event.thread_name[0:4]
-
-

@@ -66,6 +66,7 @@ class LogWriter:
             if self._single_line or finish:
                 tracks.free(self._track)
 
+
 def just_info(*msg):
     """ Print a log line, but respecting the graph """
     logging.getLogger('mupf').info( "     "+tracks.write()+" ".join(map(str, msg)))
