@@ -71,6 +71,7 @@ class LogManager:
                 self.on()
             else:
                 self.off()
+        refresh(only_aunts=True)
         return True
 
     def on_event(self, event):
@@ -212,14 +213,27 @@ class LogSimpleManager(LogManager):
                 self._silent_events_count += 1
             
         for aunt, nickname in self.aunt_nicknames.items():
-            event._sentinel_nickname = nickname
-            aunt.on_event(event)
+            if aunt._state:
+                event._sentinel_nickname = nickname
+                aunt.on_event(event)
 
 
-def refresh():
+def refresh(only_aunts=False):
+    if not main._logging_enabled:
+        return
+    aunts = []
     with main.log_mutex:
-        for l in LogManager._managers_by_addr.values():
-            if address.should_be_on(l.addr) == '+':
-                l.on()
+        for manager in LogManager._managers_by_addr.values():
+            if isinstance(manager, LogSimpleManager):
+                if not only_aunts:
+                    _refresh_manager(manager)
             else:
-                l.off()
+                aunts.append(manager)
+        for manager in aunts:
+            _refresh_manager(manager)
+
+def _refresh_manager(manager):
+    if address.should_be_on(manager.addr) == '+':
+        manager.on()
+    else:
+        manager.off()

@@ -20,9 +20,9 @@ def enable(file_name, * , file_mode = 'w', filters = ('+ ***',)):
     logging.getLogger('').addHandler(hand)
     _tracks.set_style(_tracks._styles.get(settings.graph_style, 'default'))
     for f in filters:
-    manager.refresh()
         _address.append_filter(f)
     _logging_enabled = True
+    _manager.refresh()
 
 def group_selector(event):
     return event.thread_name[0:4]
