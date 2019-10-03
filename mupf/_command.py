@@ -65,7 +65,7 @@ def create_command_class_for_client(client):
     """
     
     @loggable(
-        'command.py/*<{0}><>'.format(client._cid[0:6]),
+        'command.py/*<{0}><obj>'.format(client._cid[0:6]),
         log_path = False,
         short = lambda self: "<{}-{:X}>".format(getattr(self, '_ccid', '?'), id(self)),
         long = lambda self: "<Command {} {} {} {:X}>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'), id(self)),

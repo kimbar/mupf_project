@@ -16,6 +16,7 @@ _logging_enabled = False
 _filters = []
 
 def enable(filename, fmt='[%(name)s] %(message)s',mode='w', level=logging.INFO, filters=('+ ***',), graph_style='default'):
+    global _logging_enabled
     logging.basicConfig(level=level)
     hand = logging.FileHandler(filename=filename, mode=mode, encoding='utf-8')
     hand.setFormatter(logging.Formatter(fmt))

@@ -27,7 +27,7 @@ def create_send_task(evl, wbs, json):
     evl.create_task(send_task_body(wbs, json))
 
 @loggable(
-    'client/base.py/*<>',
+    'client/base.py/*<obj>',
     log_path=False,
     long = lambda self: "<{} {}>".format(type(self).__name__, getattr(self, '_cid', '?')[0:6]),
 )

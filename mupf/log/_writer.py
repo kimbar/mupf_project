@@ -92,4 +92,4 @@ def enh_repr(x, short=False):
     for class_, func in long_class_repr.items():
         if isinstance(x, class_):
             return func(x)
-    return repr(x).lstrip('<').rstrip('>')
+    return repr(x)

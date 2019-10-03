@@ -82,8 +82,7 @@ def loggable(
                     hidden = hidden,
                 )
                 # That's it for a function, so it can be added to the registry
-                # lfm.add(auto_on=main._logging_enabled)
-                lfm.add(auto_on=True)
+                lfm.add(auto_on=main._logging_enabled)
         elif isinstance(x, classmethod):
             # if it is a class method, the manager is created similarily as for a method, only the name must be digged
             # a one step deeper
@@ -102,7 +101,7 @@ def loggable(
                 # If it is an "aunt" class, the decorator performes a singlenton semantic
                 # That is it creates a single object, and registers it the registry
                 manager = x(log_addr, log_path, hidden)
-                manager.add(auto_on=True)
+                manager.add(auto_on=main._logging_enabled)
             else:
                 # It is a regular user's class Now we will hopefully collect all the managers
                 # that were temporarily attached to methods `_methodtolog` properties

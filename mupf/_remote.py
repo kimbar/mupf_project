@@ -73,7 +73,7 @@ class RemoteJsonEsc:
         return '["~@",{}]'.format(self.rid)
 
 @loggable(
-    'remote.py/*<>',
+    'remote.py/*<obj>',
     short = lambda self: "<{}>".format(getattr(self, '_ccid', '?')),
     long = lambda self: "<CallbackTask {} {} {}>".format(getattr(self, '_noun', '?'), getattr(self, '_ccid', '?'), getattr(self, '_func', '-'))
 )

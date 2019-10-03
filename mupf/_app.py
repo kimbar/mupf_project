@@ -19,7 +19,7 @@ from . import _enhjson as enhjson
 from .log import loggable
 
 @loggable(
-    'app.py/*<>',
+    'app.py/*<obj>',
     log_path = False,
     short = lambda self: "<{:X}>".format(id(self)),
     long = lambda self: "<App {:X}>".format(id(self)),
