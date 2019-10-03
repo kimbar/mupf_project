@@ -218,7 +218,6 @@ class LogSentTaskBody(LogManager):
         super().on()
 
     def on_event(self, event):
-        
         if event.entering():
             finish = False
             if event.args[0] == 'start':

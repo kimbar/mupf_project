@@ -35,9 +35,9 @@ class LogManager:
         printed_addr = address.build_path(self.printed_addr_tree)
         with main.log_mutex:
             if self._addr == printed_addr:
-                writer.just_info('logging: {} {}'.format(state, self._addr))
+                writer.just_info('state: {} {}'.format(state, self._addr))
             else:
-                writer.just_info('logging: {} {}     (as {})'.format(state, self._addr, printed_addr))
+                writer.just_info('state: {} {}      as {}'.format(state, self._addr, printed_addr))
 
     def on(self):
         """ Turn on logging for this manager
