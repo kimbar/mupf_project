@@ -1,9 +1,11 @@
 import mupf
 import hashlib
 
+mupf.log.settings.GROUP_WIDTH = 10
+mupf.log.settings.MIN_COLUMN_WIDTH = 90
+mupf.log.settings.graph_style = 'rounded'
+
 mupf.log.enable('callback.log')
-mupf.log.THREAD_TAB_WIDTH = 0
-mupf.log.MIN_COLUMN_WIDTH = 75
 
 # Event handler
 def button_click(event):

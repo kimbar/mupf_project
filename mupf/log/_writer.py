@@ -2,10 +2,12 @@ import logging
 from enum import IntEnum
 
 from . import _tracks as tracks
-from ._main import MIN_COLUMN_WIDTH, TAB_WIDTH, THREAD_TAB_WIDTH, log_mutex
+from . import settings
+from ._main import log_mutex
 
 short_class_repr = {}
 long_class_repr = {}
+
 
 
 class LogWriterStyle(IntEnum):
@@ -61,7 +63,7 @@ class LogWriter:
                 tracks.write(branch, self._track, self._inner),
                 '{}/{}{}'.format(self._printed_addr, self.id_, line_id),
             ))
-            len_line = max(((len(line)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
+            len_line = max(((len(line)-settings.MIN_COLUMN_WIDTH+(settings.TAB_WIDTH//2))//settings.TAB_WIDTH+1)*settings.TAB_WIDTH, 0) + settings.MIN_COLUMN_WIDTH
             line += " "*(len_line-len(line)) + ruler + ' ' + text
 
             logging.getLogger('mupf').info(line)

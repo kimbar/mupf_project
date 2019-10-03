@@ -1,4 +1,5 @@
 from . import _main as main
+from . import settings
 
 _tracks = []
 _styles = dict(
@@ -138,6 +139,6 @@ _last_group_indent = 0
 def get_group_indent(group):
     global _groups_indent, _last_group_indent
     if group not in _groups_indent:
-        _last_group_indent += main.GROUP_WIDTH
+        _last_group_indent += settings.GROUP_WIDTH
         _groups_indent[group] = _last_group_indent
     return _groups_indent[group]
