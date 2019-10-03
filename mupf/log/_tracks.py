@@ -2,10 +2,10 @@ from . import _main as main
 
 _tracks = []
 _styles = dict(
-    _reference = "|,`}+-{><.",
-    default =    "│┌└├┼─┤><·",
-    rounded =    "│╭╰├┼─┤▶◀·",
-    simple =     "|,`|+-|><*",
+    _reference = "|,`}+-{><.T^",
+    default =    "│┌└├┼─┤><·┐┘",
+    rounded =    "│╭╰├┼─┤▶◀·╮╯",
+    simple =     "|,`|+-|><*,'",
 )
 glyphs = {}
 ligatures = {}
@@ -53,28 +53,51 @@ def find_free(min_=0):
     return min_
 
 
-def write(branch=None, branch_track=None):
+def write(branch=None, branch_track=None, inner=True):
     """ Print tracks for a single line
 
     The line is connected to the line (branched) if `branch_track` number is given. The track number
     `branch_track` should be occupied. `branch` can have three values: `"start"` or `"end"` if the
-    branch should strart or end the track, `"mid"` if the branch should only attach to a track. Any
+    branch should start or end the track, `"mid"` if the branch should only attach to a track. Any
     other value (preffered `"."`) to only mark the track for single line.
     """
     global _tracks, glyphs
-    result = ""
+    if inner:
+        result = " "
+    else:
+        if branch == 'start':
+            result = glyphs[">"]
+        elif branch == 'end':
+            result = glyphs["<"]
+        elif branch == 'mid':
+            result = glyphs["-"]
+        else:
+            result = " "
+
     for n, track in enumerate(_tracks):
         if track:
             if branch:
                 if n < branch_track:
-                    result += glyphs["|"]
+                    if inner or branch == 'mid':
+                        result += glyphs["|"]
+                    else:
+                        result += glyphs["+"]
                 elif n == branch_track:
                     if branch == 'start':
-                        result += glyphs[","]
+                        if inner:
+                            result += glyphs[","]
+                        else:
+                            result += glyphs["T"]
                     elif branch == 'end':
-                        result += glyphs["`"]
+                        if inner:
+                            result += glyphs["`"]
+                        else:
+                            result += glyphs["^"]
                     elif branch == 'mid':
-                        result += glyphs["}"]
+                        if inner:
+                            result += glyphs["}"]
+                        else:
+                            result += glyphs["|"]
                     else:
                         result += glyphs["."]
                 elif n > branch_track:
@@ -84,14 +107,29 @@ def write(branch=None, branch_track=None):
         else:
             if branch:
                 if n < branch_track:
-                    result += " "
+                    if inner or branch == 'mid':
+                        result += " "
+                    else:
+                        result += glyphs["-"]
                 elif n == branch_track:
                     result += "?"
                 elif n > branch_track:
                     result += glyphs["-"]
             else:
                 result += " "
-    return result
+    if inner:
+        if branch:
+            if branch == 'start':
+                result += ligatures['<-']
+            elif branch == 'end':
+                result += ligatures['->']
+            else:
+                result += glyphs["-"]+glyphs["-"]
+        else:
+            result += "  "
+    else:
+        result += glyphs["-"]+glyphs["-"]
+    return result+":"
 
 
 _groups_indent = {'Main':0}

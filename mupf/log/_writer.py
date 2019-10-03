@@ -17,46 +17,50 @@ class LogWriterStyle(IntEnum):
 
 class LogWriter:
 
-    def __init__(self, id_, printed_addr, style=LogWriterStyle.inner, group="Main"):
+    def __init__(self, id_, printed_addr, style=LogWriterStyle.inner+LogWriterStyle.multi_line, group="Main"):
         self._group = group
         self._track = None    
         self.id_ = id_
         self._printed_addr = printed_addr
         self._linecount = 0
         self._single_line = style & LogWriterStyle.single_line
-        if style & LogWriterStyle.outer:
-            self._branch_ends = (tracks.ligatures["->"], tracks.ligatures["<-"])
-        else:
-            self._branch_ends = (tracks.ligatures["<-"], tracks.ligatures["->"])
+        self._inner = not (style & LogWriterStyle.outer)
     
     def write(self, text="", finish=False):
         if self._single_line:
             branch = "."
-            branch_end = self._branch_ends[1 if finish else 0]
+            ruler = " "+tracks.glyphs['|']+" "
+            line_id = ""
         else:
             if self._linecount == 0:
                 branch = 'start'
-                branch_end = self._branch_ends[0]
+                if self._inner:
+                    ruler = tracks.ligatures["<{"]+' '
+                else:
+                    ruler = ' '+tracks.ligatures["}>"]
+                line_id = ".s"
             elif finish:
                 branch = 'end'
-                branch_end = self._branch_ends[1]
+                if self._inner:
+                    ruler = ' '+tracks.ligatures["}>"]
+                else:
+                    ruler = tracks.ligatures["<{"]+' '
+                line_id = ".f"
             else:
                 branch = 'mid'
-                branch_end = tracks.glyphs["-"]+tracks.glyphs["-"]
+                ruler = " "+tracks.glyphs['|']+" "
+                line_id = ".{}".format(self._linecount)
 
-        ruler = (' '+tracks.ligatures["}>"]) if branch_end == tracks.ligatures['->'] else (tracks.ligatures["<{"]+' ')
-        
         with log_mutex:
             if self._track is None:
                 self._track = tracks.find_free(min_=tracks.get_group_indent(self._group))
                 tracks.reserve(self._track)
 
-            line = "{0} {1}{2} {3}".format(
+            line = " ".join((
                 self._group,
-                tracks.write(branch, self._track),
-                branch_end,
-                '{}/{}'.format(self._printed_addr, self.id_),
-            )
+                tracks.write(branch, self._track, self._inner),
+                '{}/{}{}'.format(self._printed_addr, self.id_, line_id),
+            ))
             len_line = max(((len(line)-MIN_COLUMN_WIDTH+(TAB_WIDTH//2))//TAB_WIDTH+1)*TAB_WIDTH, 0) + MIN_COLUMN_WIDTH
             line += " "*(len_line-len(line)) + ruler + ' ' + text
 
