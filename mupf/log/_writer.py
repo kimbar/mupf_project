@@ -60,7 +60,7 @@ class LogWriter:
                 tracks.reserve(self._track)
 
             line = " ".join((
-                self._group,
+                "{: <{}}".format(self._group, settings.GROUP_NAME_WIDTH)[0:settings.GROUP_NAME_WIDTH],
                 tracks.write(branch, self._track, self._inner),
                 '{}/{}{}'.format(self._printed_addr, self.id_, line_id),
             ))
@@ -77,7 +77,7 @@ class LogWriter:
 
 def just_info(*msg):
     """ Print a log line, but respecting the graph """
-    logging.getLogger('mupf').info( "     "+tracks.write()+" ".join(map(str, msg)))
+    logging.getLogger('mupf').info( " "*(settings.GROUP_NAME_WIDTH+1) + tracks.write() + " " + " ".join(map(str, msg)))
 
 def enh_repr(x, short=False):
     """ Enhanced repr(esentation) for objects, nice in logging

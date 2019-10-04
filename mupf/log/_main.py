@@ -25,4 +25,4 @@ def enable(file_name, * , file_mode = 'w', filters = ('+ ***',)):
     _manager.refresh()
 
 def group_selector(event):
-    return event.thread_name[0:4]
+    return event.thread_name[0:settings.GROUP_NAME_WIDTH]
