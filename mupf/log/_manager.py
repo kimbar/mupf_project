@@ -57,7 +57,7 @@ class LogManager:
 
         Calls already in progress will be logged
         """
-        if self._state != False:
+        if self._state:
             self.log_state_change('-')
         self._state = False
 
