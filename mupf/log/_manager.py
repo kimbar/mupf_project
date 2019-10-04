@@ -18,6 +18,8 @@ class LogManager:
         self._writer_count = 0               # how many counts of this manager's function has been done
         self._writers = {}
         self._hidden = hidden
+        self._current_event = None
+        self._employed_managers = []
 
     @property
     def addr(self):
@@ -77,7 +79,13 @@ class LogManager:
     def on_event(self, event):
         raise NotImplementedError('`LogManager.on_event()` not in `{}`'.format(self))
 
-    def new_writer(self, printed_addr, style, group):
+    def new_writer(self, * , printed_addr=None, style=None, group=None):
+        if printed_addr is None:
+            printed_addr = self._addr
+        if style is None:
+            style = writer.LogWriterStyle.inner + writer.LogWriterStyle.multi_line
+        if group is None:
+            group = main.group_selector(self._current_event)
         with main.log_mutex:
             id_ = self._writer_count
             self._writer_count += 1
@@ -87,10 +95,29 @@ class LogManager:
 
     def find_writer(self, id_):
         return self._writers[id_]
+    
+    def delete_writer(self, id_):
+        del self._writers[id_]
 
-    def employ_from_simple_manager(self, empl_addr, nickname=None):
-        self._managers_by_addr[empl_addr].employ(self, nickname)
-        # FIXME: Serching here should be through `address` module
+    def employ_sentinels(self, empl_addr, nickname=None):
+        re = address.make_regexp_from_filter(empl_addr)
+        count = 0
+        for addr, manager in self._managers_by_addr.items():
+            if isinstance(manager, LogSimpleManager) and re.match(addr):
+                manager.employ(self, nickname)
+                count += 1
+                if manager not in self._employed_managers:
+                    self._employed_managers.append(manager)
+        return count
+        
+    def dismiss_all_sentinels(self):
+        for manager in self._employed_managers:
+            manager.dismiss()
+        del self._employed_managers[:]
+
+    @property
+    def state(self):
+        return self._state
 
     @staticmethod
     def group_selector(event):
@@ -185,12 +212,13 @@ class LogSimpleManager(LogManager):
             self._soft_off()
 
     def on_event(self, event):
+        self._current_event = event
         if self._state:
+            wr = None
             if event.entering():
                 wr = self.new_writer(
-                    event.sentinel._printed_addr,
-                    writer.LogWriterStyle.inner+(writer.LogWriterStyle.multi_line if (self._log_enter and self._log_exit) else writer.LogWriterStyle.single_line),
-                    main.group_selector(event)
+                    printed_addr = event.sentinel._printed_addr,
+                    style = writer.LogWriterStyle.inner+(writer.LogWriterStyle.multi_line if (self._log_enter and self._log_exit) else writer.LogWriterStyle.single_line),
                 )
                 event._call_id = wr.id_
                 if self._log_enter:
@@ -198,24 +226,27 @@ class LogSimpleManager(LogManager):
                         wr.write(self.format_args(event))
                     else:
                         wr.write()
-            else:
+            elif self._log_exit:
                 wr = self.find_writer(id_=event.call_id)
-                if self._log_exit:
-                    if self._log_results:
-                        wr.write(writer.enh_repr(event.result), finish=True)
-                    else:
-                        wr.write(finish=True)
+                if self._log_results:
+                    wr.write(writer.enh_repr(event.result), finish=True)
+                else:
+                    wr.write(finish=True)
+            if wr is not None and wr.finished:
+                self.delete_writer(wr.id_)
         elif event.entering():
             # There is no writer, because the sentinel is only employed
             # but the event still needs a `call_id_`. A negative number is given
             with main.log_mutex:
                 event._call_id = -1 - self._silent_events_count
                 self._silent_events_count += 1
+        self._current_event = None
             
         for aunt, nickname in self.aunt_nicknames.items():
-            if aunt._state:
-                event._sentinel_nickname = nickname
-                aunt.on_event(event)
+            event._sentinel_nickname = nickname
+            aunt._current_event = event
+            aunt.on_event(event)
+            aunt._current_event = None
 
 
 def refresh(only_aunts=False):

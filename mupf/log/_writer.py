@@ -27,6 +27,7 @@ class LogWriter:
         self._linecount = 0
         self._single_line = style & LogWriterStyle.single_line
         self._inner = not (style & LogWriterStyle.outer)
+        self.finished = False
     
     def write(self, text="", finish=False):
         if self._single_line:
@@ -71,6 +72,7 @@ class LogWriter:
             self._linecount += 1
             if self._single_line or finish:
                 tracks.free(self._track)
+                self.finished = True
 
 
 def just_info(*msg):

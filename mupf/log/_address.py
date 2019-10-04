@@ -37,8 +37,8 @@ def parse_path(path):
 def build_path(tree, specifiers={}):
     return "/".join([".".join([obj[0]+"".join(["<{}>".format(specifiers.get(supl, supl).lstrip('<').rstrip('>')) for supl in obj[1:]]) for obj in pathpart]) for pathpart in tree])
 
-def _make_regexp_from_filter(f):
-    tree = parse_path(f)
+def make_regexp_from_filter(filter_):
+    tree = parse_path(filter_)
     for pathpart in tree:
         for obj in pathpart:
             class_ = re.split(r'(\*+)', obj[0])
@@ -63,12 +63,12 @@ def append_filter(f):
     f = f.lstrip()
     marker = f[0]
     f = f[1:].strip()
-    reg = _make_regexp_from_filter(f)
+    reg = make_regexp_from_filter(f)
     main._filters.append((marker, reg))
 
 def should_be_on(path):
     state = "-"
-    for f in main._filters:
-        if f[1].match(path):
-            state = f[0]
+    for filter_ in main._filters:
+        if filter_[1].match(path):
+            state = filter_[0]
     return state

@@ -214,18 +214,27 @@ class LogSentTaskBody(LogManager):
     current_writer_id = None
 
     def on(self):
-        self.employ_from_simple_manager('client/base.py/sending_event')
-        super().on()
+        count = self.employ_sentinels('client/base.py/sending_event')
+        if count > 0:
+            super().on()
+        else:
+            super().off()
+
+    def off(self):
+        self.dismiss_all_sentinels()
+        super().off()
 
     def on_event(self, event):
-        if event.entering():
-            finish = False
-            if event.args[0] == 'start':
-                wr = self.new_writer(self.addr, LogWriterStyle.inner+LogWriterStyle.multi_line, group=self.group_selector(event))
-                self.current_writer_id = wr.id_
-            else:
-                wr = self.find_writer(id_=self.current_writer_id)
-                if event.args[0] == 'end':
-                    finish = True
-                    self.current_writer_id = None
-            wr.write(self.format_args(event.args[1:], event.kwargs), finish)
+        if self.state:
+            if event.entering():
+                finish = False
+                if event.args[0] == 'start':
+                    wr = self.new_writer()
+                    self.current_writer_id = wr.id_
+                else:
+                    wr = self.find_writer(id_=self.current_writer_id)
+                    if event.args[0] == 'end':
+                        finish = True
+                        self.delete_writer(self.current_writer_id)
+                        self.current_writer_id = None
+                wr.write(self.format_args(event.args[1:], event.kwargs), finish)
