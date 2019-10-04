@@ -57,18 +57,21 @@ def make_regexp_from_filter(filter_):
             obj[0] = "".join(class_) + r'(?:<[^>]*>)*'
             for supl_no in range(len(obj)-1):
                 obj[supl_no+1] = "<" +re.escape(obj[supl_no+1]) + r'>(?:<[^>]*>)*'
-    return re.compile(build_path(tree) + r'.*')
+    return re.compile(build_path(tree) + r'(?:/.*)?$')
 
-def append_filter(f):
-    f = f.lstrip()
-    marker = f[0]
-    f = f[1:].strip()
-    reg = make_regexp_from_filter(f)
-    main._filters.append((marker, reg))
+def append_filter(filter_, handle=None):
+    if handle is None:
+        handle = str(main._filters_wo_handles_count)
+        main._filters_wo_handles_count += 1
+    filter_ = filter_.lstrip()
+    marker = filter_[0]
+    filter_ = filter_[1:].strip()
+    reg = make_regexp_from_filter(filter_)
+    main._filters[handle] = [marker, reg]
 
 def should_be_on(path):
-    state = "-"
-    for filter_ in main._filters:
-        if filter_[1].match(path):
+    state = "+" if main._default_all_on else "-"
+    for filter_ in main._filters.values():
+        if filter_[0] != '#' and filter_[1].match(path):
             state = filter_[0]
     return state

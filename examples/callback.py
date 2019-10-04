@@ -5,7 +5,12 @@ mupf.log.settings.GROUP_WIDTH = 10
 mupf.log.settings.MIN_COLUMN_WIDTH = 90
 mupf.log.settings.graph_style = 'rounded'
 
-mupf.log.enable('callback.log')
+mupf.log.add_filters(
+    '+ client/base.py/Client.decode_json',
+    stb = '- client/base.py/send_task_body'
+)
+
+mupf.log.enable('callback.log', default_all_on=False)
 
 # Event handler
 def button_click(event):
@@ -39,3 +44,5 @@ with mupf.App() as app:
     # Process events
     while client:
         client.run_one_callback_blocking()
+
+    mupf.log.set_filters_state(stb='+')
