@@ -1,6 +1,7 @@
 from . import _address as address
 from . import _main as main
 from . import _writer as writer
+from . import settings
 from ._event import LogEvent
 from ._sentinel import LogFunctionSentinel, LogPropertySentinel
 
@@ -47,6 +48,7 @@ class LogManager:
         Calls already in progress won't be logged
         """
         if self._hidden:
+            self.off()
             return
         if self._state != True:
             self.log_state_change('+')
@@ -57,8 +59,11 @@ class LogManager:
 
         Calls already in progress will be logged
         """
-        if self._state:
-            self.log_state_change('-')
+        if self._state or (settings.log_state_of_switched_off_managers and self._state is None):
+            if self._hidden:
+                self.log_state_change('H')
+            else:
+                self.log_state_change('-')
         self._state = False
 
     def add(self, auto_on=False):

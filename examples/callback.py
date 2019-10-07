@@ -4,10 +4,12 @@ import hashlib
 mupf.log.settings.GROUP_WIDTH = 10
 mupf.log.settings.MIN_COLUMN_WIDTH = 90
 mupf.log.settings.graph_style = 'rounded'
+mupf.log.settings.log_state_of_switched_off_managers = True
 
 mupf.log.add_filters(
-    '+ client/base.py/Client.decode_json',
-    stb = '- client/base.py/send_task_body'
+    '+ ***',
+    '+ ***/Client.**',
+    stb = '+ client/base.py/send_task_body'
 )
 
 mupf.log.enable('callback.log', default_all_on=False)

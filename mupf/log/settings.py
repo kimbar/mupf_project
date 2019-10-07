@@ -8,3 +8,4 @@ GROUP_NAME_WIDTH : int = 4
 graph_style : str = 'default'
 logging_format : str = '[%(name)s] %(message)s'
 logging_level = logging.INFO
+log_state_of_switched_off_managers = False
