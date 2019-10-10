@@ -9,3 +9,7 @@ graph_style : str = 'default'
 logging_format : str = '[%(name)s] %(message)s'
 logging_level = logging.INFO
 log_state_of_switched_off_managers = False
+print_group_name = True
+print_tracks = True
+print_address = True
+print_ruler = True

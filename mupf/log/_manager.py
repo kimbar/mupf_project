@@ -102,6 +102,8 @@ class LogManager:
         return self._writers[id_]
     
     def delete_writer(self, id_):
+        if isinstance(id_, writer.LogWriter):
+            id_ = id_.id_
         del self._writers[id_]
 
     def employ_sentinels(self, empl_addr, nickname=None):

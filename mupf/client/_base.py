@@ -243,6 +243,8 @@ class LogSentTaskBody(LogManager):
 class LogCrrcan(LogManager):
 
     undecoded_by_event_id = {}
+    internal_writers = {}
+    external_writers = {}
 
     def on(self):
         count_d = self.employ_sentinels('***/Client.decode_json', nickname='decode')
@@ -266,8 +268,34 @@ class LogCrrcan(LogManager):
             elif event.entering('send'):
                 self.log_data(event.args[0][0], event.args[0][1], repr(event.args[0]))
 
-
     def log_data(self, mode, ccid, text):
-        wr = self.new_writer(style=LogWriterStyle.single_line, group='crrc')
-        wr.write("{} {} {}".format(mode, ccid, text))
-        self.delete_writer(wr.id_)
+        if mode >= 5:
+            mode -= 5
+            style = LogWriterStyle.outer+LogWriterStyle.rarr
+            writers = LogCrrcan.external_writers
+        else:
+            style = LogWriterStyle.inner+LogWriterStyle.larr
+            writers = LogCrrcan.internal_writers
+
+        if mode == 0:
+            if ccid in writers:
+                wr = writers[ccid]
+            else:
+                wr = self.new_writer(style=LogWriterStyle.multi_line+style, group='crrc')
+                writers[ccid] = wr
+            wr.write(text)
+        elif mode == 1:
+            if ccid in writers:
+                wr = writers[ccid]
+                wr.write(text, finish=True)
+                self.delete_writer(wr)
+            else:
+                wr = self.new_writer(style=LogWriterStyle.multi_line+style, group='crrc')
+                wr.write('**Unmatched msg**')
+                wr.write(text, finish=True)
+                self.delete_writer(wr)
+        elif mode == 2:
+            wr = self.new_writer(style=LogWriterStyle.single_line+style, group='crrc')
+            wr.write(text)
+            self.delete_writer(wr)
+

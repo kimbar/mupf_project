@@ -60,7 +60,9 @@ def write(branch=None, branch_track=None, inner=True):
     The line is connected to the line (branched) if `branch_track` number is given. The track number
     `branch_track` should be occupied. `branch` can have three values: `"start"` or `"end"` if the
     branch should start or end the track, `"mid"` if the branch should only attach to a track. Any
-    other value (preffered `"."`) to only mark the track for single line.
+    other value to only mark the track for single line. When the single line is used, the `"<"`
+    draws left pointing arrow after the track mark; `">"` draws right pointing arrow; and `"."`
+    draws no arrow (only the track mark).
     """
     global _tracks, glyphs
     if inner:
@@ -70,10 +72,8 @@ def write(branch=None, branch_track=None, inner=True):
             result = glyphs[">"]
         elif branch == 'end':
             result = glyphs["<"]
-        elif branch == 'mid':
-            result = glyphs["-"]
         else:
-            result = " "
+            result = glyphs["-"]
 
     for n, track in enumerate(_tracks):
         if track:
@@ -120,16 +120,21 @@ def write(branch=None, branch_track=None, inner=True):
                 result += " "
     if inner:
         if branch:
-            if branch == 'start':
+            if branch == 'start' or branch == '<':
                 result += ligatures['<-']
-            elif branch == 'end':
+            elif branch == 'end' or branch == '>':
                 result += ligatures['->']
             else:
                 result += glyphs["-"]+glyphs["-"]
         else:
             result += "  "
     else:
-        result += glyphs["-"]+glyphs["-"]
+        if branch == '<':
+            result += ligatures['<-']
+        elif branch == '>':
+            result += ligatures['->']
+        else:
+            result += glyphs["-"]+glyphs["-"]
     return result+":"
 
 

@@ -4,8 +4,12 @@ import hashlib
 mupf.log.settings.GROUP_WIDTH = 10
 mupf.log.settings.MIN_COLUMN_WIDTH = 40
 mupf.log.settings.graph_style = 'rounded'
+mupf.log.settings.print_group_name = False
+mupf.log.settings.print_address = False
+mupf.log.settings.print_ruler = False
 
 mupf.log.add_filters(
+    '- ***',
     '+ crrcan',
 )
 

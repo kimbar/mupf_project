@@ -15,6 +15,8 @@ class LogWriterStyle(IntEnum):
     outer = 1
     multi_line = 0
     single_line = 2
+    larr = 4
+    rarr = 8
 
 
 class LogWriter:
@@ -26,13 +28,24 @@ class LogWriter:
         self._printed_addr = printed_addr
         self._linecount = 0
         self._single_line = style & LogWriterStyle.single_line
+        if style & LogWriterStyle.larr:
+            self._single_line_branch = '<'
+        elif style & LogWriterStyle.rarr:
+            self._single_line_branch = '>'
+        else:
+            self._single_line_branch = '.'
         self._inner = not (style & LogWriterStyle.outer)
         self.finished = False
     
     def write(self, text="", finish=False):
         if self._single_line:
-            branch = "."
-            ruler = " "+tracks.glyphs['|']+" "
+            branch = self._single_line_branch
+            if branch == '<':
+                ruler = tracks.ligatures["<{"]+' '
+            elif branch == '>':
+                ruler = ' '+tracks.ligatures["}>"]
+            else:
+                ruler = " "+tracks.glyphs['|']+" "
             line_id = ""
         else:
             if self._linecount == 0:
@@ -58,14 +71,21 @@ class LogWriter:
             if self._track is None:
                 self._track = tracks.find_free(min_=tracks.get_group_indent(self._group))
                 tracks.reserve(self._track)
-
-            line = " ".join((
-                "{: <{}}".format(self._group, settings.GROUP_NAME_WIDTH)[0:settings.GROUP_NAME_WIDTH],
-                tracks.write(branch, self._track, self._inner),
-                '{}/{}{}'.format(self._printed_addr, self.id_, line_id),
-            ))
-            len_line = max(((len(line)-settings.MIN_COLUMN_WIDTH+(settings.TAB_WIDTH//2))//settings.TAB_WIDTH+1)*settings.TAB_WIDTH, 0) + settings.MIN_COLUMN_WIDTH
-            line += " "*(len_line-len(line)) + ruler + ' ' + text
+            
+            line_elements = []
+            if settings.print_group_name:
+                line_elements.append("{: <{}}".format(self._group, settings.GROUP_NAME_WIDTH)[0:settings.GROUP_NAME_WIDTH])
+            if settings.print_tracks:
+                line_elements.append(tracks.write(branch, self._track, self._inner))
+            if settings.print_address:
+                line_elements.append('{}/{}{}'.format(self._printed_addr, self.id_, line_id))
+            line = " ".join(line_elements)
+            
+            if settings.print_ruler:
+                len_line = max(((len(line)-settings.MIN_COLUMN_WIDTH+(settings.TAB_WIDTH//2))//settings.TAB_WIDTH+1)*settings.TAB_WIDTH, 0) + settings.MIN_COLUMN_WIDTH
+                line += " "*(len_line-len(line)) + ruler
+            
+            line += ' ' + text
 
             logging.getLogger('mupf').info(line)
 
