@@ -1,70 +1,1019 @@
-[mupf]         : state: + crrcan
-[mupf] crrc  ·──: crrcan/0                      │  0 1 [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
-[mupf] crrc  ·──: crrcan/1                      │  0 1 [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
-[mupf] crrc  ·──: crrcan/2                      │  1 1 [1,1,0,{"result":null}]
-[mupf] crrc  ·──: crrcan/3                      │  0 2 [0, 2, '*features*', {'args': (), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/4                      │  1 2 [1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]
-[mupf] crrc  ·──: crrcan/5                      │  0 3 [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/6                      │  1 3 [1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]
-[mupf] crrc  ·──: crrcan/7                      │  0 4 [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/8                      │  1 4 [1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/9                      │  0 5 [0, 5, '*get*', {'args': (["~@",1], 'createElement'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/10                     │  1 5 [1,5,0,["~",{"result":["~@",2,1]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/11                     │  0 6 [0, 6, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/12                     │  1 6 [1,6,0,["~",{"result":["~@",1,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/13                     │  0 7 [0, 7, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/14                     │  1 7 [1,7,0,["~",{"result":["~@",3,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/15                     │  0 8 [0, 8, '*get*', {'args': (["~@",3], 'appendChild'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/16                     │  1 8 [1,8,0,["~",{"result":["~@",4,3]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/17                     │  0 9 [0, 9, '*call*', {'args': ('button',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] crrc  ·──: crrcan/18                     │  1 9 [1,9,0,["~",{"result":["~@",5,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/19                     │  0 10 [0, 10, '*call*', {'args': ('input',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] crrc  ·──: crrcan/20                     │  1 10 [1,10,0,["~",{"result":["~@",6,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/21                     │  0 11 [0, 11, '*call*', {'args': (["~@",6],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] crrc  ·──: crrcan/22                     │  1 11 [1,11,0,["~",{"result":["~@",6,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/23                     │  0 12 [0, 12, '*call*', {'args': (["~@",5],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] crrc  ·──: crrcan/24                     │  1 12 [1,12,0,["~",{"result":["~@",5,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/25                     │  0 13 [0, 13, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] crrc  ·──: crrcan/26                     │  1 13 [1,13,0,["~",{"result":["~@",7,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/27                     │  0 14 [0, 14, '*call*', {'args': (["~@",7],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] crrc  ·──: crrcan/28                     │  1 14 [1,14,0,["~",{"result":["~@",7,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/29                     │  0 15 [0, 15, '*set*', {'args': (["~@",5], 'textContent', 'SHA256'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/30                     │  1 15 [1,15,0,{"result":null}]
-[mupf] crrc  ·──: crrcan/31                     │  2 16 [2, 16, '*gc*', {'args': (7,), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/32                     │  0 17 [0, 17, '*set*', {'args': (["~@",5], 'onclick', ["~$",null,0]), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/33                     │  1 17 [1,17,0,{"result":null}]
-[mupf] crrc  ·──: crrcan/34                     │  5 0 [5,0,0,["~",{"args":[["~@",8,null]]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/35                     │  0 18 [0, 18, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/36                     │  1 18 [1,18,0,{"result":"asd"}]
-[mupf] crrc  ·──: crrcan/37                     │  0 19 [0, 19, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] crrc  ·──: crrcan/38                     │  1 19 [1,19,0,["~",{"result":["~@",9,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/39                     │  0 20 [0, 20, '*set*', {'args': (["~@",9], 'innerHTML', "SHA256('asd') = 688787d8ff144c502c7f5cffaafe2cc588d86079f9de88304c26b0cb99ce91c6"), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/40                     │  1 20 [1,20,0,{"result":null}]
-[mupf] crrc  ·──: crrcan/41                     │  0 21 [0, 21, '*call*', {'args': (["~@",9],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] crrc  ·──: crrcan/42                     │  1 21 [1,21,0,["~",{"result":["~@",9,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/43                     │  0 22 [0, 22, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] crrc  ·──: crrcan/44                     │  1 22 [1,22,0,["~",{"result":["~@",10,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/45                     │  0 23 [0, 23, '*call*', {'args': (["~@",10],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] crrc  ·──: crrcan/46                     │  1 23 [1,23,0,["~",{"result":["~@",10,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/47                     │  2 24 [2, 24, '*gc*', {'args': (9,), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/48                     │  6 0 [6, 0, 0, None]
-[mupf] crrc  ·──: crrcan/49                     │  2 25 [2, 25, '*gc*', {'args': (8,), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/50                     │  5 1 [5,1,0,["~",{"args":[["~@",11,null]]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/51                     │  2 26 [2, 26, '*gc*', {'args': (10,), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/52                     │  0 27 [0, 27, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/53                     │  1 27 [1,27,0,{"result":"asdasdas"}]
-[mupf] crrc  ·──: crrcan/54                     │  0 28 [0, 28, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] crrc  ·──: crrcan/55                     │  1 28 [1,28,0,["~",{"result":["~@",12,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/56                     │  0 29 [0, 29, '*set*', {'args': (["~@",12], 'innerHTML', "SHA256('asdasdas') = a6f7b874ea69329372ad75353314d7bcacd8c0be365023dab195bcac015d6009"), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/57                     │  1 29 [1,29,0,{"result":null}]
-[mupf] crrc  ·──: crrcan/58                     │  0 30 [0, 30, '*call*', {'args': (["~@",12],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] crrc  ·──: crrcan/59                     │  1 30 [1,30,0,["~",{"result":["~@",12,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/60                     │  0 31 [0, 31, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
-[mupf] crrc  ·──: crrcan/61                     │  1 31 [1,31,0,["~",{"result":["~@",13,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/62                     │  0 32 [0, 32, '*call*', {'args': (["~@",13],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
-[mupf] crrc  ·──: crrcan/63                     │  1 32 [1,32,0,["~",{"result":["~@",13,null]},{"c":1}]]
-[mupf] crrc  ·──: crrcan/64                     │  2 33 [2, 33, '*gc*', {'args': (12,), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/65                     │  6 1 [6, 1, 0, None]
-[mupf] crrc  ·──: crrcan/66                     │  2 34 [2, 34, '*gc*', {'args': (11,), 'kwargs': {}}]
-[mupf] crrc  ·──: crrcan/67                     │  7 0 [7,0,"*close*",{"result":null}]
-[mupf] crrc  ·──: crrcan/68                     │  2 35 [2, 35, '*gc*', {'args': (13,), 'kwargs': {}}]
+[mupf]    : state: + remote.py/CallbackTask<obj>.init
+[mupf]    : state: + remote.py/CallbackTask<obj>.run
+[mupf]    : state: + command.py/create_command_class_for_client
+[mupf]    : state: + client/base.py/create_send_task
+[mupf]    : state: + client/base.py/Client<obj>.bool      as Client<obj>.bool
+[mupf]    : state: + client/base.py/Client<obj>.init      as Client<obj>.init
+[mupf]    : state: + client/base.py/Client<obj>.wrap_callback      as Client<obj>.wrap_callback
+[mupf]    : state: + client/base.py/Client<obj>.app.:      as Client<obj>.app.:
+[mupf]    : state: + client/base.py/Client<obj>.await_connection      as Client<obj>.await_connection
+[mupf]    : state: + client/base.py/Client<obj>.cid.:      as Client<obj>.cid.:
+[mupf]    : state: + client/base.py/Client<obj>.close      as Client<obj>.close
+[mupf]    : state: + client/base.py/Client<obj>.decode_json      as Client<obj>.decode_json
+[mupf]    : state: + client/base.py/Client<obj>.decode_json_simple      as Client<obj>.decode_json_simple
+[mupf]    : state: + client/base.py/Client<obj>.get_remote_obj      as Client<obj>.get_remote_obj
+[mupf]    : state: + client/base.py/Client<obj>.install_commands      as Client<obj>.install_commands
+[mupf]    : state: + client/base.py/Client<obj>.install_javascript      as Client<obj>.install_javascript
+[mupf]    : state: + client/base.py/Client<obj>.run_one_callback_blocking      as Client<obj>.run_one_callback_blocking
+[mupf]    : state: + client/base.py/Client<obj>.send_json      as Client<obj>.send_json
+[mupf]    : state: + client/base.py/Client<obj>.shedule_callback      as Client<obj>.shedule_callback
+[mupf]    : state: + client/base.py/Client<obj>.summoned      as Client<obj>.summoned
+[mupf]    : state: + client/base.py/Client<obj>.url.:      as Client<obj>.url.:
+[mupf]    : state: + app.py/App<obj>.enter      as App<obj>.enter
+[mupf]    : state: + app.py/App<obj>.exit      as App<obj>.exit
+[mupf]    : state: + app.py/App<obj>.init      as App<obj>.init
+[mupf]    : state: + app.py/App<obj>.get_route_response      as App<obj>.get_route_response
+[mupf]    : state: + app.py/App<obj>.process_HTTP_request      as App<obj>.process_HTTP_request
+[mupf]    : state: + app.py/App<obj>.close      as App<obj>.close
+[mupf]    : state: + app.py/App<obj>.get_unique_client_id      as App<obj>.get_unique_client_id
+[mupf]    : state: + app.py/App<obj>.is_opened      as App<obj>.is_opened
+[mupf]    : state: + app.py/App<obj>.open      as App<obj>.open
+[mupf]    : state: + app.py/App<obj>.open_with_client      as App<obj>.open_with_client
+[mupf]    : state: + app.py/App<obj>.piggyback_call      as App<obj>.piggyback_call
+[mupf]    : state: + app.py/App<obj>.register_route      as App<obj>.register_route
+[mupf]    : state: + app.py/App<obj>.summon_client      as App<obj>.summon_client
+[mupf]    : state: + app.py/server_event
+[mupf]    : state: + app.py/websocket_event
+[mupf]    : state: + client/base.py/send_task_body
+[mupf]    : state: + crrcan
+[mupf]  ╭◀─: App<3A43E10>.init/0.s             ◀┤  
+[mupf]  ╰─▶: App<3A43E10>.init/0.f              ├▶ None
+[mupf]  ╭◀─: App<3A43E10>.enter/0.s            ◀┤  
+[mupf]  │╭◀─: App<3A43E10>.is_opened/0.s                           ◀┤  
+[mupf]  │╰─▶: App<3A43E10>.is_opened/0.f                            ├▶ False
+[mupf]  │╭◀─: App<3A43E10>.open/0.s            ◀┤  
+[mupf]  ││        ·──: app.py/server_event/0                        │  'entering server thread body'
+[mupf]  ││        ·──: app.py/server_event/1                        │  'creating event loop', eloop=<EventLoop halted>
+[mupf]  ││        ·──: app.py/server_event/2                        │  'creating server object'
+[mupf]  ││        ·──: app.py/server_event/3                        │  'server starting ...'
+[mupf]  ││        ·──: app.py/server_event/4                        │  'server started', <WebSocket Server 3A50320>
+[mupf]  ││        ·──: app.py/server_event/5                        │  'server open state mutex set', <WebSocket Server 3A50320>
+[mupf]  │╰─▶: App<3A43E10>.open/0.f             ├▶ <App 3A43E10>
+[mupf]  │╭◀─: App<3A43E10>.is_opened/1.s                           ◀┤  
+[mupf]  │╰─▶: App<3A43E10>.is_opened/1.f                            ├▶ True
+[mupf]  ╰─▶: App<3A43E10>.enter/0.f             ├▶ <App 3A43E10>
+[mupf]  ╭◀─: App<3A43E10>.summon_client/0.s                        ◀┤  
+[mupf]  │╭◀─: App<3A43E10>.get_unique_client_id/0.s                ◀┤  
+[mupf]  │╰─▶: App<3A43E10>.get_unique_client_id/0.f                 ├▶ 'fKLYHFPqQvebNbNodBe3DA'
+[mupf]  │╭◀─: Client<WebBrowser ?>.init/0.s                        ◀┤  <App 3A43E10>, 'fKLYHFPqQvebNbNodBe3DA'
+[mupf]  ││╭◀─: command.py/create_command_class_for_client/0.s                          ◀┤  <WebBrowser fKLYHF>
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.()      as Command<fKLYHF><obj>.()
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.init      as Command<fKLYHF><obj>.init
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.jsonify      as Command<fKLYHF><obj>.jsonify
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.is_in_bad_state      as Command<fKLYHF><obj>.is_in_bad_state
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.result.:      as Command<fKLYHF><obj>.result.:
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.result.=      as Command<fKLYHF><obj>.result.=
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.run      as Command<fKLYHF><obj>.run
+[mupf]  │││  : state: + command.py/Command<fKLYHF><obj>.wait      as Command<fKLYHF><obj>.wait
+[mupf]  ││╰─▶: command.py/create_command_class_for_client/0.f                           ├▶ <class 'mupf._command.create_command_class_for_client.<locals>.Command'>
+[mupf]  ││╭◀─: Command<fKLYHF><?-3A50A90>.init/0.s                 ◀┤  '*first*'
+[mupf]  ││╰─▶: Command<fKLYHF><?-3A50A90>.init/0.f                  ├▶ None
+[mupf]  ││╭◀─: Command<fKLYHF><None-3A50A90>.()/0.s                ◀┤  
+[mupf]  │││╭◀─: Command<fKLYHF><0-3A50A90>.jsonify/0.s             ◀┤  (), {}
+[mupf]  │││╰─▶: Command<fKLYHF><0-3A50A90>.jsonify/0.f              ├▶ [0, 0, '*first*', {'args': (), 'kwargs': {}}]
+[mupf]  ││╰─▶: Command<fKLYHF><None-3A50A90>.()/0.f                 ├▶ <Command cmd 0 *first* 3A50A90>
+[mupf]  │╰─▶: Client<WebBrowser ?>.init/0.f                         ├▶ None
+[mupf]  │·──: Client<WebBrowser fKLYHF>.app.:/0                     │  <App 3A43E10>
+[mupf]  │·──: Client<WebBrowser fKLYHF>.app.:/1                     │  <App 3A43E10>
+[mupf]  │·──: Client<WebBrowser fKLYHF>.cid.:/0                     │  'fKLYHFPqQvebNbNodBe3DA'
+[mupf]  │·──: Client<WebBrowser fKLYHF>.url.:/0                     │  'http://127.0.0.1:57107/#fKLYHFPqQvebNbNodBe3DA'
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.install_javascript/0.s                         ◀┤  src='mupf/core'
+[mupf]  ││╭◀─: Command<fKLYHF><?-3A507B8>.init/1.s                 ◀┤  '*install*'
+[mupf]  ││╰─▶: Command<fKLYHF><?-3A507B8>.init/1.f                  ├▶ None
+[mupf]  ││╭◀─: Command<fKLYHF><None-3A507B8>.()/1.s                ◀┤  src='mupf/core', remove=True
+[mupf]  │││╭◀─: Command<fKLYHF><1-3A507B8>.jsonify/1.s             ◀┤  (), {'src': 'mupf/core', 'remove': True}
+[mupf]  │││╰─▶: Command<fKLYHF><1-3A507B8>.jsonify/1.f              ├▶ [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
+[mupf]  │││╭◀─: Client<WebBrowser fKLYHF>.send_json/0.s            ◀┤  [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
+[mupf]  ││││                ╭◀─: crrcan/0.s                        ◀┤  [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
+[mupf]  │││╰────────────────┼─▶: Client<WebBrowser fKLYHF>.send_json/0.f                ├▶ None
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><None-3A507B8>.()/1.f                   ├▶ <Command cmd 1 *install* 3A507B8>
+[mupf]  │╰──────────────────┼─▶: Client<WebBrowser fKLYHF>.install_javascript/0.f                           ├▶ <Command cmd 1 *install* 3A507B8>
+[mupf]  │╭──────────────────┼◀─: Command<fKLYHF><1-3A507B8>.result.:/0.s               ◀┤  
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><1-3A507B8>.wait/0.s                   ◀┤  
+[mupf]  │││       ╭─────────┼◀─: App<3A43E10>.process_HTTP_request/0.s                 ◀┤  '/', <HTTP Header from 127.0.0.1:57107>
+[mupf]  │││       ╰─────────┼─▶: App<3A43E10>.process_HTTP_request/0.f                  ├▶ 
+[mupf]  │││       ╭─────────┼◀─: App<3A43E10>.process_HTTP_request/1.s                 ◀┤  '/mupf/bootstrap', <HTTP Header from 127.0.0.1:57107>
+[mupf]  │││       ╰─────────┼─▶: App<3A43E10>.process_HTTP_request/1.f                  ├▶ 
+[mupf]  │││       ╭─────────┼◀─: App<3A43E10>.process_HTTP_request/2.s                 ◀┤  '/mupf/ws', <HTTP Header from 127.0.0.1:57107>
+[mupf]  │││       ╰─────────┼─▶: App<3A43E10>.process_HTTP_request/2.f                  ├▶ 
+[mupf]  │││       ·─────────┼──: app.py/websocket_event/0                               │  'entering websocket request body', <WebSocket Protocol 3A62710>, path='/mupf/ws'
+[mupf]  │││       ·─────────┼──: app.py/websocket_event/1                               │  'websocket received result of *first*', <WebSocket Protocol 3A62710>, msg='[1,0,0,{"result":{"cid":"fKLYHFPqQvebNbNodBe3DA","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"}}]'
+[mupf]  │││       ╭─────────┼◀─: Client<obj>.decode_json_simple/0.s                    ◀┤  '[1,0,0,{"result":{"cid":"fKLYHFPqQvebNbNodBe3DA","ua":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0"}}]'
+[mupf]  │││       ╰─────────┼─▶: Client<obj>.decode_json_simple/0.f                     ├▶ [1, 0, 0, {'result': {'cid': 'fKLYHFPqQvebNbNodBe3DA', 'ua': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0'}}]
+[mupf]  │││       ·─────────┼──: app.py/websocket_event/2                               │  'websocket assigned to client', <WebSocket Protocol 3A62710>, client=<WebBrowser fKLYHF>
+[mupf]  │││       ╭─────────┼◀─: Command<fKLYHF><0-3A50A90>.result.=/0.s               ◀┤  None
+[mupf]  │││       ╰─────────┼─▶: Command<fKLYHF><0-3A50A90>.result.=/0.f                ├▶ None
+[mupf]  │││       ·─────────┼──: app.py/websocket_event/3                               │  'websocket awaiting for client...', <WebSocket Protocol 3A62710>, client=<WebBrowser fKLYHF>
+[mupf]  │││       ╭─────────┼◀─: Client<WebBrowser fKLYHF>.await_connection/0.s                            ◀┤  
+[mupf]  │││       │╭────────┼◀─: Command<fKLYHF><0-3A50A90>.wait/1.s                   ◀┤  
+[mupf]  │││       │╰────────┼─▶: Command<fKLYHF><0-3A50A90>.wait/1.f                    ├▶ <Command cmd 0 *first* 3A50A90>
+[mupf]  │││       │╭────────┼◀─: Command<fKLYHF><0-3A50A90>.is_in_bad_state/0.s                            ◀┤  
+[mupf]  │││       │╰────────┼─▶: Command<fKLYHF><0-3A50A90>.is_in_bad_state/0.f                             ├▶ False
+[mupf]  │││       │╭────────┼◀─: Client<WebBrowser fKLYHF>.send_json/1.s               ◀┤  [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
+[mupf]  │││       ││        ├──: crrcan/0.1                         │  [0, 1, '*install*', {'args': (), 'kwargs': {'src': 'mupf/core', 'remove': True}}]
+[mupf]  │││       │╰────────┼─▶: Client<WebBrowser fKLYHF>.send_json/1.f                ├▶ None
+[mupf]  │││       ╰─────────┼─▶: Client<WebBrowser fKLYHF>.await_connection/0.f                             ├▶ <WebBrowser fKLYHF>
+[mupf]  │││       ·─────────┼──: app.py/websocket_event/4                               │  'websocket contacted by client', <WebSocket Protocol 3A62710>, client=<WebBrowser fKLYHF>
+[mupf]  │││       ·─────────┼──: app.py/websocket_event/5                               │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │││       ╭─────────┼◀─: client/base.py/create_send_task/0.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]'
+[mupf]  │││       ╰─────────┼─▶: client/base.py/create_send_task/0.f                    ├▶ None
+[mupf]  │││       ╭─────────┼◀─: client/base.py/send_task_body/0.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,1,"*install*",{"args":[],"kwargs":{"src":"mupf/core","remove":true}}]'
+[mupf]  │││       ╰─────────┼─▶: client/base.py/send_task_body/0.f                      ├▶ 
+[mupf]  │││       ╭─────────┼◀─: App<3A43E10>.process_HTTP_request/3.s                 ◀┤  '/mupf/core', <HTTP Header from 127.0.0.1:57107>
+[mupf]  │││       ╰─────────┼─▶: App<3A43E10>.process_HTTP_request/3.f                  ├▶ 
+[mupf]  │││       ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/0.s             ◀┤  '[1,1,0,{"result":null}]'
+[mupf]  │││       ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/0.f              ├▶ [1, 1, 0, {'result': None}]
+[mupf]  │││                 ╰─▶: crrcan/0.f                         ├▶ [1,1,0,{"result":null}]
+[mupf]  │││       ╭◀─: Command<fKLYHF><1-3A507B8>.result.=/1.s                         ◀┤  None
+[mupf]  │││       ╰─▶: Command<fKLYHF><1-3A507B8>.result.=/1.f                          ├▶ None
+[mupf]  ││╰─▶: Command<fKLYHF><1-3A507B8>.wait/0.f                  ├▶ <Command cmd 1 *install* 3A507B8>
+[mupf]  ││        ·──: app.py/websocket_event/6                     │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │╰─▶: Command<fKLYHF><1-3A507B8>.result.:/0.f               ├▶ None
+[mupf]  │╭◀─: Command<fKLYHF><?-3A507B8>.init/2.s                  ◀┤  '*features*'
+[mupf]  │╰─▶: Command<fKLYHF><?-3A507B8>.init/2.f                   ├▶ None
+[mupf]  │╭◀─: Command<fKLYHF><None-3A507B8>.()/2.s                 ◀┤  
+[mupf]  ││╭◀─: Command<fKLYHF><2-3A507B8>.jsonify/2.s              ◀┤  (), {}
+[mupf]  ││╰─▶: Command<fKLYHF><2-3A507B8>.jsonify/2.f               ├▶ [0, 2, '*features*', {'args': (), 'kwargs': {}}]
+[mupf]  ││╭◀─: Client<WebBrowser fKLYHF>.send_json/2.s             ◀┤  [0, 2, '*features*', {'args': (), 'kwargs': {}}]
+[mupf]  │││                 ╭◀─: crrcan/1.s                        ◀┤  [0, 2, '*features*', {'args': (), 'kwargs': {}}]
+[mupf]  ││╰─────────────────┼─▶: Client<WebBrowser fKLYHF>.send_json/2.f                ├▶ None
+[mupf]  │╰──────────────────┼─▶: Command<fKLYHF><None-3A507B8>.()/2.f                   ├▶ <Command cmd 2 *features* 3A507B8>
+[mupf]  │         ╭─────────┼◀─: client/base.py/create_send_task/1.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,2,"*features*",{"args":[],"kwargs":{}}]'
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/1.f                    ├▶ None
+[mupf]  │╭──────────────────┼◀─: Command<fKLYHF><2-3A507B8>.result.:/1.s               ◀┤  
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><2-3A507B8>.wait/2.s                   ◀┤  
+[mupf]  │││       ╭─────────┼◀─: client/base.py/send_task_body/1.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,2,"*features*",{"args":[],"kwargs":{}}]'
+[mupf]  │││       ╰─────────┼─▶: client/base.py/send_task_body/1.f                      ├▶ 
+[mupf]  │││       ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/1.s             ◀┤  '[1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]'
+[mupf]  │││       ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/1.f              ├▶ [1, 2, 0, {'result': {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}}]
+[mupf]  │││                 ╰─▶: crrcan/1.f                         ├▶ [1,2,0,{"result":{"_user_feature":true,"core_features":true,"strict_feature_list":false,"verbose_macros":false,"friendly_obj_names":false,"safe_dunders":true,"garbage_collection":true,"test_feature":true,"another_test_feat":false}}]
+[mupf]  │││       ╭◀─: Command<fKLYHF><2-3A507B8>.result.=/2.s                         ◀┤  {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}
+[mupf]  │││       ╰─▶: Command<fKLYHF><2-3A507B8>.result.=/2.f                          ├▶ None
+[mupf]  ││╰─▶: Command<fKLYHF><2-3A507B8>.wait/2.f                  ├▶ <Command cmd 2 *features* 3A507B8>
+[mupf]  │╰─▶: Command<fKLYHF><2-3A507B8>.result.:/1.f               ├▶ {'_user_feature': True, 'core_features': True, 'strict_feature_list': False, 'verbose_macros': False, 'friendly_obj_names': False, 'safe_dunders': True, 'garbage_collection': True, 'test_feature': True, 'another_test_feat': False}
+[mupf]  │         ·──: app.py/websocket_event/7                     │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │╭◀─: Command<fKLYHF><?-3A62160>.init/3.s                  ◀┤  '*getcmds*'
+[mupf]  │╰─▶: Command<fKLYHF><?-3A62160>.init/3.f                   ├▶ None
+[mupf]  │╭◀─: Command<fKLYHF><None-3A62160>.()/3.s                 ◀┤  
+[mupf]  ││╭◀─: Command<fKLYHF><3-3A62160>.jsonify/3.s              ◀┤  (), {}
+[mupf]  ││╰─▶: Command<fKLYHF><3-3A62160>.jsonify/3.f               ├▶ [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}]
+[mupf]  ││╭◀─: Client<WebBrowser fKLYHF>.send_json/3.s             ◀┤  [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}]
+[mupf]  │││                 ╭◀─: crrcan/2.s                        ◀┤  [0, 3, '*getcmds*', {'args': (), 'kwargs': {}}]
+[mupf]  │││       ╭─────────┼◀─: client/base.py/create_send_task/2.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]'
+[mupf]  ││╰───────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/3.f                ├▶ None
+[mupf]  ││        ╰─────────┼─▶: client/base.py/create_send_task/2.f                    ├▶ None
+[mupf]  │╰──────────────────┼─▶: Command<fKLYHF><None-3A62160>.()/3.f                   ├▶ <Command cmd 3 *getcmds* 3A62160>
+[mupf]  │╭──────────────────┼◀─: Command<fKLYHF><3-3A62160>.result.:/2.s               ◀┤  
+[mupf]  ││        ╭─────────┼◀─: client/base.py/send_task_body/2.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,3,"*getcmds*",{"args":[],"kwargs":{}}]'
+[mupf]  ││╭───────┼─────────┼◀─: Command<fKLYHF><3-3A62160>.wait/3.s                   ◀┤  
+[mupf]  │││       ╰─────────┼─▶: client/base.py/send_task_body/2.f                      ├▶ 
+[mupf]  │││       ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/2.s             ◀┤  '[1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]'
+[mupf]  │││       ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/2.f              ├▶ [1, 3, 0, {'result': ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']}]
+[mupf]  │││                 ╰─▶: crrcan/2.f                         ├▶ [1,3,0,{"result":["*first*","*last*","*install*","*features*","*get*","*set*","*call*","*gc*","*getcmds*"]}]
+[mupf]  │││       ╭◀─: Command<fKLYHF><3-3A62160>.result.=/3.s                         ◀┤  ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']
+[mupf]  │││       ╰─▶: Command<fKLYHF><3-3A62160>.result.=/3.f                          ├▶ None
+[mupf]  ││╰─▶: Command<fKLYHF><3-3A62160>.wait/3.f                  ├▶ <Command cmd 3 *getcmds* 3A62160>
+[mupf]  │╰─▶: Command<fKLYHF><3-3A62160>.result.:/2.f               ├▶ ['*first*', '*last*', '*install*', '*features*', '*get*', '*set*', '*call*', '*gc*', '*getcmds*']
+[mupf]  │         ·──: app.py/websocket_event/8                     │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.summoned/0.s               ◀┤  
+[mupf]  │╰─▶: Client<WebBrowser fKLYHF>.summoned/0.f                ├▶ None
+[mupf]  ╰─▶: App<3A43E10>.summon_client/0.f                         ├▶ <WebBrowser fKLYHF>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A50518>.init/4.s                   ◀┤  '*get*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A50518>.init/4.f                    ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A50518>.()/4.s                  ◀┤  ["~@",0], 'document'
+[mupf]  │╭◀─: Command<fKLYHF><4-3A50518>.jsonify/4.s               ◀┤  (["~@",0], 'document'), {}
+[mupf]  │╰─▶: Command<fKLYHF><4-3A50518>.jsonify/4.f                ├▶ [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/4.s              ◀┤  [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
+[mupf]  ││                  ╭◀─: crrcan/3.s                        ◀┤  [0, 4, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/3.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/4.f                ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/3.f                    ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A50518>.()/4.f                   ├▶ <Command cmd 4 *get* 3A50518>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><4-3A50518>.result.:/3.s               ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/3.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,4,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><4-3A50518>.wait/4.s                   ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/3.f                      ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/3.s             ◀┤  '[1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/0.s                              ◀┤  1, None
+[mupf]  ││        ││╭───────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/1.s                              ◀┤  None
+[mupf]  ││        ││╰───────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/1.f                               ├▶ None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/0.f                               ├▶ <RemoteObj 1 of fKLYHF at 3A62400>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/3.f              ├▶ [1, 4, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A62400>}]
+[mupf]  ││                  ╰─▶: crrcan/3.f                         ├▶ [1,4,0,["~",{"result":["~@",1,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><4-3A50518>.result.=/4.s                         ◀┤  <RemoteObj 1 of fKLYHF at 3A62400>
+[mupf]  ││        ╰─▶: Command<fKLYHF><4-3A50518>.result.=/4.f                          ├▶ None
+[mupf]  ││        ·──: app.py/websocket_event/9                     │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │╰─▶: Command<fKLYHF><4-3A50518>.wait/4.f                   ├▶ <Command cmd 4 *get* 3A50518>
+[mupf]  ╰─▶: Command<fKLYHF><4-3A50518>.result.:/3.f                ├▶ <RemoteObj 1 of fKLYHF at 3A62400>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A50518>.init/5.s                   ◀┤  '*get*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A50518>.init/5.f                    ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A50518>.()/5.s                  ◀┤  ["~@",1], 'createElement'
+[mupf]  │╭◀─: Command<fKLYHF><5-3A50518>.jsonify/5.s               ◀┤  (["~@",1], 'createElement'), {}
+[mupf]  │╰─▶: Command<fKLYHF><5-3A50518>.jsonify/5.f                ├▶ [0, 5, '*get*', {'args': (["~@",1], 'createElement'), 'kwargs': {}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/5.s              ◀┤  [0, 5, '*get*', {'args': (["~@",1], 'createElement'), 'kwargs': {}}]
+[mupf]  ││                  ╭◀─: crrcan/4.s                        ◀┤  [0, 5, '*get*', {'args': (["~@",1], 'createElement'), 'kwargs': {}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/4.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,5,"*get*",["~",{"args":[["~@",1],"createElement"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/5.f                ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/4.f                    ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A50518>.()/5.f                   ├▶ <Command cmd 5 *get* 3A50518>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><5-3A50518>.result.:/4.s               ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/4.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,5,"*get*",["~",{"args":[["~@",1],"createElement"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><5-3A50518>.wait/5.s                   ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/4.f                      ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/4.s             ◀┤  '[1,5,0,["~",{"result":["~@",2,1]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/2.s                              ◀┤  2, 1
+[mupf]  ││        ││╭───────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/3.s                              ◀┤  1
+[mupf]  ││        ││╰───────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/3.f                               ├▶ <RemoteObj 1 of fKLYHF at 3A62400>
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/2.f                               ├▶ <RemoteObj 2 of fKLYHF at 3A62198>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/4.f              ├▶ [1, 5, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A62198>}]
+[mupf]  ││                  ╰─▶: crrcan/4.f                         ├▶ [1,5,0,["~",{"result":["~@",2,1]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><5-3A50518>.result.=/5.s                         ◀┤  <RemoteObj 2 of fKLYHF at 3A62198>
+[mupf]  ││        ╰─▶: Command<fKLYHF><5-3A50518>.result.=/5.f                          ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><5-3A50518>.wait/5.f                   ├▶ <Command cmd 5 *get* 3A50518>
+[mupf]  ╰─▶: Command<fKLYHF><5-3A50518>.result.:/4.f                ├▶ <RemoteObj 2 of fKLYHF at 3A62198>
+[mupf]            ·──: app.py/websocket_event/10                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A50518>.init/6.s                   ◀┤  '*get*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A50518>.init/6.f                    ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A50518>.()/6.s                  ◀┤  ["~@",0], 'document'
+[mupf]  │╭◀─: Command<fKLYHF><6-3A50518>.jsonify/6.s               ◀┤  (["~@",0], 'document'), {}
+[mupf]  │╰─▶: Command<fKLYHF><6-3A50518>.jsonify/6.f                ├▶ [0, 6, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/6.s              ◀┤  [0, 6, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
+[mupf]  ││                  ╭◀─: crrcan/5.s                        ◀┤  [0, 6, '*get*', {'args': (["~@",0], 'document'), 'kwargs': {}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/5.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,6,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/6.f                ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/5.f                    ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A50518>.()/6.f                   ├▶ <Command cmd 6 *get* 3A50518>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><6-3A50518>.result.:/5.s               ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/5.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,6,"*get*",["~",{"args":[["~@",0],"document"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><6-3A50518>.wait/6.s                   ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/5.f                      ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/5.s             ◀┤  '[1,6,0,["~",{"result":["~@",1,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/4.s                              ◀┤  1, None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/4.f                               ├▶ <RemoteObj 1 of fKLYHF at 3A62400>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/5.f              ├▶ [1, 6, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A62400>}]
+[mupf]  ││                  ╰─▶: crrcan/5.f                         ├▶ [1,6,0,["~",{"result":["~@",1,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><6-3A50518>.result.=/6.s                         ◀┤  <RemoteObj 1 of fKLYHF at 3A62400>
+[mupf]  ││        ╰─▶: Command<fKLYHF><6-3A50518>.result.=/6.f                          ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><6-3A50518>.wait/6.f                   ├▶ <Command cmd 6 *get* 3A50518>
+[mupf]  ╰─▶: Command<fKLYHF><6-3A50518>.result.:/5.f                ├▶ <RemoteObj 1 of fKLYHF at 3A62400>
+[mupf]            ·──: app.py/websocket_event/11                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A50518>.init/7.s                   ◀┤  '*get*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A50518>.init/7.f                    ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A50518>.()/7.s                  ◀┤  ["~@",1], 'body'
+[mupf]  │╭◀─: Command<fKLYHF><7-3A50518>.jsonify/7.s               ◀┤  (["~@",1], 'body'), {}
+[mupf]  │╰─▶: Command<fKLYHF><7-3A50518>.jsonify/7.f                ├▶ [0, 7, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/7.s              ◀┤  [0, 7, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}]
+[mupf]  ││                  ╭◀─: crrcan/6.s                        ◀┤  [0, 7, '*get*', {'args': (["~@",1], 'body'), 'kwargs': {}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/6.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,7,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/7.f                ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/6.f                    ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A50518>.()/7.f                   ├▶ <Command cmd 7 *get* 3A50518>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><7-3A50518>.result.:/6.s               ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/6.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,7,"*get*",["~",{"args":[["~@",1],"body"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><7-3A50518>.wait/7.s                   ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/6.f                      ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/6.s             ◀┤  '[1,7,0,["~",{"result":["~@",3,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/5.s                              ◀┤  3, None
+[mupf]  ││        ││╭───────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/6.s                              ◀┤  None
+[mupf]  ││        ││╰───────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/6.f                               ├▶ None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/5.f                               ├▶ <RemoteObj 3 of fKLYHF at 3A78470>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/6.f              ├▶ [1, 7, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A78470>}]
+[mupf]  ││                  ╰─▶: crrcan/6.f                         ├▶ [1,7,0,["~",{"result":["~@",3,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><7-3A50518>.result.=/7.s                         ◀┤  <RemoteObj 3 of fKLYHF at 3A78470>
+[mupf]  ││        ╰─▶: Command<fKLYHF><7-3A50518>.result.=/7.f                          ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><7-3A50518>.wait/7.f                   ├▶ <Command cmd 7 *get* 3A50518>
+[mupf]  ╰─▶: Command<fKLYHF><7-3A50518>.result.:/6.f                ├▶ <RemoteObj 3 of fKLYHF at 3A78470>
+[mupf]            ·──: app.py/websocket_event/12                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A50518>.init/8.s                   ◀┤  '*get*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A50518>.init/8.f                    ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A50518>.()/8.s                  ◀┤  ["~@",3], 'appendChild'
+[mupf]  │╭◀─: Command<fKLYHF><8-3A50518>.jsonify/8.s               ◀┤  (["~@",3], 'appendChild'), {}
+[mupf]  │╰─▶: Command<fKLYHF><8-3A50518>.jsonify/8.f                ├▶ [0, 8, '*get*', {'args': (["~@",3], 'appendChild'), 'kwargs': {}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/8.s              ◀┤  [0, 8, '*get*', {'args': (["~@",3], 'appendChild'), 'kwargs': {}}]
+[mupf]  ││                  ╭◀─: crrcan/7.s                        ◀┤  [0, 8, '*get*', {'args': (["~@",3], 'appendChild'), 'kwargs': {}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/7.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,8,"*get*",["~",{"args":[["~@",3],"appendChild"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/8.f                ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/7.f                    ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A50518>.()/8.f                   ├▶ <Command cmd 8 *get* 3A50518>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><8-3A50518>.result.:/7.s               ◀┤  
+[mupf]  │╭──────────────────┼◀─: Command<fKLYHF><8-3A50518>.wait/8.s                   ◀┤  
+[mupf]  ││        ╭─────────┼◀─: client/base.py/send_task_body/7.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,8,"*get*",["~",{"args":[["~@",3],"appendChild"],"kwargs":{}},{"c":1}]]'
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/7.f                      ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/7.s             ◀┤  '[1,8,0,["~",{"result":["~@",4,3]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/7.s                              ◀┤  4, 3
+[mupf]  ││        ││╭───────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/8.s                              ◀┤  3
+[mupf]  ││        ││╰───────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/8.f                               ├▶ <RemoteObj 3 of fKLYHF at 3A78470>
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/7.f                               ├▶ <RemoteObj 4 of fKLYHF at 3A784E0>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/7.f              ├▶ [1, 8, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A784E0>}]
+[mupf]  ││                  ╰─▶: crrcan/7.f                         ├▶ [1,8,0,["~",{"result":["~@",4,3]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><8-3A50518>.result.=/8.s                         ◀┤  <RemoteObj 4 of fKLYHF at 3A784E0>
+[mupf]  ││        ╰─▶: Command<fKLYHF><8-3A50518>.result.=/8.f                          ├▶ None
+[mupf]  ││        ·──: app.py/websocket_event/13                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │╰─▶: Command<fKLYHF><8-3A50518>.wait/8.f                   ├▶ <Command cmd 8 *get* 3A50518>
+[mupf]  ╰─▶: Command<fKLYHF><8-3A50518>.result.:/7.f                ├▶ <RemoteObj 4 of fKLYHF at 3A784E0>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A43E48>.init/9.s                   ◀┤  '*call*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A43E48>.init/9.f                    ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A43E48>.()/9.s                  ◀┤  'button', id=2, this_=["~@",1]
+[mupf]  │╭◀─: Command<fKLYHF><9-3A43E48>.jsonify/9.s               ◀┤  ('button',), {'id': 2, 'this_': ["~@",1]}
+[mupf]  │╰─▶: Command<fKLYHF><9-3A43E48>.jsonify/9.f                ├▶ [0, 9, '*call*', {'args': ('button',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/9.s              ◀┤  [0, 9, '*call*', {'args': ('button',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││                  ╭◀─: crrcan/8.s                        ◀┤  [0, 9, '*call*', {'args': ('button',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/8.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,9,"*call*",["~",{"args":["button"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/9.f                ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/8.f                    ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A43E48>.()/9.f                   ├▶ <Command cmd 9 *call* 3A43E48>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><9-3A43E48>.result.:/8.s               ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/8.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,9,"*call*",["~",{"args":["button"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><9-3A43E48>.wait/9.s                   ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/8.f                      ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/8.s             ◀┤  '[1,9,0,["~",{"result":["~@",5,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/9.s                              ◀┤  5, None
+[mupf]  ││        ││╭───────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/10.s                             ◀┤  None
+[mupf]  ││        ││╰───────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/10.f                              ├▶ None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/9.f                               ├▶ <RemoteObj 5 of fKLYHF at 3A78668>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/8.f              ├▶ [1, 9, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A78668>}]
+[mupf]  ││                  ╰─▶: crrcan/8.f                         ├▶ [1,9,0,["~",{"result":["~@",5,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><9-3A43E48>.result.=/9.s                         ◀┤  <RemoteObj 5 of fKLYHF at 3A78668>
+[mupf]  ││        ╰─▶: Command<fKLYHF><9-3A43E48>.result.=/9.f                          ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><9-3A43E48>.wait/9.f                   ├▶ <Command cmd 9 *call* 3A43E48>
+[mupf]  ╰─▶: Command<fKLYHF><9-3A43E48>.result.:/8.f                ├▶ <RemoteObj 5 of fKLYHF at 3A78668>
+[mupf]            ·──: app.py/websocket_event/14                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A43E48>.init/10.s                  ◀┤  '*call*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A43E48>.init/10.f                   ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A43E48>.()/10.s                 ◀┤  'input', id=2, this_=["~@",1]
+[mupf]  │╭◀─: Command<fKLYHF><10-3A43E48>.jsonify/10.s             ◀┤  ('input',), {'id': 2, 'this_': ["~@",1]}
+[mupf]  │╰─▶: Command<fKLYHF><10-3A43E48>.jsonify/10.f              ├▶ [0, 10, '*call*', {'args': ('input',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/10.s             ◀┤  [0, 10, '*call*', {'args': ('input',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││                  ╭◀─: crrcan/9.s                        ◀┤  [0, 10, '*call*', {'args': ('input',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/9.s                   ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,10,"*call*",["~",{"args":["input"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/10.f               ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/9.f                    ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A43E48>.()/10.f                  ├▶ <Command cmd 10 *call* 3A43E48>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><10-3A43E48>.result.:/9.s              ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/9.s                     ◀┤  <WebSocket Protocol 3A62710>, '[0,10,"*call*",["~",{"args":["input"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><10-3A43E48>.wait/10.s                 ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/9.f                      ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/9.s             ◀┤  '[1,10,0,["~",{"result":["~@",6,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/11.s                             ◀┤  6, None
+[mupf]  ││        ││╭───────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/12.s                             ◀┤  None
+[mupf]  ││        ││╰───────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/12.f                              ├▶ None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/11.f                              ├▶ <RemoteObj 6 of fKLYHF at 3A78588>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/9.f              ├▶ [1, 10, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A78588>}]
+[mupf]  ││                  ╰─▶: crrcan/9.f                         ├▶ [1,10,0,["~",{"result":["~@",6,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><10-3A43E48>.result.=/10.s                       ◀┤  <RemoteObj 6 of fKLYHF at 3A78588>
+[mupf]  ││        ╰─▶: Command<fKLYHF><10-3A43E48>.result.=/10.f                        ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><10-3A43E48>.wait/10.f                 ├▶ <Command cmd 10 *call* 3A43E48>
+[mupf]  ╰─▶: Command<fKLYHF><10-3A43E48>.result.:/9.f               ├▶ <RemoteObj 6 of fKLYHF at 3A78588>
+[mupf]            ·──: app.py/websocket_event/15                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A43E48>.init/11.s                  ◀┤  '*call*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A43E48>.init/11.f                   ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A43E48>.()/11.s                 ◀┤  ["~@",6], id=4, this_=["~@",3]
+[mupf]  │╭◀─: Command<fKLYHF><11-3A43E48>.jsonify/11.s             ◀┤  (["~@",6],), {'id': 4, 'this_': ["~@",3]}
+[mupf]  │╰─▶: Command<fKLYHF><11-3A43E48>.jsonify/11.f              ├▶ [0, 11, '*call*', {'args': (["~@",6],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/11.s             ◀┤  [0, 11, '*call*', {'args': (["~@",6],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││                  ╭◀─: crrcan/10.s                       ◀┤  [0, 11, '*call*', {'args': (["~@",6],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/10.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,11,"*call*",["~",{"args":[["~@",6]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/11.f               ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/10.f                   ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A43E48>.()/11.f                  ├▶ <Command cmd 11 *call* 3A43E48>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><11-3A43E48>.result.:/10.s             ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/10.s                    ◀┤  <WebSocket Protocol 3A62710>, '[0,11,"*call*",["~",{"args":[["~@",6]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><11-3A43E48>.wait/11.s                 ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/10.f                     ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/10.s            ◀┤  '[1,11,0,["~",{"result":["~@",6,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/13.s                             ◀┤  6, None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/13.f                              ├▶ <RemoteObj 6 of fKLYHF at 3A78588>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/10.f             ├▶ [1, 11, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A78588>}]
+[mupf]  ││                  ╰─▶: crrcan/10.f                        ├▶ [1,11,0,["~",{"result":["~@",6,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><11-3A43E48>.result.=/11.s                       ◀┤  <RemoteObj 6 of fKLYHF at 3A78588>
+[mupf]  ││        ╰─▶: Command<fKLYHF><11-3A43E48>.result.=/11.f                        ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><11-3A43E48>.wait/11.f                 ├▶ <Command cmd 11 *call* 3A43E48>
+[mupf]  ╰─▶: Command<fKLYHF><11-3A43E48>.result.:/10.f              ├▶ <RemoteObj 6 of fKLYHF at 3A78588>
+[mupf]            ·──: app.py/websocket_event/16                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A43E48>.init/12.s                  ◀┤  '*call*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A43E48>.init/12.f                   ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A43E48>.()/12.s                 ◀┤  ["~@",5], id=4, this_=["~@",3]
+[mupf]  │╭◀─: Command<fKLYHF><12-3A43E48>.jsonify/12.s             ◀┤  (["~@",5],), {'id': 4, 'this_': ["~@",3]}
+[mupf]  │╰─▶: Command<fKLYHF><12-3A43E48>.jsonify/12.f              ├▶ [0, 12, '*call*', {'args': (["~@",5],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/12.s             ◀┤  [0, 12, '*call*', {'args': (["~@",5],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││                  ╭◀─: crrcan/11.s                       ◀┤  [0, 12, '*call*', {'args': (["~@",5],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/11.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,12,"*call*",["~",{"args":[["~@",5]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/12.f               ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/11.f                   ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A43E48>.()/12.f                  ├▶ <Command cmd 12 *call* 3A43E48>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><12-3A43E48>.result.:/11.s             ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/11.s                    ◀┤  <WebSocket Protocol 3A62710>, '[0,12,"*call*",["~",{"args":[["~@",5]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><12-3A43E48>.wait/12.s                 ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/11.f                     ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/11.s            ◀┤  '[1,12,0,["~",{"result":["~@",5,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/14.s                             ◀┤  5, None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/14.f                              ├▶ <RemoteObj 5 of fKLYHF at 3A78668>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/11.f             ├▶ [1, 12, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A78668>}]
+[mupf]  ││                  ╰─▶: crrcan/11.f                        ├▶ [1,12,0,["~",{"result":["~@",5,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><12-3A43E48>.result.=/12.s                       ◀┤  <RemoteObj 5 of fKLYHF at 3A78668>
+[mupf]  ││        ╰─▶: Command<fKLYHF><12-3A43E48>.result.=/12.f                        ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><12-3A43E48>.wait/12.f                 ├▶ <Command cmd 12 *call* 3A43E48>
+[mupf]  ╰─▶: Command<fKLYHF><12-3A43E48>.result.:/11.f              ├▶ <RemoteObj 5 of fKLYHF at 3A78668>
+[mupf]            ·──: app.py/websocket_event/17                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A43E48>.init/13.s                  ◀┤  '*call*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A43E48>.init/13.f                   ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A43E48>.()/13.s                 ◀┤  'br', id=2, this_=["~@",1]
+[mupf]  │╭◀─: Command<fKLYHF><13-3A43E48>.jsonify/13.s             ◀┤  ('br',), {'id': 2, 'this_': ["~@",1]}
+[mupf]  │╰─▶: Command<fKLYHF><13-3A43E48>.jsonify/13.f              ├▶ [0, 13, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/13.s             ◀┤  [0, 13, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││                  ╭◀─: crrcan/12.s                       ◀┤  [0, 13, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/12.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,13,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/13.f               ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/12.f                   ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A43E48>.()/13.f                  ├▶ <Command cmd 13 *call* 3A43E48>
+[mupf]            ╭─────────┼◀─: client/base.py/send_task_body/12.s                    ◀┤  <WebSocket Protocol 3A62710>, '[0,13,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  ╭─────────┼─────────┼◀─: Command<fKLYHF><13-3A43E48>.result.:/12.s             ◀┤  
+[mupf]  │         ╰─────────┼─▶: client/base.py/send_task_body/12.f                     ├▶ 
+[mupf]  │╭──────────────────┼◀─: Command<fKLYHF><13-3A43E48>.wait/13.s                 ◀┤  
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/12.s            ◀┤  '[1,13,0,["~",{"result":["~@",7,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/15.s                             ◀┤  7, None
+[mupf]  ││        ││╭───────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/16.s                             ◀┤  None
+[mupf]  ││        ││╰───────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/16.f                              ├▶ None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/15.f                              ├▶ <RemoteObj 7 of fKLYHF at 3A788D0>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/12.f             ├▶ [1, 13, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A788D0>}]
+[mupf]  ││                  ╰─▶: crrcan/12.f                        ├▶ [1,13,0,["~",{"result":["~@",7,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><13-3A43E48>.result.=/13.s                       ◀┤  <RemoteObj 7 of fKLYHF at 3A788D0>
+[mupf]  ││        ╰─▶: Command<fKLYHF><13-3A43E48>.result.=/13.f                        ├▶ None
+[mupf]  │╰─▶: Command<fKLYHF><13-3A43E48>.wait/13.f                 ├▶ <Command cmd 13 *call* 3A43E48>
+[mupf]  ╰─▶: Command<fKLYHF><13-3A43E48>.result.:/12.f              ├▶ <RemoteObj 7 of fKLYHF at 3A788D0>
+[mupf]            ·──: app.py/websocket_event/18                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A43E48>.init/14.s                  ◀┤  '*call*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A43E48>.init/14.f                   ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A43E48>.()/14.s                 ◀┤  ["~@",7], id=4, this_=["~@",3]
+[mupf]  │╭◀─: Command<fKLYHF><14-3A43E48>.jsonify/14.s             ◀┤  (["~@",7],), {'id': 4, 'this_': ["~@",3]}
+[mupf]  │╰─▶: Command<fKLYHF><14-3A43E48>.jsonify/14.f              ├▶ [0, 14, '*call*', {'args': (["~@",7],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/14.s             ◀┤  [0, 14, '*call*', {'args': (["~@",7],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││                  ╭◀─: crrcan/13.s                       ◀┤  [0, 14, '*call*', {'args': (["~@",7],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/13.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,14,"*call*",["~",{"args":[["~@",7]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/14.f               ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/13.f                   ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A43E48>.()/14.f                  ├▶ <Command cmd 14 *call* 3A43E48>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><14-3A43E48>.result.:/13.s             ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/13.s                    ◀┤  <WebSocket Protocol 3A62710>, '[0,14,"*call*",["~",{"args":[["~@",7]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │╭────────┼─────────┼◀─: Command<fKLYHF><14-3A43E48>.wait/14.s                 ◀┤  
+[mupf]  ││        ╰─────────┼─▶: client/base.py/send_task_body/13.f                     ├▶ 
+[mupf]  ││        ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/13.s            ◀┤  '[1,14,0,["~",{"result":["~@",7,null]},{"c":1}]]'
+[mupf]  ││        │╭────────┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/17.s                             ◀┤  7, None
+[mupf]  ││        │╰────────┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/17.f                              ├▶ <RemoteObj 7 of fKLYHF at 3A788D0>
+[mupf]  ││        ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/13.f             ├▶ [1, 14, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A788D0>}]
+[mupf]  ││                  ╰─▶: crrcan/13.f                        ├▶ [1,14,0,["~",{"result":["~@",7,null]},{"c":1}]]
+[mupf]  ││        ╭◀─: Command<fKLYHF><14-3A43E48>.result.=/14.s                       ◀┤  <RemoteObj 7 of fKLYHF at 3A788D0>
+[mupf]  ││        ╰─▶: Command<fKLYHF><14-3A43E48>.result.=/14.f                        ├▶ None
+[mupf]  ││        ·──: app.py/websocket_event/19                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │╰─▶: Command<fKLYHF><14-3A43E48>.wait/14.f                 ├▶ <Command cmd 14 *call* 3A43E48>
+[mupf]  ╰─▶: Command<fKLYHF><14-3A43E48>.result.:/13.f              ├▶ <RemoteObj 7 of fKLYHF at 3A788D0>
+[mupf]  ╭◀─: Command<fKLYHF><?-3A50518>.init/15.s                  ◀┤  '*set*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A50518>.init/15.f                   ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><None-3A50518>.()/15.s                 ◀┤  ["~@",5], 'textContent', 'SHA256'
+[mupf]  │╭◀─: Command<fKLYHF><15-3A50518>.jsonify/15.s             ◀┤  (["~@",5], 'textContent', 'SHA256'), {}
+[mupf]  │╰─▶: Command<fKLYHF><15-3A50518>.jsonify/15.f              ├▶ [0, 15, '*set*', {'args': (["~@",5], 'textContent', 'SHA256'), 'kwargs': {}}]
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/15.s             ◀┤  [0, 15, '*set*', {'args': (["~@",5], 'textContent', 'SHA256'), 'kwargs': {}}]
+[mupf]  ││                  ╭◀─: crrcan/14.s                       ◀┤  [0, 15, '*set*', {'args': (["~@",5], 'textContent', 'SHA256'), 'kwargs': {}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/14.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,15,"*set*",["~",{"args":[["~@",5],"textContent","SHA256"],"kwargs":{}},{"c":1}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/15.f               ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/14.f                   ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A50518>.()/15.f                  ├▶ <Command cmd 15 *set* 3A50518>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><15-3A50518>.wait/15.s                 ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/14.s                    ◀┤  <WebSocket Protocol 3A62710>, '[0,15,"*set*",["~",{"args":[["~@",5],"textContent","SHA256"],"kwargs":{}},{"c":1}]]'
+[mupf]  │         ╰─────────┼─▶: client/base.py/send_task_body/14.f                     ├▶ 
+[mupf]  │         ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/14.s            ◀┤  '[1,15,0,{"result":null}]'
+[mupf]  │         ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/14.f             ├▶ [1, 15, 0, {'result': None}]
+[mupf]  │                   ╰─▶: crrcan/14.f                        ├▶ [1,15,0,{"result":null}]
+[mupf]  │         ╭◀─: Command<fKLYHF><?-3A62208>.init/16.s                            ◀┤  '*gc*'
+[mupf]  │         ╰─▶: Command<fKLYHF><?-3A62208>.init/16.f                             ├▶ None
+[mupf]  │         ╭◀─: Command<fKLYHF><None-3A62208>.run/0.s                           ◀┤  7
+[mupf]  │         │╭◀─: Command<fKLYHF><None-3A62208>.()/16.s                          ◀┤  7
+[mupf]  │         ││╭◀─: Command<fKLYHF><16-3A62208>.jsonify/16.s                      ◀┤  (7,), {}
+[mupf]  │         ││╰─▶: Command<fKLYHF><16-3A62208>.jsonify/16.f                       ├▶ [2, 16, '*gc*', {'args': (7,), 'kwargs': {}}]
+[mupf]  │         ││╭◀─: Client<WebBrowser fKLYHF>.send_json/16.s                      ◀┤  [2, 16, '*gc*', {'args': (7,), 'kwargs': {}}]
+[mupf]  │         │││       ·◀─: crrcan/15                         ◀┤  [2, 16, '*gc*', {'args': (7,), 'kwargs': {}}]
+[mupf]  │         ││╰─▶: Client<WebBrowser fKLYHF>.send_json/16.f                       ├▶ None
+[mupf]  │         │╰─▶: Command<fKLYHF><None-3A62208>.()/16.f                           ├▶ <Command run 16 *gc* 3A62208>
+[mupf]  │         ╰─▶: Command<fKLYHF><None-3A62208>.run/0.f                            ├▶ <Command cmd 16 *gc* 3A62208>
+[mupf]  │         ╭◀─: Command<fKLYHF><16-3A62208>.result.:/14.s                       ◀┤  
+[mupf]  │         │╭◀─: Command<fKLYHF><16-3A62208>.wait/16.s                          ◀┤  
+[mupf]  │         │╰─▶: Command<fKLYHF><16-3A62208>.wait/16.f                           ├▶ <Command cmd 16 *gc* 3A62208>
+[mupf]  │         ╰─▶: Command<fKLYHF><16-3A62208>.result.:/14.f                        ├▶ None
+[mupf]  │         ╭◀─: Command<fKLYHF><15-3A50518>.result.=/15.s                       ◀┤  None
+[mupf]  │         ╰─▶: Command<fKLYHF><15-3A50518>.result.=/15.f                        ├▶ None
+[mupf]  ╰─▶: Command<fKLYHF><15-3A50518>.wait/15.f                  ├▶ <Command cmd 15 *set* 3A50518>
+[mupf]            ·──: app.py/websocket_event/20                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ╭◀─: Client<WebBrowser fKLYHF>.wrap_callback/0.s           ◀┤  <function button_click at 0x0000000001DB9AE8>
+[mupf]  ╰─▶: Client<WebBrowser fKLYHF>.wrap_callback/0.f            ├▶ ["~$",null,0]
+[mupf]            ╭◀─: client/base.py/create_send_task/15.s                            ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[2,16,"*gc*",{"args":[7],"kwargs":{}}]'
+[mupf]            ╰─▶: client/base.py/create_send_task/15.f                             ├▶ None
+[mupf]  ╭◀─: Command<fKLYHF><?-3A50518>.init/17.s                  ◀┤  '*set*'
+[mupf]  ╰─▶: Command<fKLYHF><?-3A50518>.init/17.f                   ├▶ None
+[mupf]            ╭◀─: client/base.py/send_task_body/15.s                              ◀┤  <WebSocket Protocol 3A62710>, '[2,16,"*gc*",{"args":[7],"kwargs":{}}]'
+[mupf]  ╭─────────┼◀─: Command<fKLYHF><None-3A50518>.()/17.s                           ◀┤  ["~@",5], 'onclick', ["~$",null,0]
+[mupf]  │╭────────┼◀─: Command<fKLYHF><17-3A50518>.jsonify/17.s                        ◀┤  (["~@",5], 'onclick', ["~$",null,0]), {}
+[mupf]  │╰────────┼─▶: Command<fKLYHF><17-3A50518>.jsonify/17.f                         ├▶ [0, 17, '*set*', {'args': (["~@",5], 'onclick', ["~$",null,0]), 'kwargs': {}}]
+[mupf]  │         ╰─▶: client/base.py/send_task_body/15.f                               ├▶ 
+[mupf]  │╭◀─: Client<WebBrowser fKLYHF>.send_json/17.s             ◀┤  [0, 17, '*set*', {'args': (["~@",5], 'onclick', ["~$",null,0]), 'kwargs': {}}]
+[mupf]  ││                  ╭◀─: crrcan/16.s                       ◀┤  [0, 17, '*set*', {'args': (["~@",5], 'onclick', ["~$",null,0]), 'kwargs': {}}]
+[mupf]  ││        ╭─────────┼◀─: client/base.py/create_send_task/16.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,17,"*set*",["~",{"args":[["~@",5],"onclick",["~$",null,0]],"kwargs":{}},{"c":2}]]'
+[mupf]  │╰────────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/17.f               ├▶ None
+[mupf]  │         ╰─────────┼─▶: client/base.py/create_send_task/16.f                   ├▶ None
+[mupf]  ╰───────────────────┼─▶: Command<fKLYHF><None-3A50518>.()/17.f                  ├▶ <Command cmd 17 *set* 3A50518>
+[mupf]  ╭───────────────────┼◀─: Command<fKLYHF><17-3A50518>.wait/17.s                 ◀┤  
+[mupf]  │         ╭─────────┼◀─: client/base.py/send_task_body/16.s                    ◀┤  <WebSocket Protocol 3A62710>, '[0,17,"*set*",["~",{"args":[["~@",5],"onclick",["~$",null,0]],"kwargs":{}},{"c":2}]]'
+[mupf]  │         ╰─────────┼─▶: client/base.py/send_task_body/16.f                     ├▶ 
+[mupf]  │         ╭─────────┼◀─: Client<WebBrowser fKLYHF>.decode_json/15.s            ◀┤  '[1,17,0,{"result":null}]'
+[mupf]  │         ╰─────────┼─▶: Client<WebBrowser fKLYHF>.decode_json/15.f             ├▶ [1, 17, 0, {'result': None}]
+[mupf]  │                   ╰─▶: crrcan/16.f                        ├▶ [1,17,0,{"result":null}]
+[mupf]  │         ╭◀─: Command<fKLYHF><17-3A50518>.result.=/16.s                       ◀┤  None
+[mupf]  │         ╰─▶: Command<fKLYHF><17-3A50518>.result.=/16.f                        ├▶ None
+[mupf]  ╰─▶: Command<fKLYHF><17-3A50518>.wait/17.f                  ├▶ <Command cmd 17 *set* 3A50518>
+[mupf]            ·──: app.py/websocket_event/21                    │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ·──: Client<WebBrowser fKLYHF>.bool/0                       │  True
+[mupf]  ╭◀─: Client<WebBrowser fKLYHF>.run_one_callback_blocking/0.s                   ◀┤  
+[mupf]  │         ╭◀─: Client<WebBrowser fKLYHF>.decode_json/16.s                      ◀┤  '[5,0,0,["~",{"args":[["~@",8,null]]},{"c":1}]]'
+[mupf]  │         │╭◀─: Client<WebBrowser fKLYHF>.get_remote_obj/18.s                  ◀┤  8, None
+[mupf]  │         ││╭◀─: Client<WebBrowser fKLYHF>.get_remote_obj/19.s                 ◀┤  None
+[mupf]  │         ││╰─▶: Client<WebBrowser fKLYHF>.get_remote_obj/19.f                  ├▶ None
+[mupf]  │         │╰─▶: Client<WebBrowser fKLYHF>.get_remote_obj/18.f                   ├▶ <RemoteObj 8 of fKLYHF at 3A788D0>
+[mupf]  │         ╰─▶: Client<WebBrowser fKLYHF>.decode_json/16.f                       ├▶ [5, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003A788D0>]}]
+[mupf] ▶┼───────────────────╮──: crrcan/17.s                        ├▶ [5,0,0,["~",{"args":[["~@",8,null]]},{"c":1}]]
+[mupf]  │         ╭─────────┼◀─: Client<WebBrowser fKLYHF>.shedule_callback/0.s                            ◀┤  0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003A788D0>]}
+[mupf]  │         │╭────────┼◀─: remote.py/CallbackTask<?>.init/0.s                    ◀┤  <WebBrowser fKLYHF>, 0, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003A788D0>]}
+[mupf]  │         │╰────────┼─▶: remote.py/CallbackTask<?>.init/0.f                     ├▶ None
+[mupf]  │         ╰─────────┼─▶: Client<WebBrowser fKLYHF>.shedule_callback/0.f                             ├▶ None
+[mupf]  │╭──────────────────┼◀─: remote.py/CallbackTask<0>.run/0.s                     ◀┤  
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/22                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A789B0>.init/18.s                  ◀┤  '*get*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A789B0>.init/18.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A789B0>.()/18.s                 ◀┤  ["~@",6], 'value'
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><18-3A789B0>.jsonify/18.s              ◀┤  (["~@",6], 'value'), {}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><18-3A789B0>.jsonify/18.f               ├▶ [0, 18, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/18.s              ◀┤  [0, 18, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
+[mupf]  ││││                │╭◀─: crrcan/18.s                      ◀┤  [0, 18, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/17.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,18,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/18.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/17.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A789B0>.()/18.f                 ├▶ <Command cmd 18 *get* 3A789B0>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><18-3A789B0>.result.:/15.s            ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/17.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,18,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]'
+[mupf]  │││╭──────┼─────────┼┼◀─: Command<fKLYHF><18-3A789B0>.wait/18.s                ◀┤  
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/17.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/17.s           ◀┤  '[1,18,0,{"result":"qweqw"}]'
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/17.f            ├▶ [1, 18, 0, {'result': 'qweqw'}]
+[mupf]  ││││                │╰─▶: crrcan/18.f                       ├▶ [1,18,0,{"result":"qweqw"}]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><18-3A789B0>.result.=/17.s             ◀┤  'qweqw'
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><18-3A789B0>.result.=/17.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><18-3A789B0>.wait/18.f                  ├▶ <Command cmd 18 *get* 3A789B0>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><18-3A789B0>.result.:/15.f              ├▶ 'qweqw'
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/23                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78A20>.init/19.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A78A20>.init/19.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78A20>.()/19.s                 ◀┤  'span', id=2, this_=["~@",1]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><19-3A78A20>.jsonify/19.s              ◀┤  ('span',), {'id': 2, 'this_': ["~@",1]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><19-3A78A20>.jsonify/19.f               ├▶ [0, 19, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/19.s              ◀┤  [0, 19, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││││                │╭◀─: crrcan/19.s                      ◀┤  [0, 19, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/18.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,19,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/19.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/18.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A78A20>.()/19.f                 ├▶ <Command cmd 19 *call* 3A78A20>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><19-3A78A20>.result.:/16.s            ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/18.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,19,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │││╭──────┼─────────┼┼◀─: Command<fKLYHF><19-3A78A20>.wait/19.s                ◀┤  
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/18.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/18.s           ◀┤  '[1,19,0,["~",{"result":["~@",9,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/20.s                            ◀┤  9, None
+[mupf]  ││││      ││╭───────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/21.s                            ◀┤  None
+[mupf]  ││││      ││╰───────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/21.f                             ├▶ None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/20.f                             ├▶ <RemoteObj 9 of fKLYHF at 3A787F0>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/18.f            ├▶ [1, 19, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A787F0>}]
+[mupf]  ││││                │╰─▶: crrcan/19.f                       ├▶ [1,19,0,["~",{"result":["~@",9,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><19-3A78A20>.result.=/18.s             ◀┤  <RemoteObj 9 of fKLYHF at 3A787F0>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><19-3A78A20>.result.=/18.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><19-3A78A20>.wait/19.f                  ├▶ <Command cmd 19 *call* 3A78A20>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><19-3A78A20>.result.:/16.f              ├▶ <RemoteObj 9 of fKLYHF at 3A787F0>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/24                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A43E48>.init/20.s                  ◀┤  '*set*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A43E48>.init/20.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A43E48>.()/20.s                 ◀┤  ["~@",9], 'innerHTML', "SHA256('qweqw') = ba11c8cb7117c7ac8a333668180c83be3ec82960e9e756f378006e42076ff81c"
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><20-3A43E48>.jsonify/20.s              ◀┤  (["~@",9], 'innerHTML', "SHA256('qweqw') = ba11c8cb7117c7ac8a333668180c83be3ec82960e9e756f378006e42076ff81c"), {}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><20-3A43E48>.jsonify/20.f               ├▶ [0, 20, '*set*', {'args': (["~@",9], 'innerHTML', "SHA256('qweqw') = ba11c8cb7117c7ac8a333668180c83be3ec82960e9e756f378006e42076ff81c"), 'kwargs': {}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/20.s              ◀┤  [0, 20, '*set*', {'args': (["~@",9], 'innerHTML', "SHA256('qweqw') = ba11c8cb7117c7ac8a333668180c83be3ec82960e9e756f378006e42076ff81c"), 'kwargs': {}}]
+[mupf]  ││││                │╭◀─: crrcan/20.s                      ◀┤  [0, 20, '*set*', {'args': (["~@",9], 'innerHTML', "SHA256('qweqw') = ba11c8cb7117c7ac8a333668180c83be3ec82960e9e756f378006e42076ff81c"), 'kwargs': {}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/19.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,20,"*set*",["~",{"args":[["~@",9],"innerHTML","SHA256(\'qweqw\') = ba11c8cb7117c7ac8a333668180c83be3ec82960e9e756f378006e42076ff81c"],"kwargs":{}},{"c":1}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/20.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/19.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A43E48>.()/20.f                 ├▶ <Command cmd 20 *set* 3A43E48>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><20-3A43E48>.wait/20.s                ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/19.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,20,"*set*",["~",{"args":[["~@",9],"innerHTML","SHA256(\'qweqw\') = ba11c8cb7117c7ac8a333668180c83be3ec82960e9e756f378006e42076ff81c"],"kwargs":{}},{"c":1}]]'
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/send_task_body/19.f                    ├▶ 
+[mupf]  │││       ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/19.s           ◀┤  '[1,20,0,{"result":null}]'
+[mupf]  │││       ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/19.f            ├▶ [1, 20, 0, {'result': None}]
+[mupf]  │││                 │╰─▶: crrcan/20.f                       ├▶ [1,20,0,{"result":null}]
+[mupf]  │││       ╭─────────┼◀─: Command<fKLYHF><20-3A43E48>.result.=/19.s             ◀┤  None
+[mupf]  │││       ╰─────────┼─▶: Command<fKLYHF><20-3A43E48>.result.=/19.f              ├▶ None
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><20-3A43E48>.wait/20.f                  ├▶ <Command cmd 20 *set* 3A43E48>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/25                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A787B8>.init/21.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A787B8>.init/21.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A787B8>.()/21.s                 ◀┤  ["~@",9], id=4, this_=["~@",3]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><21-3A787B8>.jsonify/21.s              ◀┤  (["~@",9],), {'id': 4, 'this_': ["~@",3]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><21-3A787B8>.jsonify/21.f               ├▶ [0, 21, '*call*', {'args': (["~@",9],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/21.s              ◀┤  [0, 21, '*call*', {'args': (["~@",9],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││                │╭◀─: crrcan/21.s                      ◀┤  [0, 21, '*call*', {'args': (["~@",9],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/20.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,21,"*call*",["~",{"args":[["~@",9]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/21.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/20.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A787B8>.()/21.f                 ├▶ <Command cmd 21 *call* 3A787B8>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><21-3A787B8>.result.:/17.s            ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/20.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,21,"*call*",["~",{"args":[["~@",9]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╭──────┼─────────┼┼◀─: Command<fKLYHF><21-3A787B8>.wait/21.s                ◀┤  
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/20.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/20.s           ◀┤  '[1,21,0,["~",{"result":["~@",9,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/22.s                            ◀┤  9, None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/22.f                             ├▶ <RemoteObj 9 of fKLYHF at 3A787F0>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/20.f            ├▶ [1, 21, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A787F0>}]
+[mupf]  ││││                │╰─▶: crrcan/21.f                       ├▶ [1,21,0,["~",{"result":["~@",9,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><21-3A787B8>.result.=/20.s             ◀┤  <RemoteObj 9 of fKLYHF at 3A787F0>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><21-3A787B8>.result.=/20.f              ├▶ None
+[mupf]  ││││      ·─────────┼──: app.py/websocket_event/26                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><21-3A787B8>.wait/21.f                  ├▶ <Command cmd 21 *call* 3A787B8>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><21-3A787B8>.result.:/17.f              ├▶ <RemoteObj 9 of fKLYHF at 3A787F0>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A787B8>.init/22.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A787B8>.init/22.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A787B8>.()/22.s                 ◀┤  'br', id=2, this_=["~@",1]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><22-3A787B8>.jsonify/22.s              ◀┤  ('br',), {'id': 2, 'this_': ["~@",1]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><22-3A787B8>.jsonify/22.f               ├▶ [0, 22, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/22.s              ◀┤  [0, 22, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││││                │╭◀─: crrcan/22.s                      ◀┤  [0, 22, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │││╰────────────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/22.f              ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A787B8>.()/22.f                 ├▶ <Command cmd 22 *call* 3A787B8>
+[mupf]  ││        ╭─────────┼┼◀─: client/base.py/create_send_task/21.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,22,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  ││        ╰─────────┼┼─▶: client/base.py/create_send_task/21.f                  ├▶ None
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><22-3A787B8>.result.:/18.s            ◀┤  
+[mupf]  │││╭────────────────┼┼◀─: Command<fKLYHF><22-3A787B8>.wait/22.s                ◀┤  
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/send_task_body/21.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,22,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/21.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/21.s           ◀┤  '[1,22,0,["~",{"result":["~@",10,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/23.s                            ◀┤  10, None
+[mupf]  ││││      ││╭───────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/24.s                            ◀┤  None
+[mupf]  ││││      ││╰───────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/24.f                             ├▶ None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/23.f                             ├▶ <RemoteObj 10 of fKLYHF at 3A78DD8>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/21.f            ├▶ [1, 22, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A78DD8>}]
+[mupf]  ││││                │╰─▶: crrcan/22.f                       ├▶ [1,22,0,["~",{"result":["~@",10,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><22-3A787B8>.result.=/21.s             ◀┤  <RemoteObj 10 of fKLYHF at 3A78DD8>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><22-3A787B8>.result.=/21.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><22-3A787B8>.wait/22.f                  ├▶ <Command cmd 22 *call* 3A787B8>
+[mupf]  │││       ·─────────┼──: app.py/websocket_event/27                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><22-3A787B8>.result.:/18.f              ├▶ <RemoteObj 10 of fKLYHF at 3A78DD8>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A787B8>.init/23.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A787B8>.init/23.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A787B8>.()/23.s                 ◀┤  ["~@",10], id=4, this_=["~@",3]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><23-3A787B8>.jsonify/23.s              ◀┤  (["~@",10],), {'id': 4, 'this_': ["~@",3]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><23-3A787B8>.jsonify/23.f               ├▶ [0, 23, '*call*', {'args': (["~@",10],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/23.s              ◀┤  [0, 23, '*call*', {'args': (["~@",10],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││                │╭◀─: crrcan/23.s                      ◀┤  [0, 23, '*call*', {'args': (["~@",10],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/22.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,23,"*call*",["~",{"args":[["~@",10]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/23.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/22.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A787B8>.()/23.f                 ├▶ <Command cmd 23 *call* 3A787B8>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><23-3A787B8>.result.:/19.s            ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/22.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,23,"*call*",["~",{"args":[["~@",10]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╭──────┼─────────┼┼◀─: Command<fKLYHF><23-3A787B8>.wait/23.s                ◀┤  
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/22.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/22.s           ◀┤  '[1,23,0,["~",{"result":["~@",10,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/25.s                            ◀┤  10, None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/25.f                             ├▶ <RemoteObj 10 of fKLYHF at 3A78DD8>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/22.f            ├▶ [1, 23, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A78DD8>}]
+[mupf]  ││││                │╰─▶: crrcan/23.f                       ├▶ [1,23,0,["~",{"result":["~@",10,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><23-3A787B8>.result.=/22.s             ◀┤  <RemoteObj 10 of fKLYHF at 3A78DD8>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><23-3A787B8>.result.=/22.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><23-3A787B8>.wait/23.f                  ├▶ <Command cmd 23 *call* 3A787B8>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><23-3A787B8>.result.:/19.f              ├▶ <RemoteObj 10 of fKLYHF at 3A78DD8>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/28                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A43E48>.init/24.s                  ◀┤  '*gc*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A43E48>.init/24.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A43E48>.run/1.s                 ◀┤  9
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><None-3A43E48>.()/24.s                 ◀┤  9
+[mupf]  ││││╭───────────────┼◀─: Command<fKLYHF><24-3A43E48>.jsonify/24.s              ◀┤  (9,), {}
+[mupf]  ││││╰───────────────┼─▶: Command<fKLYHF><24-3A43E48>.jsonify/24.f               ├▶ [2, 24, '*gc*', {'args': (9,), 'kwargs': {}}]
+[mupf]  ││││╭───────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/24.s              ◀┤  [2, 24, '*gc*', {'args': (9,), 'kwargs': {}}]
+[mupf]  │││││               │·◀─: crrcan/24                        ◀┤  [2, 24, '*gc*', {'args': (9,), 'kwargs': {}}]
+[mupf]  │││││     ╭─────────┼◀─: client/base.py/create_send_task/23.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[2,24,"*gc*",{"args":[9],"kwargs":{}}]'
+[mupf]  ││││╰─────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/24.f               ├▶ None
+[mupf]  ││││      ╰─────────┼─▶: client/base.py/create_send_task/23.f                   ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><None-3A43E48>.()/24.f                  ├▶ <Command run 24 *gc* 3A43E48>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><None-3A43E48>.run/1.f                  ├▶ <Command cmd 24 *gc* 3A43E48>
+[mupf]  ││        ╭─────────┼◀─: client/base.py/send_task_body/23.s                    ◀┤  <WebSocket Protocol 3A62710>, '[2,24,"*gc*",{"args":[9],"kwargs":{}}]'
+[mupf]  ││╭───────┼─────────┼◀─: Command<fKLYHF><24-3A43E48>.result.:/20.s             ◀┤  
+[mupf]  │││╭──────┼─────────┼◀─: Command<fKLYHF><24-3A43E48>.wait/24.s                 ◀┤  
+[mupf]  │││╰──────┼─────────┼─▶: Command<fKLYHF><24-3A43E48>.wait/24.f                  ├▶ <Command cmd 24 *gc* 3A43E48>
+[mupf]  │││       ╰─────────┼─▶: client/base.py/send_task_body/23.f                     ├▶ 
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><24-3A43E48>.result.:/20.f              ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/25.s              ◀┤  [6, 0, 0, None]
+[mupf] ◀┼┼┼─────────────────╯──: crrcan/17.f                       ◀┤  [6, 0, 0, None]
+[mupf]  │││       ╭◀─: client/base.py/create_send_task/24.s                            ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[6,0,0,null]'
+[mupf]  ││╰───────┼─▶: Client<WebBrowser fKLYHF>.send_json/25.f                         ├▶ None
+[mupf]  ││        ╰─▶: client/base.py/create_send_task/24.f                             ├▶ None
+[mupf]  │╰─▶: remote.py/CallbackTask<0>.run/0.f                     ├▶ None
+[mupf]  │╭◀─: Command<fKLYHF><?-3A43E48>.init/25.s                 ◀┤  '*gc*'
+[mupf]  ││        ╭◀─: client/base.py/send_task_body/24.s                              ◀┤  <WebSocket Protocol 3A62710>, '[6,0,0,null]'
+[mupf]  │╰────────┼─▶: Command<fKLYHF><?-3A43E48>.init/25.f                             ├▶ None
+[mupf]  │╭────────┼◀─: Command<fKLYHF><None-3A43E48>.run/2.s                           ◀┤  8
+[mupf]  ││        ╰─▶: client/base.py/send_task_body/24.f                               ├▶ 
+[mupf]  ││╭◀─: Command<fKLYHF><None-3A43E48>.()/25.s               ◀┤  8
+[mupf]  │││╭◀─: Command<fKLYHF><25-3A43E48>.jsonify/25.s           ◀┤  (8,), {}
+[mupf]  │││╰─▶: Command<fKLYHF><25-3A43E48>.jsonify/25.f            ├▶ [2, 25, '*gc*', {'args': (8,), 'kwargs': {}}]
+[mupf]  │││╭◀─: Client<WebBrowser fKLYHF>.send_json/26.s           ◀┤  [2, 25, '*gc*', {'args': (8,), 'kwargs': {}}]
+[mupf]  ││││                ·◀─: crrcan/25                         ◀┤  [2, 25, '*gc*', {'args': (8,), 'kwargs': {}}]
+[mupf]  ││││      ╭◀─: client/base.py/create_send_task/25.s                            ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[2,25,"*gc*",{"args":[8],"kwargs":{}}]'
+[mupf]  │││╰──────┼─▶: Client<WebBrowser fKLYHF>.send_json/26.f                         ├▶ None
+[mupf]  │││       ╰─▶: client/base.py/create_send_task/25.f                             ├▶ None
+[mupf]  ││╰─▶: Command<fKLYHF><None-3A43E48>.()/25.f                ├▶ <Command run 25 *gc* 3A43E48>
+[mupf]  │╰─▶: Command<fKLYHF><None-3A43E48>.run/2.f                 ├▶ <Command cmd 25 *gc* 3A43E48>
+[mupf]  │         ╭◀─: client/base.py/send_task_body/25.s                              ◀┤  <WebSocket Protocol 3A62710>, '[2,25,"*gc*",{"args":[8],"kwargs":{}}]'
+[mupf]  │╭────────┼◀─: Command<fKLYHF><25-3A43E48>.result.:/21.s                       ◀┤  
+[mupf]  ││╭───────┼◀─: Command<fKLYHF><25-3A43E48>.wait/25.s                           ◀┤  
+[mupf]  ││╰───────┼─▶: Command<fKLYHF><25-3A43E48>.wait/25.f                            ├▶ <Command cmd 25 *gc* 3A43E48>
+[mupf]  ││        ╰─▶: client/base.py/send_task_body/25.f                               ├▶ 
+[mupf]  │╰─▶: Command<fKLYHF><25-3A43E48>.result.:/21.f             ├▶ None
+[mupf]  ╰─▶: Client<WebBrowser fKLYHF>.run_one_callback_blocking/0.f                    ├▶ None
+[mupf]  ·──: Client<WebBrowser fKLYHF>.bool/1                       │  True
+[mupf]  ╭◀─: Client<WebBrowser fKLYHF>.run_one_callback_blocking/1.s                   ◀┤  
+[mupf]  │         ╭◀─: Client<WebBrowser fKLYHF>.decode_json/23.s                      ◀┤  '[5,1,0,["~",{"args":[["~@",11,null]]},{"c":1}]]'
+[mupf]  │         │╭◀─: Client<WebBrowser fKLYHF>.get_remote_obj/26.s                  ◀┤  11, None
+[mupf]  │         ││╭◀─: Client<WebBrowser fKLYHF>.get_remote_obj/27.s                 ◀┤  None
+[mupf]  │         ││╰─▶: Client<WebBrowser fKLYHF>.get_remote_obj/27.f                  ├▶ None
+[mupf]  │         │╰─▶: Client<WebBrowser fKLYHF>.get_remote_obj/26.f                   ├▶ <RemoteObj 11 of fKLYHF at 3A78908>
+[mupf]  │         ╰─▶: Client<WebBrowser fKLYHF>.decode_json/23.f                       ├▶ [5, 1, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003A78908>]}]
+[mupf] ▶┼───────────────────╮──: crrcan/26.s                        ├▶ [5,1,0,["~",{"args":[["~@",11,null]]},{"c":1}]]
+[mupf]  │         ╭─────────┼◀─: Command<fKLYHF><?-3A62208>.init/26.s                  ◀┤  '*gc*'
+[mupf]  │         ╰─────────┼─▶: Command<fKLYHF><?-3A62208>.init/26.f                   ├▶ None
+[mupf]  │         ╭─────────┼◀─: Command<fKLYHF><None-3A62208>.run/3.s                 ◀┤  10
+[mupf]  │         │╭────────┼◀─: Command<fKLYHF><None-3A62208>.()/26.s                 ◀┤  10
+[mupf]  │         ││╭───────┼◀─: Command<fKLYHF><26-3A62208>.jsonify/26.s              ◀┤  (10,), {}
+[mupf]  │         ││╰───────┼─▶: Command<fKLYHF><26-3A62208>.jsonify/26.f               ├▶ [2, 26, '*gc*', {'args': (10,), 'kwargs': {}}]
+[mupf]  │         ││╭───────┼◀─: Client<WebBrowser fKLYHF>.send_json/27.s              ◀┤  [2, 26, '*gc*', {'args': (10,), 'kwargs': {}}]
+[mupf]  │         │││       │·◀─: crrcan/27                        ◀┤  [2, 26, '*gc*', {'args': (10,), 'kwargs': {}}]
+[mupf]  │         ││╰───────┼─▶: Client<WebBrowser fKLYHF>.send_json/27.f               ├▶ None
+[mupf]  │         │╰────────┼─▶: Command<fKLYHF><None-3A62208>.()/26.f                  ├▶ <Command run 26 *gc* 3A62208>
+[mupf]  │         ╰─────────┼─▶: Command<fKLYHF><None-3A62208>.run/3.f                  ├▶ <Command cmd 26 *gc* 3A62208>
+[mupf]  │         ╭─────────┼◀─: Command<fKLYHF><26-3A62208>.result.:/22.s             ◀┤  
+[mupf]  │         │╭────────┼◀─: Command<fKLYHF><26-3A62208>.wait/26.s                 ◀┤  
+[mupf]  │         │╰────────┼─▶: Command<fKLYHF><26-3A62208>.wait/26.f                  ├▶ <Command cmd 26 *gc* 3A62208>
+[mupf]  │         ╰─────────┼─▶: Command<fKLYHF><26-3A62208>.result.:/22.f              ├▶ None
+[mupf]  │         ╭─────────┼◀─: Client<WebBrowser fKLYHF>.shedule_callback/1.s                            ◀┤  1, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003A78908>]}
+[mupf]  │         │╭────────┼◀─: remote.py/CallbackTask<?>.init/1.s                    ◀┤  <WebBrowser fKLYHF>, 1, 0, {'args': [<mupf._remote.RemoteObj object at 0x0000000003A78908>]}
+[mupf]  │         │╰────────┼─▶: remote.py/CallbackTask<?>.init/1.f                     ├▶ None
+[mupf]  │         ╰─────────┼─▶: Client<WebBrowser fKLYHF>.shedule_callback/1.f                             ├▶ None
+[mupf]  │╭──────────────────┼◀─: remote.py/CallbackTask<1>.run/1.s                     ◀┤  
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/29                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78DA0>.init/27.s                  ◀┤  '*get*'
+[mupf]  │││       ╭─────────┼◀─: client/base.py/create_send_task/26.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[2,26,"*gc*",{"args":[10],"kwargs":{}}]'
+[mupf]  ││╰───────┼─────────┼─▶: Command<fKLYHF><?-3A78DA0>.init/27.f                   ├▶ None
+[mupf]  ││        ╰─────────┼─▶: client/base.py/create_send_task/26.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78DA0>.()/27.s                 ◀┤  ["~@",6], 'value'
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><27-3A78DA0>.jsonify/27.s              ◀┤  (["~@",6], 'value'), {}
+[mupf]  ││││      ╭─────────┼◀─: client/base.py/send_task_body/26.s                    ◀┤  <WebSocket Protocol 3A62710>, '[2,26,"*gc*",{"args":[10],"kwargs":{}}]'
+[mupf]  │││╰──────┼─────────┼─▶: Command<fKLYHF><27-3A78DA0>.jsonify/27.f               ├▶ [0, 27, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
+[mupf]  │││       ╰─────────┼─▶: client/base.py/send_task_body/26.f                     ├▶ 
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/28.s              ◀┤  [0, 27, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
+[mupf]  ││││                │╭◀─: crrcan/28.s                      ◀┤  [0, 27, '*get*', {'args': (["~@",6], 'value'), 'kwargs': {}}]
+[mupf]  │││╰────────────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/28.f              ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A78DA0>.()/27.f                 ├▶ <Command cmd 27 *get* 3A78DA0>
+[mupf]  ││        ╭─────────┼┼◀─: client/base.py/create_send_task/27.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,27,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]'
+[mupf]  ││        ╰─────────┼┼─▶: client/base.py/create_send_task/27.f                  ├▶ None
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><27-3A78DA0>.result.:/23.s            ◀┤  
+[mupf]  │││╭────────────────┼┼◀─: Command<fKLYHF><27-3A78DA0>.wait/27.s                ◀┤  
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/send_task_body/27.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,27,"*get*",["~",{"args":[["~@",6],"value"],"kwargs":{}},{"c":1}]]'
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/27.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/24.s           ◀┤  '[1,27,0,{"result":"qwe"}]'
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/24.f            ├▶ [1, 27, 0, {'result': 'qwe'}]
+[mupf]  ││││                │╰─▶: crrcan/28.f                       ├▶ [1,27,0,{"result":"qwe"}]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><27-3A78DA0>.result.=/23.s             ◀┤  'qwe'
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><27-3A78DA0>.result.=/23.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><27-3A78DA0>.wait/27.f                  ├▶ <Command cmd 27 *get* 3A78DA0>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><27-3A78DA0>.result.:/23.f              ├▶ 'qwe'
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/30                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78A20>.init/28.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A78A20>.init/28.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78A20>.()/28.s                 ◀┤  'span', id=2, this_=["~@",1]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><28-3A78A20>.jsonify/28.s              ◀┤  ('span',), {'id': 2, 'this_': ["~@",1]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><28-3A78A20>.jsonify/28.f               ├▶ [0, 28, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/29.s              ◀┤  [0, 28, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││││                │╭◀─: crrcan/29.s                      ◀┤  [0, 28, '*call*', {'args': ('span',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │││╰────────────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/29.f              ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A78A20>.()/28.f                 ├▶ <Command cmd 28 *call* 3A78A20>
+[mupf]  ││        ╭─────────┼┼◀─: client/base.py/create_send_task/28.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,28,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  ││        ╰─────────┼┼─▶: client/base.py/create_send_task/28.f                  ├▶ None
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><28-3A78A20>.result.:/24.s            ◀┤  
+[mupf]  │││╭────────────────┼┼◀─: Command<fKLYHF><28-3A78A20>.wait/28.s                ◀┤  
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/send_task_body/28.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,28,"*call*",["~",{"args":["span"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/28.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/25.s           ◀┤  '[1,28,0,["~",{"result":["~@",12,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/28.s                            ◀┤  12, None
+[mupf]  ││││      ││╭───────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/29.s                            ◀┤  None
+[mupf]  ││││      ││╰───────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/29.f                             ├▶ None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/28.f                             ├▶ <RemoteObj 12 of fKLYHF at 3A787B8>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/25.f            ├▶ [1, 28, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A787B8>}]
+[mupf]  ││││                │╰─▶: crrcan/29.f                       ├▶ [1,28,0,["~",{"result":["~@",12,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><28-3A78A20>.result.=/24.s             ◀┤  <RemoteObj 12 of fKLYHF at 3A787B8>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><28-3A78A20>.result.=/24.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><28-3A78A20>.wait/28.f                  ├▶ <Command cmd 28 *call* 3A78A20>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><28-3A78A20>.result.:/24.f              ├▶ <RemoteObj 12 of fKLYHF at 3A787B8>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/31                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78B00>.init/29.s                  ◀┤  '*set*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A78B00>.init/29.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78B00>.()/29.s                 ◀┤  ["~@",12], 'innerHTML', "SHA256('qwe') = 489cd5dbc708c7e541de4d7cd91ce6d0f1613573b7fc5b40d3942ccb9555cf35"
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><29-3A78B00>.jsonify/29.s              ◀┤  (["~@",12], 'innerHTML', "SHA256('qwe') = 489cd5dbc708c7e541de4d7cd91ce6d0f1613573b7fc5b40d3942ccb9555cf35"), {}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><29-3A78B00>.jsonify/29.f               ├▶ [0, 29, '*set*', {'args': (["~@",12], 'innerHTML', "SHA256('qwe') = 489cd5dbc708c7e541de4d7cd91ce6d0f1613573b7fc5b40d3942ccb9555cf35"), 'kwargs': {}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/30.s              ◀┤  [0, 29, '*set*', {'args': (["~@",12], 'innerHTML', "SHA256('qwe') = 489cd5dbc708c7e541de4d7cd91ce6d0f1613573b7fc5b40d3942ccb9555cf35"), 'kwargs': {}}]
+[mupf]  ││││                │╭◀─: crrcan/30.s                      ◀┤  [0, 29, '*set*', {'args': (["~@",12], 'innerHTML', "SHA256('qwe') = 489cd5dbc708c7e541de4d7cd91ce6d0f1613573b7fc5b40d3942ccb9555cf35"), 'kwargs': {}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/29.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,29,"*set*",["~",{"args":[["~@",12],"innerHTML","SHA256(\'qwe\') = 489cd5dbc708c7e541de4d7cd91ce6d0f1613573b7fc5b40d3942ccb9555cf35"],"kwargs":{}},{"c":1}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/30.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/29.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A78B00>.()/29.f                 ├▶ <Command cmd 29 *set* 3A78B00>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><29-3A78B00>.wait/29.s                ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/29.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,29,"*set*",["~",{"args":[["~@",12],"innerHTML","SHA256(\'qwe\') = 489cd5dbc708c7e541de4d7cd91ce6d0f1613573b7fc5b40d3942ccb9555cf35"],"kwargs":{}},{"c":1}]]'
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/send_task_body/29.f                    ├▶ 
+[mupf]  │││       ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/26.s           ◀┤  '[1,29,0,{"result":null}]'
+[mupf]  │││       ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/26.f            ├▶ [1, 29, 0, {'result': None}]
+[mupf]  │││                 │╰─▶: crrcan/30.f                       ├▶ [1,29,0,{"result":null}]
+[mupf]  │││       ╭─────────┼◀─: Command<fKLYHF><29-3A78B00>.result.=/25.s             ◀┤  None
+[mupf]  │││       ╰─────────┼─▶: Command<fKLYHF><29-3A78B00>.result.=/25.f              ├▶ None
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><29-3A78B00>.wait/29.f                  ├▶ <Command cmd 29 *set* 3A78B00>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/32                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78E80>.init/30.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A78E80>.init/30.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78E80>.()/30.s                 ◀┤  ["~@",12], id=4, this_=["~@",3]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><30-3A78E80>.jsonify/30.s              ◀┤  (["~@",12],), {'id': 4, 'this_': ["~@",3]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><30-3A78E80>.jsonify/30.f               ├▶ [0, 30, '*call*', {'args': (["~@",12],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/31.s              ◀┤  [0, 30, '*call*', {'args': (["~@",12],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││                │╭◀─: crrcan/31.s                      ◀┤  [0, 30, '*call*', {'args': (["~@",12],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/30.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,30,"*call*",["~",{"args":[["~@",12]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/31.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/30.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A78E80>.()/30.f                 ├▶ <Command cmd 30 *call* 3A78E80>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><30-3A78E80>.result.:/25.s            ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/30.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,30,"*call*",["~",{"args":[["~@",12]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╭──────┼─────────┼┼◀─: Command<fKLYHF><30-3A78E80>.wait/30.s                ◀┤  
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/30.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/27.s           ◀┤  '[1,30,0,["~",{"result":["~@",12,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/30.s                            ◀┤  12, None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/30.f                             ├▶ <RemoteObj 12 of fKLYHF at 3A787B8>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/27.f            ├▶ [1, 30, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A787B8>}]
+[mupf]  ││││                │╰─▶: crrcan/31.f                       ├▶ [1,30,0,["~",{"result":["~@",12,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><30-3A78E80>.result.=/26.s             ◀┤  <RemoteObj 12 of fKLYHF at 3A787B8>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><30-3A78E80>.result.=/26.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><30-3A78E80>.wait/30.f                  ├▶ <Command cmd 30 *call* 3A78E80>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><30-3A78E80>.result.:/25.f              ├▶ <RemoteObj 12 of fKLYHF at 3A787B8>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/33                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78E80>.init/31.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A78E80>.init/31.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78E80>.()/31.s                 ◀┤  'br', id=2, this_=["~@",1]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><31-3A78E80>.jsonify/31.s              ◀┤  ('br',), {'id': 2, 'this_': ["~@",1]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><31-3A78E80>.jsonify/31.f               ├▶ [0, 31, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/32.s              ◀┤  [0, 31, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││││                │╭◀─: crrcan/32.s                      ◀┤  [0, 31, '*call*', {'args': ('br',), 'kwargs': {'id': 2, 'this_': ["~@",1]}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/31.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,31,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/32.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/31.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A78E80>.()/31.f                 ├▶ <Command cmd 31 *call* 3A78E80>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><31-3A78E80>.result.:/26.s            ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/31.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,31,"*call*",["~",{"args":["br"],"kwargs":{"id":2,"this_":["~@",1]}},{"c":1}]]'
+[mupf]  │││╭──────┼─────────┼┼◀─: Command<fKLYHF><31-3A78E80>.wait/31.s                ◀┤  
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/31.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/28.s           ◀┤  '[1,31,0,["~",{"result":["~@",13,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/31.s                            ◀┤  13, None
+[mupf]  ││││      ││╭───────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/32.s                            ◀┤  None
+[mupf]  ││││      ││╰───────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/32.f                             ├▶ None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/31.f                             ├▶ <RemoteObj 13 of fKLYHF at 3A8A198>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/28.f            ├▶ [1, 31, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A8A198>}]
+[mupf]  ││││                │╰─▶: crrcan/32.f                       ├▶ [1,31,0,["~",{"result":["~@",13,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><31-3A78E80>.result.=/27.s             ◀┤  <RemoteObj 13 of fKLYHF at 3A8A198>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><31-3A78E80>.result.=/27.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><31-3A78E80>.wait/31.f                  ├▶ <Command cmd 31 *call* 3A78E80>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><31-3A78E80>.result.:/26.f              ├▶ <RemoteObj 13 of fKLYHF at 3A8A198>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/34                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78E80>.init/32.s                  ◀┤  '*call*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A78E80>.init/32.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78E80>.()/32.s                 ◀┤  ["~@",13], id=4, this_=["~@",3]
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><32-3A78E80>.jsonify/32.s              ◀┤  (["~@",13],), {'id': 4, 'this_': ["~@",3]}
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><32-3A78E80>.jsonify/32.f               ├▶ [0, 32, '*call*', {'args': (["~@",13],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  │││╭────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/33.s              ◀┤  [0, 32, '*call*', {'args': (["~@",13],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││                │╭◀─: crrcan/33.s                      ◀┤  [0, 32, '*call*', {'args': (["~@",13],), 'kwargs': {'id': 4, 'this_': ["~@",3]}}]
+[mupf]  ││││      ╭─────────┼┼◀─: client/base.py/create_send_task/32.s                 ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[0,32,"*call*",["~",{"args":[["~@",13]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╰──────┼─────────┼┼─▶: Client<WebBrowser fKLYHF>.send_json/33.f              ├▶ None
+[mupf]  │││       ╰─────────┼┼─▶: client/base.py/create_send_task/32.f                  ├▶ None
+[mupf]  ││╰─────────────────┼┼─▶: Command<fKLYHF><None-3A78E80>.()/32.f                 ├▶ <Command cmd 32 *call* 3A78E80>
+[mupf]  ││╭─────────────────┼┼◀─: Command<fKLYHF><32-3A78E80>.result.:/27.s            ◀┤  
+[mupf]  │││       ╭─────────┼┼◀─: client/base.py/send_task_body/32.s                   ◀┤  <WebSocket Protocol 3A62710>, '[0,32,"*call*",["~",{"args":[["~@",13]],"kwargs":{"id":4,"this_":["~@",3]}},{"c":2}]]'
+[mupf]  │││╭──────┼─────────┼┼◀─: Command<fKLYHF><32-3A78E80>.wait/32.s                ◀┤  
+[mupf]  ││││      ╰─────────┼┼─▶: client/base.py/send_task_body/32.f                    ├▶ 
+[mupf]  ││││      ╭─────────┼┼◀─: Client<WebBrowser fKLYHF>.decode_json/29.s           ◀┤  '[1,32,0,["~",{"result":["~@",13,null]},{"c":1}]]'
+[mupf]  ││││      │╭────────┼┼◀─: Client<WebBrowser fKLYHF>.get_remote_obj/33.s                            ◀┤  13, None
+[mupf]  ││││      │╰────────┼┼─▶: Client<WebBrowser fKLYHF>.get_remote_obj/33.f                             ├▶ <RemoteObj 13 of fKLYHF at 3A8A198>
+[mupf]  ││││      ╰─────────┼┼─▶: Client<WebBrowser fKLYHF>.decode_json/29.f            ├▶ [1, 32, 0, {'result': <mupf._remote.RemoteObj object at 0x0000000003A8A198>}]
+[mupf]  ││││                │╰─▶: crrcan/33.f                       ├▶ [1,32,0,["~",{"result":["~@",13,null]},{"c":1}]]
+[mupf]  ││││      ╭─────────┼◀─: Command<fKLYHF><32-3A78E80>.result.=/28.s             ◀┤  <RemoteObj 13 of fKLYHF at 3A8A198>
+[mupf]  ││││      ╰─────────┼─▶: Command<fKLYHF><32-3A78E80>.result.=/28.f              ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><32-3A78E80>.wait/32.f                  ├▶ <Command cmd 32 *call* 3A78E80>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><32-3A78E80>.result.:/27.f              ├▶ <RemoteObj 13 of fKLYHF at 3A8A198>
+[mupf]  ││        ·─────────┼──: app.py/websocket_event/35                              │  'websocket going to sleep', <WebSocket Protocol 3A62710>
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><?-3A78A90>.init/33.s                  ◀┤  '*gc*'
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><?-3A78A90>.init/33.f                   ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Command<fKLYHF><None-3A78A90>.run/4.s                 ◀┤  12
+[mupf]  │││╭────────────────┼◀─: Command<fKLYHF><None-3A78A90>.()/33.s                 ◀┤  12
+[mupf]  ││││╭───────────────┼◀─: Command<fKLYHF><33-3A78A90>.jsonify/33.s              ◀┤  (12,), {}
+[mupf]  ││││╰───────────────┼─▶: Command<fKLYHF><33-3A78A90>.jsonify/33.f               ├▶ [2, 33, '*gc*', {'args': (12,), 'kwargs': {}}]
+[mupf]  ││││╭───────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/34.s              ◀┤  [2, 33, '*gc*', {'args': (12,), 'kwargs': {}}]
+[mupf]  │││││               │·◀─: crrcan/34                        ◀┤  [2, 33, '*gc*', {'args': (12,), 'kwargs': {}}]
+[mupf]  │││││     ╭─────────┼◀─: client/base.py/create_send_task/33.s                  ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[2,33,"*gc*",{"args":[12],"kwargs":{}}]'
+[mupf]  ││││╰─────┼─────────┼─▶: Client<WebBrowser fKLYHF>.send_json/34.f               ├▶ None
+[mupf]  ││││      ╰─────────┼─▶: client/base.py/create_send_task/33.f                   ├▶ None
+[mupf]  │││╰────────────────┼─▶: Command<fKLYHF><None-3A78A90>.()/33.f                  ├▶ <Command run 33 *gc* 3A78A90>
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><None-3A78A90>.run/4.f                  ├▶ <Command cmd 33 *gc* 3A78A90>
+[mupf]  ││        ╭─────────┼◀─: client/base.py/send_task_body/33.s                    ◀┤  <WebSocket Protocol 3A62710>, '[2,33,"*gc*",{"args":[12],"kwargs":{}}]'
+[mupf]  ││╭───────┼─────────┼◀─: Command<fKLYHF><33-3A78A90>.result.:/28.s             ◀┤  
+[mupf]  │││╭──────┼─────────┼◀─: Command<fKLYHF><33-3A78A90>.wait/33.s                 ◀┤  
+[mupf]  │││╰──────┼─────────┼─▶: Command<fKLYHF><33-3A78A90>.wait/33.f                  ├▶ <Command cmd 33 *gc* 3A78A90>
+[mupf]  │││       ╰─────────┼─▶: client/base.py/send_task_body/33.f                     ├▶ 
+[mupf]  ││╰─────────────────┼─▶: Command<fKLYHF><33-3A78A90>.result.:/28.f              ├▶ None
+[mupf]  ││╭─────────────────┼◀─: Client<WebBrowser fKLYHF>.send_json/35.s              ◀┤  [6, 1, 0, None]
+[mupf] ◀┼┼┼─────────────────╯──: crrcan/26.f                       ◀┤  [6, 1, 0, None]
+[mupf]  │││       ╭◀─: client/base.py/create_send_task/34.s                            ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[6,1,0,null]'
+[mupf]  ││╰───────┼─▶: Client<WebBrowser fKLYHF>.send_json/35.f                         ├▶ None
+[mupf]  ││        ╰─▶: client/base.py/create_send_task/34.f                             ├▶ None
+[mupf]  │╰─▶: remote.py/CallbackTask<1>.run/1.f                     ├▶ None
+[mupf]  │╭◀─: Command<fKLYHF><?-3A787F0>.init/34.s                 ◀┤  '*gc*'
+[mupf]  ││        ╭◀─: client/base.py/send_task_body/34.s                              ◀┤  <WebSocket Protocol 3A62710>, '[6,1,0,null]'
+[mupf]  │╰────────┼─▶: Command<fKLYHF><?-3A787F0>.init/34.f                             ├▶ None
+[mupf]  │╭────────┼◀─: Command<fKLYHF><None-3A787F0>.run/5.s                           ◀┤  11
+[mupf]  ││        ╰─▶: client/base.py/send_task_body/34.f                               ├▶ 
+[mupf]  ││╭◀─: Command<fKLYHF><None-3A787F0>.()/34.s               ◀┤  11
+[mupf]  │││╭◀─: Command<fKLYHF><34-3A787F0>.jsonify/34.s           ◀┤  (11,), {}
+[mupf]  │││╰─▶: Command<fKLYHF><34-3A787F0>.jsonify/34.f            ├▶ [2, 34, '*gc*', {'args': (11,), 'kwargs': {}}]
+[mupf]  │││╭◀─: Client<WebBrowser fKLYHF>.send_json/36.s           ◀┤  [2, 34, '*gc*', {'args': (11,), 'kwargs': {}}]
+[mupf]  ││││                ·◀─: crrcan/35                         ◀┤  [2, 34, '*gc*', {'args': (11,), 'kwargs': {}}]
+[mupf]  ││││      ╭◀─: client/base.py/create_send_task/35.s                            ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[2,34,"*gc*",{"args":[11],"kwargs":{}}]'
+[mupf]  │││╰──────┼─▶: Client<WebBrowser fKLYHF>.send_json/36.f                         ├▶ None
+[mupf]  │││       ╰─▶: client/base.py/create_send_task/35.f                             ├▶ None
+[mupf]  ││╰─▶: Command<fKLYHF><None-3A787F0>.()/34.f                ├▶ <Command run 34 *gc* 3A787F0>
+[mupf]  │╰─▶: Command<fKLYHF><None-3A787F0>.run/5.f                 ├▶ <Command cmd 34 *gc* 3A787F0>
+[mupf]  │         ╭◀─: client/base.py/send_task_body/35.s                              ◀┤  <WebSocket Protocol 3A62710>, '[2,34,"*gc*",{"args":[11],"kwargs":{}}]'
+[mupf]  │╭────────┼◀─: Command<fKLYHF><34-3A787F0>.result.:/29.s                       ◀┤  
+[mupf]  ││╭───────┼◀─: Command<fKLYHF><34-3A787F0>.wait/34.s                           ◀┤  
+[mupf]  ││╰───────┼─▶: Command<fKLYHF><34-3A787F0>.wait/34.f                            ├▶ <Command cmd 34 *gc* 3A787F0>
+[mupf]  ││        ╰─▶: client/base.py/send_task_body/35.f                               ├▶ 
+[mupf]  │╰─▶: Command<fKLYHF><34-3A787F0>.result.:/29.f             ├▶ None
+[mupf]  ╰─▶: Client<WebBrowser fKLYHF>.run_one_callback_blocking/1.f                    ├▶ None
+[mupf]  ·──: Client<WebBrowser fKLYHF>.bool/2                       │  True
+[mupf]  ╭◀─: Client<WebBrowser fKLYHF>.run_one_callback_blocking/2.s                   ◀┤  
+[mupf]  │         ╭◀─: Client<WebBrowser fKLYHF>.decode_json/30.s                      ◀┤  '[7,0,"*close*",{"result":null}]'
+[mupf]  │         ╰─▶: Client<WebBrowser fKLYHF>.decode_json/30.f                       ├▶ [7, 0, '*close*', {'result': None}]
+[mupf] ─┼───────────────────·─▶: crrcan/36                          ├▶ [7,0,"*close*",{"result":null}]
+[mupf]  │         ╭◀─: Command<fKLYHF><?-3A43EB8>.init/35.s                            ◀┤  '*gc*'
+[mupf]  │         ╰─▶: Command<fKLYHF><?-3A43EB8>.init/35.f                             ├▶ None
+[mupf]  │         ╭◀─: Command<fKLYHF><None-3A43EB8>.run/6.s                           ◀┤  13
+[mupf]  │         │╭◀─: Command<fKLYHF><None-3A43EB8>.()/35.s                          ◀┤  13
+[mupf]  │         ││╭◀─: Command<fKLYHF><35-3A43EB8>.jsonify/35.s                      ◀┤  (13,), {}
+[mupf]  │         ││╰─▶: Command<fKLYHF><35-3A43EB8>.jsonify/35.f                       ├▶ [2, 35, '*gc*', {'args': (13,), 'kwargs': {}}]
+[mupf]  │         ││╭◀─: Client<WebBrowser fKLYHF>.send_json/37.s                      ◀┤  [2, 35, '*gc*', {'args': (13,), 'kwargs': {}}]
+[mupf]  │         │││       ·◀─: crrcan/37                         ◀┤  [2, 35, '*gc*', {'args': (13,), 'kwargs': {}}]
+[mupf]  │         ││╰─▶: Client<WebBrowser fKLYHF>.send_json/37.f                       ├▶ None
+[mupf]  │         │╰─▶: Command<fKLYHF><None-3A43EB8>.()/35.f                           ├▶ <Command run 35 *gc* 3A43EB8>
+[mupf]  │         ╰─▶: Command<fKLYHF><None-3A43EB8>.run/6.f                            ├▶ <Command cmd 35 *gc* 3A43EB8>
+[mupf]  │         ╭◀─: Command<fKLYHF><35-3A43EB8>.result.:/30.s                       ◀┤  
+[mupf]  │         │╭◀─: Command<fKLYHF><35-3A43EB8>.wait/35.s                          ◀┤  
+[mupf]  │         │╰─▶: Command<fKLYHF><35-3A43EB8>.wait/35.f                           ├▶ <Command cmd 35 *gc* 3A43EB8>
+[mupf]  │         ╰─▶: Command<fKLYHF><35-3A43EB8>.result.:/30.f                        ├▶ None
+[mupf]  │         ╭◀─: Client<WebBrowser fKLYHF>.shedule_callback/2.s                  ◀┤  0, '*close*', {'result': None}
+[mupf]  │         │╭◀─: remote.py/CallbackTask<?>.init/2.s                             ◀┤  <WebBrowser fKLYHF>, 0, '*close*', {'result': None}
+[mupf]  │         │╰─▶: remote.py/CallbackTask<?>.init/2.f                              ├▶ None
+[mupf]  │         ╰─▶: Client<WebBrowser fKLYHF>.shedule_callback/2.f                   ├▶ None
+[mupf]  │╭◀─: remote.py/CallbackTask<0>.run/2.s                    ◀┤  
+[mupf]  ││        ·──: app.py/websocket_event/36                    │  'websocket communication breakdown', <WebSocket Protocol 3A62710>, break_reason='*close*'
+[mupf]  │╰─▶: remote.py/CallbackTask<0>.run/2.f                     ├▶ None
+[mupf]  ╰─▶: Client<WebBrowser fKLYHF>.run_one_callback_blocking/2.f                    ├▶ None
+[mupf]            ·──: app.py/websocket_event/37                    │  'exiting websocket request body', <WebSocket Protocol 3A62710>
+[mupf]  ·──: Client<WebBrowser fKLYHF>.bool/3                       │  False
+[mupf]  ╭◀─: App<3A43E10>.exit/0.s             ◀┤  None, None, None
+[mupf]  │         ╭◀─: client/base.py/create_send_task/36.s                            ◀┤  <EventLoop>, <WebSocket Protocol 3A62710>, '[2,35,"*gc*",{"args":[13],"kwargs":{}}]'
+[mupf]  │╭────────┼◀─: App<3A43E10>.close/0.s                      ◀┤  
+[mupf]  ││        ╰─▶: client/base.py/create_send_task/36.f                             ├▶ None
+[mupf]  ││╭◀─: Client<WebBrowser fKLYHF>.close/0.s                 ◀┤  _dont_remove_from_app=True
+[mupf]  ││╰─▶: Client<WebBrowser fKLYHF>.close/0.f                  ├▶ None
+[mupf]  ││        ╭◀─: client/base.py/send_task_body/36.s                              ◀┤  <WebSocket Protocol 3A62710>, '[2,35,"*gc*",{"args":[13],"kwargs":{}}]'
+[mupf]  │╰────────┼─▶: App<3A43E10>.close/0.f                       ├▶ None
+[mupf]  ╰─────────┼─▶: App<3A43E10>.exit/0.f                        ├▶ None
+[mupf]            ├──: client/base.py/send_task_body/36.1                               │  'Exception:', ConnectionClosed('WebSocket connection is closed: code = 1001 (going away), no reason')
+[mupf]            ╰─▶: client/base.py/send_task_body/36.f                               ├▶ 
+[mupf]            ·──: app.py/server_event/6                        │  'event loop main run ended', <WebSocket Server 3A50320>, eloop=<EventLoop halted>
+[mupf]            ·──: app.py/server_event/7                        │  'server closing ...', <WebSocket Server 3A50320>
+[mupf]            ·──: app.py/server_event/8                        │  'server closed', <WebSocket Server 3A50320>
+[mupf]            ·──: app.py/server_event/9                        │  'event loop completed', <WebSocket Server 3A50320>, eloop=<EventLoop halted>
+[mupf]            ·──: app.py/server_event/10                       │  'event loop closed', <WebSocket Server 3A50320>, eloop=<EventLoop closed>
+[mupf]            ·──: app.py/server_event/11                       │  'server close state mutex set', <WebSocket Server 3A50320>
+[mupf]            ·──: app.py/server_event/12                       │  'exiting server thread body', <WebSocket Server 3A50320>

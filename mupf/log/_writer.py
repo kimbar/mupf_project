@@ -97,7 +97,13 @@ class LogWriter:
 
 def just_info(*msg):
     """ Print a log line, but respecting the graph """
-    logging.getLogger('mupf').info( " "*(settings.GROUP_NAME_WIDTH+1) + tracks.write() + " " + " ".join(map(str, msg)))
+    line = ""
+    if settings.print_group_name:
+        line += " "*(settings.GROUP_NAME_WIDTH+1)
+    if settings.print_tracks:
+        line += tracks.write()
+    line += " " + " ".join(map(str, msg))
+    logging.getLogger('mupf').info(line)
 
 def enh_repr(x, short=False):
     """ Enhanced repr(esentation) for objects, nice in logging
