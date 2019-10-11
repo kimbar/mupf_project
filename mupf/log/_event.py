@@ -1,3 +1,5 @@
+import inspect
+
 class LogEvent:
 
     def __init__(self, call_id, sentinel, func, fargs, fkwargs, fresult, thread):
@@ -10,6 +12,7 @@ class LogEvent:
         self._fresult = fresult
         self._thread = thread
         self._sentinel_nickname = None
+        self._bound_arguments = None
 
     def entering(self, sentinel_nickname=None):
         return self._entering and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
@@ -46,3 +49,11 @@ class LogEvent:
     @property
     def thread_name(self):
         return self._thread.name
+
+    def arg(self, name):
+        if self._bound_arguments is None:
+            sig = inspect.signature(self._func)
+            self._bound_arguments = sig.bind(*self._fargs, **self._fkwargs)
+            self._bound_arguments.apply_defaults()
+        return self._bound_arguments.arguments[name]
+        

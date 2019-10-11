@@ -9,7 +9,7 @@ mupf.log.settings.print_address = True
 mupf.log.settings.print_ruler = True
 
 mupf.log.add_filters(
-    '+ ***',
+    '- ***',
     '+ crrcan',
 )
 

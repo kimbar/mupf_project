@@ -228,12 +228,12 @@ class LogSentTaskBody(LogManager):
         if self.state:
             if event.entering():
                 finish = False
-                if event.args[0] == 'start':
+                if event.arg('part') == 'start':
                     wr = self.new_writer()
                     self.current_writer_id = wr.id_
                 else:
                     wr = self.find_writer(id_=self.current_writer_id)
-                    if event.args[0] == 'end':
+                    if event.arg('part') == 'end':
                         finish = True
                         self.delete_writer(self.current_writer_id)
                         self.current_writer_id = None
@@ -261,12 +261,12 @@ class LogCrrcan(LogManager):
     def on_event(self, event):
         if self.state:
             if event.entering('decode'):
-                LogCrrcan.undecoded_by_event_id[event.call_id] = event.args[0]
+                LogCrrcan.undecoded_by_event_id[event.call_id] = event.arg('raw_json')
             elif event.exiting('decode'):
                 self.log_data(event.result[0], event.result[1], LogCrrcan.undecoded_by_event_id[event.call_id])
                 del LogCrrcan.undecoded_by_event_id[event.call_id]
             elif event.entering('send'):
-                self.log_data(event.args[0][0], event.args[0][1], repr(event.args[0]))
+                self.log_data(event.arg('json')[0], event.arg('json')[1], repr(event.arg('json')))
 
     def log_data(self, mode, ccid, text):
         if mode >= 5:
