@@ -1,9 +1,11 @@
 import copy
 import threading
+import inspect
 
 from . import _address as address
 from . import _writer as writer
 from ._event import LogEvent
+from . import settings
 
 
 class LogSentinel:
@@ -20,14 +22,19 @@ class LogSentinel:
         self._printed_addr = address.build_path(self._manager.printed_addr_tree)
 
     def __call__(self, *args, **kwargs):
-        ev = LogEvent(None, self, self._func, args, kwargs, None, threading.current_thread())
+        stack = None
+        if settings.graph_call_stack_connect:
+            stack = inspect.stack()
+        ev = LogEvent(None, self, self._func, args, kwargs, None, threading.current_thread(), stack)
         self._manager.on_event(ev)
         call_id = ev.call_id
         del ev
+        if stack is not None:
+            del stack
 
         result = self._func(*args, **kwargs)
 
-        ev = LogEvent(call_id, self, self._func, args, kwargs, result, threading.current_thread())
+        ev = LogEvent(call_id, self, self._func, args, kwargs, result, threading.current_thread(), None)
         self._manager.on_event(ev)
         return result
 
@@ -46,7 +53,7 @@ class LogSentinel:
 
 
 class LogFunctionSentinel(LogSentinel):
-    
+
     def __init__(self, manager, func_parent, func_name):
         super().__init__(manager, func_parent, func_name, getattr(func_parent, func_name))
         if self.is_first_level:

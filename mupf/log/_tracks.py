@@ -3,10 +3,10 @@ from . import settings
 
 _tracks = []
 _styles = dict(
-    _reference = "|,`}+-{><.T^",
-    default =    "│┌└├┼─┤><·┐┘",
-    rounded =    "│╭╰├┼─┤▶◀·╮╯",
-    simple =     "|,`|+-|><*,'",
+    _reference = "|,`}+-{><.T^t",
+    default =    "│┌└├┼─┤><·┐┘─",
+    rounded =    "│╭╰├┼─┤▶◀·╮╯─",
+    simple =     "|,`|+-|><*,'-",
 )
 glyphs = {}
 ligatures = {}
@@ -54,7 +54,7 @@ def find_free(min_=0):
     return min_
 
 
-def write(branch=None, branch_track=None, inner=True):
+def write(branch=None, branch_track=None, inner=True, connect_to=None):
     """ Print tracks for a single line
 
     The line is connected to the line (branched) if `branch_track` number is given. The track number
@@ -79,7 +79,9 @@ def write(branch=None, branch_track=None, inner=True):
         if track:
             if branch:
                 if n < branch_track:
-                    if inner or branch == 'mid':
+                    if n == connect_to:
+                        result += glyphs["}"]
+                    elif inner or branch == 'mid':
                         result += glyphs["|"]
                     else:
                         result += glyphs["+"]
@@ -148,3 +150,23 @@ def get_group_indent(group):
             _last_group_indent += settings.GROUP_WIDTH
         _groups_indent[group] = _last_group_indent
     return _groups_indent[group]
+
+
+_stack_frames_by_track = {}
+_tracks_by_stack_frames = {}
+
+def register_stack_frame(frame, track):
+    global _stack_frames_by_track, _tracks_by_stack_frames
+    _stack_frames_by_track[track] = frame
+    _tracks_by_stack_frames[frame] = track
+
+def deregister_stack_frame(track):
+    global _stack_frames_by_track, _tracks_by_stack_frames
+    if track in _stack_frames_by_track:
+        frame = _stack_frames_by_track[track]
+        del _tracks_by_stack_frames[frame]
+        del _stack_frames_by_track[track]
+
+def get_track_by_stack_frame(frame):
+    global _tracks_by_stack_frames
+    return _tracks_by_stack_frames.get(frame, None)

@@ -6,6 +6,7 @@ GROUP_WIDTH : int = 10
 GROUP_NAME_WIDTH : int = 4
 
 graph_style : str = 'default'
+graph_call_stack_connect = False
 logging_format : str = '[%(name)s] %(message)s'
 logging_level = logging.INFO
 log_state_of_switched_off_managers = False

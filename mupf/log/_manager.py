@@ -4,12 +4,13 @@ from . import _writer as writer
 from . import settings
 from ._event import LogEvent
 from ._sentinel import LogFunctionSentinel, LogPropertySentinel
+from . import _tracks as tracks
 
 
 class LogManager:
 
     _managers_by_addr = {}
-    
+
     def __init__(self, addr, log_path=True, hidden=False):
         self.log_path = log_path
         self._addr = None
@@ -100,7 +101,7 @@ class LogManager:
 
     def find_writer(self, id_):
         return self._writers[id_]
-    
+
     def delete_writer(self, id_):
         if isinstance(id_, writer.LogWriter):
             id_ = id_.id_
@@ -116,7 +117,7 @@ class LogManager:
                 if manager not in self._employed_managers:
                     self._employed_managers.append(manager)
         return count
-        
+
     def dismiss_all_sentinels(self):
         for manager in self._employed_managers:
             manager.dismiss()
@@ -148,7 +149,7 @@ class LogSimpleManager(LogManager):
     def __init__(self, addr, log_path, func_parent, func_name, verbosity_settings, hidden):
         self.func_parent = func_parent              # the object (class or module) that holds the method/function/property
         self.func_name = func_name        # the name of the function that is wrapped
-        
+
         self.sentinel = None               # the wrapper for function doing the actual logging
         self.property_name = None         # property name if the function is actually an accesor of property
         self.aunt_nicknames = {}
@@ -163,7 +164,7 @@ class LogSimpleManager(LogManager):
 
         super().__init__(addr, log_path, hidden)
         LogSimpleManager._dangling_simple_managers.append(self)
-    
+
     def add(self, auto_on=False):
         if not super().add(auto_on):
             return False
@@ -200,7 +201,7 @@ class LogSimpleManager(LogManager):
         if self.sentinel is not None:
             self.sentinel.remove_yourself()
         self.sentinel = None
-    
+
     def off(self):
         self._soft_off()
         super().off()
@@ -229,16 +230,27 @@ class LogSimpleManager(LogManager):
                 )
                 event._call_id = wr.id_
                 if self._log_enter:
+                    connect_to_track = None
+                    stack = event._stack
+                    if stack is not None:
+                        for frame_record in stack:
+                            connect_to_track = tracks.get_track_by_stack_frame(frame_record.frame)
+                            if connect_to_track is not None:
+                                break
                     if self._log_args:
-                        wr.write(self.format_args(event))
+                        wr.write(self.format_args(event), connect_to_track = connect_to_track)
                     else:
-                        wr.write()
+                        wr.write(connect_to_track = connect_to_track)
+                    if stack is not None:
+                        tracks.register_stack_frame(stack[0].frame, wr._track)
             elif self._log_exit:
                 wr = self.find_writer(id_=event.call_id)
                 if self._log_results:
                     wr.write(writer.enh_repr(event.result), finish=True)
                 else:
                     wr.write(finish=True)
+                if settings.graph_call_stack_connect:
+                    tracks.deregister_stack_frame(wr._track)
             if wr is not None and wr.finished:
                 self.delete_writer(wr.id_)
         elif event.entering():
@@ -248,7 +260,7 @@ class LogSimpleManager(LogManager):
                 event._call_id = -1 - self._silent_events_count
                 self._silent_events_count += 1
         self._current_event = None
-            
+
         for aunt, nickname in self.aunt_nicknames.items():
             event._sentinel_nickname = nickname
             aunt._current_event = event

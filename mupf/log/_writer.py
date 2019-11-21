@@ -23,7 +23,7 @@ class LogWriter:
 
     def __init__(self, id_, printed_addr, style=LogWriterStyle.inner+LogWriterStyle.multi_line, group="Main"):
         self._group = group
-        self._track = None    
+        self._track = None
         self.id_ = id_
         self._printed_addr = printed_addr
         self._linecount = 0
@@ -36,8 +36,8 @@ class LogWriter:
             self._single_line_branch = '.'
         self._inner = not (style & LogWriterStyle.outer)
         self.finished = False
-    
-    def write(self, text="", finish=False):
+
+    def write(self, text="", finish=False, connect_to_track=None):
         if self._single_line:
             branch = self._single_line_branch
             if branch == '<':
@@ -71,20 +71,20 @@ class LogWriter:
             if self._track is None:
                 self._track = tracks.find_free(min_=tracks.get_group_indent(self._group))
                 tracks.reserve(self._track)
-            
+
             line_elements = []
             if settings.print_group_name:
                 line_elements.append("{: <{}}".format(self._group, settings.GROUP_NAME_WIDTH)[0:settings.GROUP_NAME_WIDTH])
             if settings.print_tracks:
-                line_elements.append(tracks.write(branch, self._track, self._inner))
+                line_elements.append(tracks.write(branch, self._track, self._inner, connect_to_track))
             if settings.print_address:
                 line_elements.append('{}/{}{}'.format(self._printed_addr, self.id_, line_id))
             line = " ".join(line_elements)
-            
+
             if settings.print_ruler:
                 len_line = max(((len(line)-settings.MIN_COLUMN_WIDTH+(settings.TAB_WIDTH//2))//settings.TAB_WIDTH+1)*settings.TAB_WIDTH, 0) + settings.MIN_COLUMN_WIDTH
                 line += " "*(len_line-len(line)) + ruler
-            
+
             line += ' ' + text
 
             logging.getLogger('mupf').info(line)
