@@ -6,6 +6,12 @@ mupf.cmd['*get*'] = function (args, kwargs) {
     return new mupf.esc.Any(x, args[0])
 }
 
+mupf.cmd['*geti*'] = function(args, kwargs) {
+    let x = args[0][args[1]]
+    if (x === undefined) throw new mupf.MupfError('DOMAttributeError', 'object has no attribute \'' + args[1] + '\'')
+    return new mupf.esc.Any(x, args[0])
+}
+
 mupf.cmd['*set*'] = function(args, kwargs) {
     args[0][args[1]] = args[2]
 }

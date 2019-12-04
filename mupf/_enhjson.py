@@ -1,6 +1,7 @@
 import io
 from enum import Enum
 from . import _symbols as S
+from ._remote import _make_escapable
 
 class OptPolicy(Enum):
     none = 0
@@ -72,7 +73,7 @@ class EnhancedBlock:
 
     def addr_change(self, last):
         self._addr[-1] = last
-        
+
     def addr_append(self, new):
         self._addr.append(new)
 
@@ -156,6 +157,9 @@ def encode(value):
         # Here we check the "type" of the value, and then act acordingly -- that is
         # we encode the value, encode some separators and/or biuld the stack. The stack
         # allows us to get deeper into the tree structure of JSON
+
+        current_value = _make_escapable(current_value)  # BIG PROBLEM WITH REMOTE???!!!!
+
         try:
             # check if it has dict-like type
             keys = current_value.keys()

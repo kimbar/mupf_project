@@ -99,7 +99,7 @@ class CallbackTask:
             self._client.send_json([6, self._ccid, 0, answer])
             return
         if self._noun == '*close*':
-            return        
+            return
 
 
 class CallbackJsonEsc:

@@ -244,6 +244,7 @@ class App:
                 open(self._file_routes[route], 'rb').read()   # TODO: check if exists
             )
         else:
+            print(f'404: {route}')
             pass  # 404
 
     async def _websocket_request(self, new_websocket, path):

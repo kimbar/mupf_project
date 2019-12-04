@@ -32,7 +32,7 @@ function main() {
     mupf.hk.postntf = (msg, cmd) => [msg, cmd]  // TODO: temporarily removed - recreate
     mupf.hk.postcmd = (msg, cmd) => [msg, cmd]
     mupf.hk.preclose = () => undefined
-    
+
     mupf.res = function(msg, result, cmd) {
         if (result === undefined) result = null
         let msgcmd = mupf.hk.presend([1,msg[1],0,{result:result}], cmd)
@@ -47,7 +47,10 @@ function main() {
             let result = null
             let cmd = mupf.hk.fndcmd(msg[2])
             try {
-                if (cmd===undefined) throw new MupfError('CommandUnknownError', msg[2])
+                if (cmd===undefined) {
+                    console.log('CommandUnknownError', msg[2])
+                    throw new MupfError('CommandUnknownError', msg[2])
+                }
                 result = mupf.hk.ccall(cmd, msg[3])
                 if (result instanceof Promise)
                     result.then((r) => mupf.res(msg, r, cmd))
@@ -130,8 +133,8 @@ function main() {
 
     // The `*last*` command is also a special case. This command is symetrical to `*first*` in
     // being special -- it is not in a notification mode, but it cannot send its result
-    // because it closes the websocket. But the 
-    
+    // because it closes the websocket. But the
+
 }   // end of `main()`
 
 // This part is taken from jQuery - it ensures that `main()` is run exactly once after the document
