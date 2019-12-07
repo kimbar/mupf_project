@@ -71,7 +71,8 @@ mupf.esc = {
         }
         if (typeof(x) === 'undefined') {
             enhb.c += 1
-            return ["~S", "undefined"]
+            // return ["~S", "undefined"]   // temporarily turned off because the Py-side is not ready
+            return undefined
         }
         return x
     },

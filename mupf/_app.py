@@ -1,22 +1,26 @@
-from . import client
-import base64
-import uuid
-import threading
 import asyncio
-import websockets
+import base64
 import json
-import urllib
-from http import HTTPStatus
-import os
-import pkg_resources
 import mimetypes
-import mupf.exceptions as exceptions
+import sys
+import os
+import threading
 import time
-from ._macro import MacroByteStream
-from . import _features as F
-from . import _enhjson as enhjson
+import urllib
+import uuid
+from http import HTTPStatus
 
+import pkg_resources
+import websockets
+
+import mupf.exceptions as exceptions
+
+from . import _enhjson as enhjson
+from . import _features as F
+from . import client
+from ._macro import MacroByteStream
 from .log import loggable
+
 
 @loggable(
     'app.py/*<obj>',
@@ -27,12 +31,12 @@ from .log import loggable
 class App:
     """
     Class for an app. Object represents a server and port, and a thread with an event-loop.
-    
+
     There is a little reason to have more than one object of this class in the process, however there may be periods in
     process execution when GUI is not needed. Destruction of this object represents destruction of GUI. This feature
     would be inconvenient if the API of this class was present directly in the `mupf` package namespace.
     """
-    
+
     default_port = 57107
 
     @loggable()
@@ -64,6 +68,7 @@ class App:
 
         self._event_loop = None    # if event-loop cannot be done this holds an offending exception
         self._clients_by_cid = {}
+        self._root_path = os.path.split(sys.argv[0])[0]
         self._file_routes = {}
 
     @loggable()
@@ -88,7 +93,7 @@ class App:
             if state:
                 client.features.add(+getattr(F, feat))
         if F.core_features in client.features:
-            client.command._legal_names.append('*getcmds*')    
+            client.command._legal_names.append('*getcmds*')
             client.command._legal_names = client.command('*getcmds*')().result
         client.summoned()
         return client
@@ -241,7 +246,7 @@ class App:
                 websockets.http.Headers({
                     'Content-Type': mimetypes.guess_type(route[-1])[0],
                 }),
-                open(self._file_routes[route], 'rb').read()   # TODO: check if exists
+                open(os.path.join(self._root_path, self._file_routes[route]), 'rb').read()   # TODO: check if exists
             )
         else:
             print(f'404: {route}')
@@ -258,7 +263,7 @@ class App:
         the_client._websocket = new_websocket
         log_websocket_event('websocket assigned to client', new_websocket, client=the_client)
         the_client._user_agent = result['ua']
-        
+
         # this line accepts a response from  `command('*first*')` because if the websocket is
         # open then the `*first` have been just executed
         the_client.command.resolve_by_id_mupf(ccid=0, result=None)
@@ -303,7 +308,7 @@ class App:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
 
         log_websocket_event('exiting websocket request body', new_websocket)
-    
+
     @loggable()
     def piggyback_call(self, function, *args):
         self._event_loop.call_soon_threadsafe(function, *args)
