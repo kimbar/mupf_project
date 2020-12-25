@@ -51,8 +51,8 @@ feature_list = [x for x in globals().values() if isinstance(x, __Feature)]
 
 def __getattr__(name: str):
     global feature_list
-    if name[:1] != "_":
-        raise ValueError('User defined features names must begin with `_`, got `{}`'.format(name))
+    if not name.startswith("_"):
+        raise ValueError(f'User defined features names must begin with `_`, got `{name}`')
     feature = __Feature(name, True)
     feature_list.append(feature)
     return feature
