@@ -34,3 +34,31 @@ def make_load_tests(init_file):
         return standard_tests
 
     return load_tests
+
+def repair_plugins(mupf_package_path):
+    """ Repairs the `mupf.__path__` to find plugins during developement
+
+    The `mupf.plugins` is a namespace package. If all is installed normally
+    (not for developement) all is all right. The plugins are placed in
+    `site-packages/mupf/plugins` and are discoverd as they should.
+
+    The problem arises when `mupf` and plugins are installed with
+    `pip -e install .`
+
+    In this case, the "parent path" (as said in PEP 420) must be altered
+    aproprietly. However, the "parent path" is not `sys.path` which is OK, but
+    the `mupf.__path__`. It is possible that there is another mechanism to
+    alter this path, but I don't know it.
+
+    THIS IS A HACK
+
+    """
+    try:
+        fp = open(os.path.join(os.path.dirname(__file__), 'easy-install.pth'), 'r')
+    except IOError:
+        print('repair_plugins: cannot open the `easy-install.pth` file')
+    else:
+        for line in fp:
+            if '\\mupf_plugins\\' in line:
+                mupf_package_path.append(line.strip('\n'))
+        fp.close()
