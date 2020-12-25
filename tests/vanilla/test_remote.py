@@ -1,7 +1,6 @@
-"""Test suite for the `_enhjson.py` module
+"""Test suite for the `_remote.py` module
 """
-import nose
-from nose.tools import istest, nottest
+
 
 import mupf
 from mupf._remote import RemoteObj
@@ -11,7 +10,6 @@ class DummyClient():
         self.command = set()    # `set` can be weak referenced
         self._safe_dunders_feature = True
 
-@istest
 def class_test():
     client = DummyClient()
     rem = RemoteObj(0, client)

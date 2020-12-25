@@ -16,7 +16,7 @@ def test_func2(g):
 
 @log.loggable('test.py/K<obj>', log_path=False)
 class K:
-    
+
     @log.loggable('test_init', log_exit=False)
     def __init__(self, x):
         self._x = x
@@ -36,7 +36,8 @@ class K:
         self._x = value
 
 
-log.enable('out_test.log', graph_style='rounded')
+# log.enable('out_test.log', graph_style='rounded')
+log.enable('out_test.log')
 
 T = threading.Thread(name='Server', target=test_func, args=(0.01,89))
 
