@@ -1,6 +1,5 @@
 import json
 import queue
-import time
 import weakref
 
 import mupf.exceptions as exceptions
@@ -154,21 +153,21 @@ class Client:
             return self.command('*install*')(src=src, remove=remove)
         else:
             raise ValueError('you must provide just one of `code` or `src`')
-    
+
     @loggable()
     def install_commands(self, code=None, src=None):
         self.install_javascript(code, src, remove=True).result
         if F.core_features in self.features:
             self.command._legal_names = self.command('*getcmds*')().result
-    
+
     @loggable()
     def _wrap_callback(self, func):
         if func in self._clbid_by_callbacks:
             return CallbackJsonEsc(self._clbid_by_callbacks[func])
-        
+
         self._clbid_by_callbacks[func] = self._callback_free_id
         self._callbacks_by_clbid[self._callback_free_id] = func
-        
+
         res = CallbackJsonEsc(self._callback_free_id)
         self._callback_free_id += 1
         return res
@@ -176,7 +175,7 @@ class Client:
     @loggable()
     def shedule_callback(self, ccid, noun, pyld):
         self._callback_queue.put(CallbackTask(self, ccid, noun, pyld))
-    
+
     @loggable()
     def run_one_callback_blocking(self):
         if not self._healthy_connection:
@@ -210,7 +209,7 @@ def log_sending_event(part, *args, **kwargs):
 
 @loggable('client/base.py/send_task_body')
 class LogSentTaskBody(LogManager):
-    
+
     current_writer_id = None
 
     def on(self):
@@ -298,4 +297,3 @@ class LogCrrcan(LogManager):
             wr = self.new_writer(style=LogWriterStyle.single_line+style, group='crrc')
             wr.write(text)
             self.delete_writer(wr)
-

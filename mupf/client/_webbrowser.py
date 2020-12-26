@@ -1,10 +1,8 @@
-
 import webbrowser
 from . import Client
 
 class WebBrowser(Client):
-    """
-    `Client` that utilizes the `webbrowser` module interface.
+    """ `Client` that utilizes the `webbrowser` module interface.
     """
     def __init__(self, app, client_id):
         super().__init__(app, client_id)
