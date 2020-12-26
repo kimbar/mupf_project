@@ -11,8 +11,9 @@ class Import(unittest.TestCase):
     def test_import(self):
         "selenium: Module -> importing the `Selenium` class from the plugin"
         import mupf.plugins
+        from mupf.client import Selenium
+
         print('mupf.__path__ =', mupf.__path__)
-        from mupf.plugins.selenium.client import Selenium
         print('mupf.plugins.__path__ =', mupf.plugins.__path__)
 
 # import socket
