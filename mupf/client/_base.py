@@ -65,7 +65,7 @@ class Client:
             self._preconnection_stash.append(json)
         else:
             evl = self._app_wr()._event_loop
-            json[3] = enhjson.EnhancedBlock(json[3]) 
+            json[3] = enhjson.EnhancedBlock(json[3])
             json = enhjson.encode(json)
             # print('<- {:.3f}'.format(time.time()-self._app_wr()._t0), json)
             evl.call_soon_threadsafe(
@@ -81,7 +81,7 @@ class Client:
         return self._healthy_connection
 
     @loggable()
-    def decode_json(self, raw_json): 
+    def decode_json(self, raw_json):
         msg = json.loads(raw_json)
         if F.core_features in self.features:
             msg[3] = enhjson.decode(msg[3], self.enhjson_decoders)

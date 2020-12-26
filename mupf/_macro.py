@@ -14,7 +14,7 @@ class MacroByteStream:
     def __init__(self, stream):
         self._stream = stream
         self._labels = set()
-    
+
     def set_from_features(self, symbols):
         for symbol in symbols:
             if symbol.state:
@@ -27,7 +27,7 @@ class MacroByteStream:
         self._labels.update(set(labels))
         self._labels.discard('')
         return self
-    
+
     def unset(self, labels):
         for m in labels:
             self._labels.discard(m)

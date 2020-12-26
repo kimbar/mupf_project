@@ -117,7 +117,7 @@ def _encode_string(s, stream):
 #  "esc" - Escape sequence
 #  "arr" - Array (list, tuple)
 #  "obj" - Object (dict)
-#  "ufa" - unfenced array (array without `[` and `]`) 
+#  "ufa" - unfenced array (array without `[` and `]`)
 #
 #  Frames put on the stack have one of the forms:
 #
@@ -203,7 +203,7 @@ def encode(value):
                             handler, arguments = b'?', ("NoEnhJSONAPIError", repr(current_value))
                         # Building an escape structure
                         current_enhanced_block.esc_here(handler, stack, result)
-                        # The arguments will be encoded in "ufa" made, tahat is they will be appended
+                        # The arguments will be encoded in "ufa" mode, tahat is they will be appended
                         # after the handler name string
                         current_value = arguments
                     else:
@@ -225,7 +225,7 @@ def encode(value):
                         )
                     ):
                         current_enhanced_block.esc_here(b'~', stack, result)
-                        # We need to wrap the current value in tuple. 
+                        # We need to wrap the current value in tuple.
                         # We will put an escape frame on the stack -- it will fail the `if` condition
                         # above on the next pass and encode the array normally, but an escape sequence can
                         # encode muliple parameters (with "ufa" mode) so we need to wrap the list so it will
@@ -245,7 +245,7 @@ def encode(value):
         #
         # Here we inform the enhanced block that a normal value has been encoded.
         # This is done to give the EB data on the position of escape structures
-        # inside all of the data, so it could choose apropriate optimization 
+        # inside all of the data, so it could choose apropriate optimization
         # strategy.
         if current_enhanced_block and (stack[-1][0] != 1 or stack[-1][1]):
             current_enhanced_block.encoded_value_here()
@@ -257,7 +257,7 @@ def encode(value):
         while True:
             if stack:    # Process top element of the stack
                 if stack[-1][0] == 0:      # mode: 'enh'
-                    # End of enhanced mode, we revert to previous enhancement block 
+                    # End of enhanced mode, we revert to previous enhancement block
                     # (which can be `None`) and remove this frame from the stack
                     nested_explicit = current_enhanced_block.end(result)
                     current_enhanced_block = stack[-1][1]

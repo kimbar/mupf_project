@@ -59,9 +59,9 @@ def loggable(
             log_addr = log_addr.replace('*',  x.__name__.strip('_'), 1)
             if x.__qualname__ != x.__name__:
                 # It is a method, so a manager is created that has parent temporarily set to `None`
-                # it will be sorted out when the class will be decorated. It is also temporarily arrached to
-                # `_methodtolog` property of the method. It hangs here until the class is decorated -- then all
-                # the `_methodtolog` will be clean up. If not the logger id "dangling" -- that means that
+                # it will be sorted out when the class will be decorated. It is also temporarily attached to
+                # `_methodtolog` property of the method. It hangs there until the class is decorated -- then all
+                # the `_methodtolog` will be cleaned up. If not, the logger is "dangling" -- that means that
                 # the class of this method was not decorated as it should.
                 x._methodtolog = LogSimpleManager(
                     addr = log_addr,
@@ -99,7 +99,7 @@ def loggable(
             # Finally a class is decorated.
             if issubclass(x, LogManager):
                 # If it is an "aunt" class, the decorator performes a singlenton semantic
-                # That is it creates a single object, and registers it the registry
+                # That is it creates a single object, and registers it in the registry
                 manager = x(log_addr, log_path, hidden)
                 manager.add(auto_on=main._logging_enabled)
             else:
@@ -117,7 +117,7 @@ def loggable(
                         members = ((member, None),)
                     for member, subname in members:
                         try:
-                            # Now we just try to update the manager that is hanging in the function. If it is not 
+                            # Now we just try to update the manager that is hanging in the function. If it is not
                             # hanging there that means that we have something other than decorated method here
                             # end the exception occurs.
                             #
@@ -131,7 +131,7 @@ def loggable(
                             member._methodtolog.func_parent = x
                             # if `subname` we are in a property
                             if subname:
-                                # what was stored before in the manager as a name is in fact was the name of property
+                                # what was stored before in the manager as a name in fact was the name of the property
                                 # so it has to be rewriten
                                 member._methodtolog.set_as_property_manager(member._methodtolog.func_name, subname)
                                 # Function name is now one of the accesor functions: `fget`, `fset` or `fdel`
@@ -143,7 +143,7 @@ def loggable(
                             # It was not a decorated method (most of the time it is not), so we do nothing
                             pass
                 # When we decorate a class we can assign a logging "repr"s here. One is "short" and one
-                # is "long". For descriptin see docstring of `enh_repr` function.
+                # is "long". For description see docstring of `enh_repr` function.
                 if short is not None:
                     writer.short_class_repr[x] = short
                 if long is not None:

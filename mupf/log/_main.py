@@ -57,7 +57,7 @@ def add_filters(*args, **kwargs):
 
     Filters should be passed as unnamed or named. The advantege of naming a
     filter is that one can change its state (`<marker>`) later on. For example:
-    
+
     ```
     add_filters("+ app.py/**", dj="# **/Client.decode_json")
     ```
@@ -66,7 +66,7 @@ def add_filters(*args, **kwargs):
 
     ```
     set_filter_state(dj="+")
-    ``` 
+    ```
 
     Currently it is impossible to change order or delete the filters (commenting
     is the closest to deletion right now.)

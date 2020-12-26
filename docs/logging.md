@@ -31,7 +31,7 @@ it request from one or more simple managers to **employ** their sentinels. If
 the simple manager of the requested sentinel is not switched on at the moment
 it flags sentinel state as "employed" but does not switch on itself. The
 relation parent-sentinel is one-to-one[[1]](#many-sentinels), and relation
-aunt-sentinel many-to-many.
+aunt-sentinel is many-to-many.
 
 When a sentinel is in place and the wrapped function would be called the
 sentinel is called. The sentinel reports this (**enter**) event to its parent
@@ -82,13 +82,13 @@ the name). They never request a middle message from its writer − only enter an
 exit messages are printed. One of this two messages can be turned off, and that
 is an only option a simple manager has (some functions have uninteresting
 arguments or results and logging both only clutters the log.) Moreover, a
-simple manager always logs an event. If a more flexible manager is needed (for
-example one that logs only erroneous results and good ones passes silently) an
-additional childless manager must be created that implements this logic. A
-childless manager can after all employ just a single sentinel to implement this
-behaviour. This approach clearly separates managers directly connected to some
-piece of code (simple) and those operating on higher level of application logic
-(childless).
+simple manager always logs an event (if it is switched on). If a more flexible
+manager is needed (for example one that logs only erroneous results and good
+ones passes silently) an additional childless manager must be created that
+implements this logic. A childless manager can after all employ just a single
+sentinel to implement this behaviour. This approach clearly separates managers
+directly connected to some piece of code (simple) and those operating on higher
+level of application logic (childless).
 
 Manager address
 ---------------
@@ -101,7 +101,7 @@ with zero or more **specifiers** enclosed in `<>`.
 part/part/subpart.subpart/subpart<specifier>.subpart.subpart<specifier><specifier>
 ```
 
-Each of these can be used freely, but they have designed purpose for simple
+Each of these can be used freely, but they have designated purpose for simple
 managers. Parts should mimic the structure of application, that is packages,
 modules and files. Last part describes a function that is managed by the
 manager with `.` separating names of classes, methods, properties and accessors

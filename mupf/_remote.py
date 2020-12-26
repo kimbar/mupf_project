@@ -10,7 +10,7 @@ class MetaRemoteObj(type):
 
 
 class RemoteObj(metaclass=MetaRemoteObj):
-    
+
     def __init__(self, rid, client, this=None):
         object.__setattr__(self, '_client_wr', weakref.ref(client))
         object.__setattr__(self, '_command_wr', weakref.ref(client.command))

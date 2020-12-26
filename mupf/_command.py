@@ -24,7 +24,7 @@ class MetaCommand(type):
     works fine for an object, but here we want it to act for the class `X`, not its instance. Therefore a metaclass is
     needed. Its `__getattr__` is called when the `X.go` is approached, and it simply invokes constructor `X("go")`.
     """
-    
+
     def __init__(cls, name, bases, dict_):
         super().__init__(name, bases, dict_)
 
@@ -56,14 +56,14 @@ class MetaCommand(type):
                 cls._resolved_in_advance.append(ccid)
             else:
                 cls._unresolved[ccid].result = result
-                
+
 
 @loggable('command.py/*')
 def create_command_class_for_client(client):
     """
     Return a class "binded" to the `client`.
     """
-    
+
     @loggable(
         'command.py/*<{0}><obj>'.format(client._cid[0:6]),
         log_path = False,
@@ -111,7 +111,7 @@ def create_command_class_for_client(client):
                 if Command._ccid_counter < 0:
                     raise RuntimeError('`*last*` command was already sent, trying to send `{}`(args={}, kwargs={})'.format(self._cmd_name, args, kwargs))
                 if self._ccid in Command._unresolved:
-                    raise RuntimeError('reissue impossible right now')    
+                    raise RuntimeError('reissue impossible right now')
                 self._ccid = Command._ccid_counter
                 if self._notification:
                     self._is_resolved.set()
