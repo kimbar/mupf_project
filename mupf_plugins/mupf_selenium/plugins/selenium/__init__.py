@@ -1,1 +1,1 @@
-from .client import Selenium
+from ._client import Selenium
