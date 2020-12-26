@@ -1,20 +1,42 @@
 import unittest
 import os
 import sys
+from selenium import webdriver
+import mupf
+import time
 
 class Import(unittest.TestCase):
 
     def setUp(self) -> None:
         print(self.shortDescription())
         os.chdir(os.path.dirname(__file__))
+        self.t0 = time.time()
 
     def test_import(self):
-        "selenium: Module -> importing the `Selenium` class from the plugin"
+        "selenium/basics: None -> Import the `Selenium` class from the plugin"
         import mupf.plugins
         from mupf.client import Selenium
 
         print('mupf.__path__ =', mupf.__path__)
         print('mupf.plugins.__path__ =', mupf.plugins.__path__)
+
+    def test_geckodriver_firefox(self):
+        "selenium/basics: None -> Run Firefox webdriver (geckodriver)"
+        driver = webdriver.Firefox()
+        driver.close()
+
+    def test_hello_world(self):
+        "selenium/basics: None -> Display 'Hello, World!' example"
+        text = "Hello, World!"
+        with mupf.App() as app:
+            client = app.summon_client(frontend=mupf.client.Selenium)
+            client.window.document.body.innerHTML = text
+
+            body = client.selenium.find_element_by_tag_name('body')
+            self.assertEqual(body.text, text)
+
+    def tearDown(self) -> None:
+        print(f'Test run time: {int((time.time()-self.t0)*1000)} ms')
 
 # import socket
 # from selenium import webdriver
@@ -23,24 +45,10 @@ class Import(unittest.TestCase):
 # import mupf
 # import mupf.exceptions
 
-# @istest
-# def selenium():
-#     """with_selenium/basics: None -> Invoke Selenium browser
-#     """
-#     driver = webdriver.Firefox()
-#     driver.close()
+
 
 # @istest
-# def hello_world():
-#     """with_selenium/basics: None -> Display "Hello, World!" example
-#     """
-#     text = "Hello, World!"
-#     with mupf.App() as app:
-#         client = app.summon_client(frontend=mupf.client.Selenium)
-#         client.window.document.body.innerHTML = text
 
-#         body = client.selenium.find_element_by_tag_name('body')
-#         assert body.text == text
 
 # @istest
 # def append_element():
@@ -113,5 +121,4 @@ class Import(unittest.TestCase):
 #     with assert_raises(OSError):
 #         with mupf.App():
 #             pass
-            
 #     sock.close()
