@@ -1,9 +1,8 @@
 import asyncio
 import base64
-import json
 import mimetypes
-import sys
 import os
+import sys
 import threading
 import time
 import typing as T
@@ -14,11 +13,8 @@ from http import HTTPStatus
 import pkg_resources
 import websockets
 
-import mupf.exceptions as exceptions
-
-from . import _enhjson as enhjson
 from . import _features as F
-from . import client
+from . import client, exceptions
 from ._macro import MacroByteStream
 from .log import loggable
 
@@ -43,37 +39,49 @@ class App:
     @loggable()
     def __init__(
         self,
-        host='127.0.0.1',
-        port=default_port,
-        charset='utf-8',
-        features = (),
+        host: str ='127.0.0.1',
+        port: int = default_port,
+        charset: str ='utf-8',
+        features: T.Iterable[F._features__Feature]= (),
     ):
-        self._t0 = time.time()
-        self._host = host
-        self._port = port
-        self._charset = charset
+        self._t0: float = time.time()
+        self._host: str = host
+        self._port: int = port
+        self._charset: str = charset
+        self._features: set[F._features__Feature] = set()
 
         self._server_opened_mutex = threading.Event()
         self._server_closed_mutex = threading.Event()
 
-        # these semm to be just one kind of features (sans bootstrap ones)
+        # Checking the format of `features` argument.
+        # Tested in `vanilla_env/test_featyres.py/Features`
         try:
             feat_type_check = any([not isinstance(f, F.__dict__['__Feature']) for f in features])
         except Exception:
             raise TypeError("`feature` argumnet of `App` must be a **container** of features")
         if feat_type_check:
             raise TypeError("all features must be of `mupf.F.__Feature` type")
+
+        # Features are added in reverse order than listed in `features`,
+        # because of the semantics of `set()` creator - doing nothing when an
+        # element already exists. The features are hashed by their names only
+        # (not name and state) This way stored state of a feature is taken from
+        # the last occurence of a given feature on the list.
         self._features = set(reversed(features))
+        # `.update()` has the same semantics as creator, so only features not
+        # on the list are added (with their default states).
         self._features.update(F.feature_list)
         self._features = set(filter(lambda f: f.state, self._features))
 
-        self._event_loop = None    # if event-loop cannot be done this holds an offending exception
-        self._clients_by_cid = {}
-        self._root_path = os.path.split(sys.argv[0])[0]
-        self._file_routes = {}
+        # The main event loop of the App. However, if event-loop cannot be done
+        # this holds an offending exception
+        self._event_loop: asyncio.BaseEventLoop = None
+        self._clients_by_cid: dict[str, client.Client] = {}
+        self._root_path: str = os.path.split(sys.argv[0])[0]
+        self._file_routes: dict[str, str] = {}
 
     @loggable()
-    def get_unique_client_id(self):
+    def get_unique_client_id(self) -> str:
         while True:
             cid = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
             if '-' not in cid[0:6]:
@@ -85,7 +93,7 @@ class App:
         return cid
 
     @loggable()
-    def summon_client(self, frontend=client.WebBrowser, **kwargs):
+    def summon_client(self, frontend: client.Client = client.WebBrowser, **kwargs) -> client.Client:
         cid = self.get_unique_client_id()
         client = frontend(self, cid, **kwargs)
         self._clients_by_cid[cid] = client
@@ -100,6 +108,8 @@ class App:
         return client
 
     def _server_thread_body(self):
+        """ Main body of the server, run in a separate thread in `self.open()`
+        """
         log_server_event('entering server thread body')
         self._event_loop = asyncio.new_event_loop()
         log_server_event('creating event loop', eloop=self._event_loop)
@@ -119,6 +129,7 @@ class App:
             self._server_opened_mutex.set()
             log_server_event('server open state mutex set', server)
             self._event_loop.run_forever()
+            # Here everything happens
             log_server_event('event loop main run ended', server, eloop=self._event_loop)
         except OSError as err:
             log_server_event('server OSError', err, server)
@@ -298,6 +309,7 @@ class App:
                 open(os.path.join(self._root_path, self._file_routes[route]), 'rb').read()   # TODO: check if exists
             )
         else:
+            log_server_event('HTTP Status 404', route=route)
             pass
 
 #endregion

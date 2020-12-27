@@ -1,13 +1,14 @@
 import copy
 
 class __Feature:
+
     def __init__(self, internal_name, default):
         self.internal_name = internal_name
         self._default = default
         self._state = None
 
     def __repr__(self):
-        return "{} mupf.F.{}".format(('+' if self.state else '-'), self.internal_name)
+        return f"{('+' if self.state else '-')} mupf.F.{self.internal_name}"
 
     def __eq__(self, other):
         return self.internal_name == other.internal_name
@@ -51,8 +52,11 @@ feature_list = [x for x in globals().values() if isinstance(x, __Feature)]
 
 def __getattr__(name: str):
     global feature_list
+    if name.startswith('_features__'):
+        return globals()[name.removeprefix('_features')]
     if not name.startswith("_"):
         raise ValueError(f'User defined features names must begin with `_`, got `{name}`')
     feature = __Feature(name, True)
-    feature_list.append(feature)
+    if feature not in feature_list:
+        feature_list.append(feature)
     return feature

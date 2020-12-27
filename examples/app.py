@@ -7,7 +7,7 @@ with mupf.App(
         host='127.0.0.1',
         features = (
             - mupf.F.test_feature,
-            + mupf.F.friendly_obj_names,
+            - mupf.F.friendly_obj_names,    # This is not working - ReferenceError: id is not defined [static/core-esc.js:64:55]
             + mupf.F.verbose_macros,
         )
     ) as app:
