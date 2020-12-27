@@ -6,6 +6,7 @@ import sys
 import os
 import threading
 import time
+import typing as T
 import urllib
 import uuid
 from http import HTTPStatus
@@ -140,12 +141,12 @@ class App:
 
     @loggable()
     def __enter__(self):
-        if self.is_opened():
+        if not self.is_closed():
             return self._clients_by_cid[list(self._clients_by_cid.keys())[0]]
         else:
             self.open()
-            if not self.is_opened():
-                raise self._event_loop    # if event-loop is not opened this is an exception
+            if culprit := self.is_closed(get_culprit=True):
+                raise culprit
             return self
 
     @loggable()
@@ -170,14 +171,31 @@ class App:
         return self
 
     @loggable()
-    def is_opened(self, get_culprit=False):
+    def is_closed(self, get_culprit: bool = False) -> T.Union[bool, BaseException]:
+        """ Is app closed?
+
+        It returns `False` if it is not closed. Otherwise it returns `True` by
+        default or an exception if asked for the culprit of the app being
+        closed. The exception is not rised - it is only returned and must be
+        rised outside.
+        """
         if get_culprit:
-            if self.is_opened():
-                return None
+            if not self.is_closed():
+                return False
+            elif isinstance(self._event_loop, asyncio.events.AbstractEventLoop):
+                return RuntimeError(f'Event loop in `{self}` was closed')
+            elif self._event_loop is None:
+                # It's hard to give a reason, because this should never happen
+                # (FLW) unless user creates App, does not open it and asks why
+                # it is closed.
+                return RuntimeError(f'Event loop in `{self}` was never created (`App` was never opened?)')
             else:
                 return self._event_loop # if event-loop is not opened this is an exception
         else:
-            return isinstance(self._event_loop, asyncio.events.AbstractEventLoop)
+            if isinstance(self._event_loop, asyncio.events.AbstractEventLoop):
+                return self._event_loop.is_closed()
+            else:
+                return True
 
     @loggable()
     def close(self, wait=False):
