@@ -188,8 +188,26 @@ class App:
         if wait:
             self._server_closed_mutex.wait()
 
-    @loggable(log_results=False) # FIXME: temprary turned off because of the length of the output
+#region It's a mess
+
+    # The serving of so-called static files become quite a mess. It is because
+    # this subsystem was never really designed as a whole. Right now it
+    # consists of following parts:
+    #
+    #  * mupf.App._process_HTTP_request
+    #  * mupf.App.register_route
+    #  * mupf.App._get_route_response
+    #  * mupf.App._identify_line_in_code
+    #  * mupf.client.Client.decode_json
+    #  * mupf.exceptions.create_from_result
+    #  * mupf._macro.MacroByteStream
+    #  * mupf.F.__Feature
+    #
+
+    @loggable(log_results=False) # FIXME: temporary turned off because of the length of the output
     def _process_HTTP_request(self, path, request_headers):
+        # This is a temporary solution just to make basics work
+        # it should be done in some more systemic way.
         url = tuple(urllib.parse.urlparse(path).path.split('/'))
         if url == ('', ''):
             return (
@@ -214,7 +232,9 @@ class App:
                     'Content-Type':'application/javascript',
                 }),
                 MacroByteStream(
-                    pkg_resources.resource_stream(__name__, "static/core-base.js")
+                    pkg_resources.resource_stream(__name__, "static/core-base.js"),
+                    substream_finder = lambda fname: pkg_resources.resource_stream(__name__, fname),
+                    code_name = "static/core-base.js",
                 ).set_from_features(self._features).read()
             )
         elif url == ('', 'mupf', 'ws'):
@@ -229,7 +249,18 @@ class App:
             return self._get_route_response(url)
 
     @loggable()
-    def register_route(self, route, **kwargs):
+    def _identify_line_in_code(self, position_data):
+        file_name, line, col = position_data
+        if file_name.endswith('/mupf/core'):
+            if position_data := MacroByteStream(
+                    pkg_resources.resource_stream(__name__, "static/core-base.js"),
+                    substream_finder = lambda fname: pkg_resources.resource_stream(__name__, fname),
+                    code_name = "static/core-base.js",
+                ).set_from_features(self._features).identify_line(line):
+                return (position_data[0], position_data[1], col)
+
+    @loggable()
+    def register_route(self, route: str, **kwargs) -> None:
         route = tuple(urllib.parse.urlparse('/'+route).path.split('/'))
         if route[0:2] == ('', 'mupf') or route == ('', ''):
             raise ValueError('route reserved')
@@ -249,8 +280,9 @@ class App:
                 open(os.path.join(self._root_path, self._file_routes[route]), 'rb').read()   # TODO: check if exists
             )
         else:
-            print(f'404: {route}')
-            pass  # 404
+            pass
+
+#endregion
 
     async def _websocket_request(self, new_websocket, path):
         log_websocket_event('entering websocket request body', new_websocket, path=path)

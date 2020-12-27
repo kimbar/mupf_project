@@ -11,9 +11,12 @@ class MacroByteStream:
     re_number = re.compile(br'^[1-9]+[0-9]*$')
     re_argument_split = re.compile(br'\s*(==|<=|>=|!=|[|&()~+\-*<>])\s*')
 
-    def __init__(self, stream):
+    def __init__(self, stream, substream_finder=None, code_name="", output_line_start = 1):
         self._stream = stream
         self._labels = set()
+        self._substream_finder = substream_finder
+        self.output_line_number = output_line_start
+        self._code_name = code_name
 
     def set_from_features(self, symbols):
         for symbol in symbols:
@@ -33,19 +36,22 @@ class MacroByteStream:
             self._labels.discard(m)
         return self
 
-    def read(self):
+    def _read(self, just_identify_line=None):
         curr_state = True
         if_stack = []
         result = io.BytesIO()
+        input_line_number = 0
+        verbose = ('verbose_macros' in self._labels)
         while True:
-            verbose = ('verbose_macros' in self._labels)
             line = self._stream.readline()
+            input_line_number += 1
             if len(line) == 0:
                 break
-            m = MacroByteStream.re_macro_line.match(line)
-            if m:
+            if m := MacroByteStream.re_macro_line.match(line):
                 if verbose:
                     result.write(line)
+                    if adv_res := self.advance_line_number(input_line_number, just_identify_line):
+                        return adv_res
                 directive, argument = m.groups()
                 if directive == b'if':
                     # split into tokens
@@ -77,11 +83,12 @@ class MacroByteStream:
                                 result.write(b':false')
                             first_label = False
                         result.write(b'\n')
+                        if adv_res := self.advance_line_number(input_line_number, just_identify_line):
+                            return adv_res
                 elif directive == b'define':
                     if curr_state:
                         for label in map(lambda l: l.decode('utf-8'), re.split(br'\s*,\s*', argument)):
-                            m = re.match(r'^~\s*(.*)$', label)
-                            if m:
+                            if m := re.match(r'^~\s*(.*)$', label):
                                 self._labels.discard(m.group(1))
                             else:
                                 self._labels.add(label)
@@ -89,26 +96,57 @@ class MacroByteStream:
                     pass
                 elif directive == b'include':
                     if curr_state:
-                        subfile = MacroByteStream(pkg_resources.resource_stream(__name__, argument.decode('utf-8'))).set(self._labels)
-                        result.write(subfile.read())
+                        subfile_name = argument.decode('utf-8')
+                        subfile = MacroByteStream(
+                            self._substream_finder(subfile_name),
+                            substream_finder=self._substream_finder,
+                            code_name = subfile_name,
+                            output_line_start = self.output_line_number
+                            ).set(self._labels)
+                        subresult = subfile._read(just_identify_line)
+                        self.output_line_number = subfile.output_line_number
+                        if just_identify_line is None:
+                            result.write(subresult)
+                        else:
+                            if subresult is not None:
+                                return subresult
                         if ('verbose_macros' in self._labels):
                             spaces, rest = MacroByteStream.re_leading_spaces_detector.match(line).groups()
                             result.write(spaces)
                             result.write(b'// #end-of-include-of ')
                             result.write(argument)
                             result.write(b'\n')
+                            if adv_res := self.advance_line_number(input_line_number, just_identify_line):
+                                return adv_res
                         self._labels = subfile._labels
                 else:
                     raise ValueError('Unknown directive `#{}`'.format(directive.decode('utf-8')))
             else:
                 if curr_state:
                     result.write(line)
+                    if adv_res := self.advance_line_number(input_line_number, just_identify_line):
+                        return adv_res
                 elif verbose:
                     spaces, rest = MacroByteStream.re_leading_spaces_detector.match(line).groups()
                     result.write(spaces)
                     result.write(b"// ")
                     result.write(rest)
-        return result.getvalue()
+                    if adv_res := self.advance_line_number(input_line_number, just_identify_line):
+                        return adv_res
+        if just_identify_line is None:
+            return result.getvalue()
+
+    def read(self):
+        return self._read(just_identify_line=None)
+
+    def identify_line(self, line_no):
+        if line_no is not None:
+            return self._read(just_identify_line=line_no)
+
+    def advance_line_number(self, input_line_number, just_identify_line):
+        if just_identify_line == self.output_line_number:
+            return (self._code_name, input_line_number)
+        self.output_line_number += 1
 
     def _translate(self, token):
         """

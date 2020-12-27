@@ -86,7 +86,10 @@ class Client:
         if F.core_features in self.features:
             msg[3] = enhjson.decode(msg[3], self.enhjson_decoders)
         if msg[0] == 1 and msg[2] != 0:
-            msg[3]['result'] = exceptions.create_from_result(msg[3]['result'])
+            error_data = msg[3]['result']
+            if line_id := self._app_wr()._identify_line_in_code(error_data[2:5]):
+                error_data[2:5] = line_id
+            msg[3]['result'] = exceptions.create_from_result(error_data)
         return msg
 
     @loggable()
