@@ -2,10 +2,12 @@ import unittest
 import os
 import sys
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 import mupf
 import time
+import socket
 
-class Import(unittest.TestCase):
+class Connection(unittest.TestCase):
 
     def setUp(self) -> None:
         print(self.shortDescription())
@@ -14,6 +16,7 @@ class Import(unittest.TestCase):
 
     def test_import(self):
         "selenium/basics: None -> Import the `Selenium` class from the plugin"
+
         import mupf.plugins
         from mupf.client import Selenium
 
@@ -21,24 +24,73 @@ class Import(unittest.TestCase):
         print('mupf.plugins.__path__ =', mupf.plugins.__path__)
 
     def test_geckodriver_firefox(self):
-        "selenium/basics: None -> Run Firefox webdriver (geckodriver)"
-        driver = webdriver.Firefox()
+        "selenium/basics: None -> Run Firefox webdriver (geckodriver) headless"
+
+        options = Options()
+        options.headless = True
+        driver = webdriver.Firefox(options=options)
         driver.close()
 
-    def test_hello_world(self):
-        "selenium/basics: None -> Display 'Hello, World!' example"
-        text = "Hello, World!"
-        with mupf.App() as app:
-            client = app.summon_client(frontend=mupf.client.Selenium)
-            client.window.document.body.innerHTML = text
+    def test_port_unavailable(self):
+        "selenium/basics: Port already used -> Fail with `OSError` exception"
 
-            body = client.selenium.find_element_by_tag_name('body')
-            self.assertEqual(body.text, text)
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            sock.bind(('127.0.0.1', mupf.App.default_port))
+        except OSError:
+            self.skipTest('Required port was unavaliable in the first place')
+
+        with self.assertRaises(OSError) as cm:
+            with mupf.App():
+                pass
+        print('Exception text:', cm.exception)
+
+        sock.close()
 
     def tearDown(self) -> None:
         print(f'Test run time: {int((time.time()-self.t0)*1000)} ms')
 
-# import socket
+
+class LowLevelApp(unittest.TestCase):
+
+    def setUp(self) -> None:
+        print(self.shortDescription())
+        os.chdir(os.path.dirname(__file__))
+        self.t0 = time.time()
+
+    def test_hello_world(self):
+        "selenium/basics: None -> Display 'Hello, World!' example"
+
+        text = "Hello, World!"
+        with mupf.App() as app:
+            client = app.summon_client(frontend=mupf.client.Selenium, headless=True)
+            client.window.document.body.innerHTML = text
+
+            body = client.selenium.find_element_by_tag_name('body')
+            print(f'Text found: {repr(body.text)}')
+            self.assertEqual(body.text, text)
+
+    def test_append_element(self):
+        "selenium/basics: None -> Create and append a <span>"
+
+        with mupf.App() as app:
+            client = app.summon_client(frontend=mupf.client.Selenium, headless=True)
+            createElement = client.window.document.createElement
+            bodyAppendChild = client.window.document.body.appendChild
+            bodyAppendChild(createElement('span'))
+
+            body = client.selenium.find_element_by_tag_name('body')
+            span = body.find_element_by_tag_name('span')
+            self.assertIsInstance(span, webdriver.remote.webelement.WebElement)
+
+    def tearDown(self) -> None:
+        print(f'Test run time: {int((time.time()-self.t0)*1000)} ms')
+
+
+if __name__ == '__main__':
+    unittest.main()
+
+
 # from selenium import webdriver
 # import time
 
@@ -50,19 +102,7 @@ class Import(unittest.TestCase):
 # @istest
 
 
-# @istest
-# def append_element():
-#     """with_selenium/basics: None -> Create and append a <span>
-#     """
-#     with mupf.App() as app:
-#         client = app.summon_client(frontend=mupf.client.Selenium)
-#         createElement = client.window.document.createElement
-#         bodyAppendChild = client.window.document.body.appendChild
-#         bodyAppendChild(createElement('span'))
 
-#         body = client.selenium.find_element_by_tag_name('body')
-#         span = body.find_element_by_tag_name('span')
-#         assert isinstance(span, webdriver.remote.webelement.WebElement)
 
 # @istest
 # def user_close():
@@ -109,16 +149,4 @@ class Import(unittest.TestCase):
 #             client.run_one_callback_blocking()
 
 # @istest
-# def port_unavailable():
-#     """with_selenium/basics: Port already used -> Fail with `OSError` exception
-#     """
-#     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     try:
-#         sock.bind(('127.0.0.1', mupf.App.default_port))
-#     except OSError:
-#         raise SkipTest('Required port was unavaliable in the first place')
 
-#     with assert_raises(OSError):
-#         with mupf.App():
-#             pass
-#     sock.close()
