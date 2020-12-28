@@ -84,6 +84,7 @@ function main() {
         document.head.removeChild(document.getElementById('mupf-bootstrap'))
         Object.assign(window.mupf.fts, kwargs)
         mupf.cid = window.location.hash.substring(1)                       // client id
+        document.cookie = mupf.cid
         mupf.ws = await new Promise((ok, no) => {                          // web socket
             let ws = new WebSocket("ws://"+window.location.host+"/mupf/ws")
             ws.onopen = () => { ok(ws) }

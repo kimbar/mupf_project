@@ -83,6 +83,7 @@ class App:
     @loggable()
     def get_unique_client_id(self) -> str:
         while True:
+            # This should be HTTP cookie safe. It is hence it is `[-_0-9A-Za-z]+`
             cid = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
             if '-' not in cid[0:6]:
                 for used_cid in self._clients_by_cid:
@@ -237,7 +238,12 @@ class App:
     def _process_HTTP_request(self, path, request_headers):
         # This is a temporary solution just to make basics work
         # it should be done in some more systemic way.
+
+        # An error here is pretty catastrophic!!! The `mupf` itself hangs
+
+        cid = request_headers.get('Cookie', None)    # This can now be used to set `Client` features to `core.js`
         url = tuple(urllib.parse.urlparse(path).path.split('/'))
+
         if url == ('', ''):
             return (
                 HTTPStatus.OK,
