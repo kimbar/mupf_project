@@ -65,7 +65,7 @@ class LogWriter:
             else:
                 branch = 'mid'
                 ruler = " "+tracks.glyphs['|']+" "
-                line_id = ".{}".format(self._linecount)
+                line_id = f".{self._linecount}"
 
         with log_mutex:
             if self._track is None:
@@ -74,11 +74,11 @@ class LogWriter:
 
             line_elements = []
             if settings.print_group_name:
-                line_elements.append("{: <{}}".format(self._group, settings.GROUP_NAME_WIDTH)[0:settings.GROUP_NAME_WIDTH])
+                line_elements.append(f"{self._group: <{settings.GROUP_NAME_WIDTH}}"[0:settings.GROUP_NAME_WIDTH])
             if settings.print_tracks:
                 line_elements.append(tracks.write(branch, self._track, self._inner, connect_to_track))
             if settings.print_address:
-                line_elements.append('{}/{}{}'.format(self._printed_addr, self.id_, line_id))
+                line_elements.append(f'{self._printed_addr}/{self.id_}{line_id}')
             line = " ".join(line_elements)
 
             if settings.print_ruler:

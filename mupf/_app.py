@@ -22,8 +22,8 @@ from .log import loggable
 @loggable(
     'app.py/*<obj>',
     log_path = False,
-    short = lambda self: "<{:X}>".format(id(self)),
-    long = lambda self: "<App {:X}>".format(id(self)),
+    short = lambda self: f"<{id(self):X}>",
+    long = lambda self: f"<App {id(self):X}>",
 )
 class App:
     """
@@ -170,7 +170,7 @@ class App:
         self._server_thread = threading.Thread(
             target = self._server_thread_body,
             daemon = False,
-            name = "mupfapp-{}:{}".format(self._host, self._port)
+            name = f"mupfapp-{self._host}:{self._port}"
         )
         self._server_thread.start()
         self._server_opened_mutex.wait()
@@ -248,7 +248,7 @@ class App:
             return (
                 HTTPStatus.OK,
                 websockets.http.Headers({
-                    'Content-Type':'text/html; charset={0}'.format(self._charset),
+                    'Content-Type': f'text/html; charset={self._charset}',
                 }),
                 pkg_resources.resource_stream(__name__, "static/main.html").read()
             )
@@ -256,7 +256,7 @@ class App:
             return (
                 HTTPStatus.OK,
                 websockets.http.Headers({
-                    'Content-Type':'application/javascript',
+                    'Content-Type': 'application/javascript',
                 }),
                 pkg_resources.resource_stream(__name__, "static/bootstrap.js").read()
             )
@@ -264,7 +264,7 @@ class App:
             return (
                 HTTPStatus.OK,
                 websockets.http.Headers({
-                    'Content-Type':'application/javascript',
+                    'Content-Type': 'application/javascript',
                 }),
                 MacroByteStream(
                     pkg_resources.resource_stream(__name__, "static/core-base.js"),
@@ -347,7 +347,7 @@ class App:
                 break_reason = e.reason
                 break
 
-            # print('{:.3f} ->'.format(time.time()-self._t0), raw_msg)
+            # print(f'{time.time()-self._t0:.3f} ->', raw_msg)
             msg = the_client.decode_json(raw_msg)
 
             mode = msg[0]
@@ -382,7 +382,7 @@ class App:
         self._event_loop.call_soon_threadsafe(function, *args)
 
     def __repr__(self):
-        return "<App {:X}>".format(id(self))
+        return f"<App {id(self):X}>"
 
 #
 # `_logging.py` hooks
@@ -398,12 +398,12 @@ def log_websocket_event(*args, **kwargs):
 
 loggable(
     outer_class = websockets.server.WebSocketServer,
-    long = lambda self: "<WebSocket Server {:X}>".format(id(self)),
+    long = lambda self: f"<WebSocket Server {id(self):X}>",
 )
 
 loggable(
     outer_class = websockets.server.WebSocketServerProtocol,
-    long = lambda self: "<WebSocket Protocol {:X}>".format(id(self)),
+    long = lambda self: f"<WebSocket Protocol {id(self):X}>",
 )
 
 def _eventloop_logger(evl):
@@ -420,5 +420,5 @@ loggable(
 
 loggable(
     outer_class = websockets.http.Headers,
-    long = lambda self: "<HTTP Header from {}>".format(self['Host']),
+    long = lambda self: f"<HTTP Header from {self['Host']}>",
 )

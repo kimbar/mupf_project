@@ -28,7 +28,7 @@ def create_send_task(evl, wbs, json):
 @loggable(
     'client/base.py/*<obj>',
     log_path=False,
-    long = lambda self: "<{} {}>".format(type(self).__name__, getattr(self, '_cid', '?')[0:6]),
+    long = lambda self: f"<{type(self).__name__} {getattr(self, '_cid', '?')[0:6]}>",
 )
 class Client:
     """
@@ -67,7 +67,7 @@ class Client:
             evl = self._app_wr()._event_loop
             json[3] = enhjson.EnhancedBlock(json[3])
             json = enhjson.encode(json)
-            # print('<- {:.3f}'.format(time.time()-self._app_wr()._t0), json)
+            # print(f'<- {time.time()-self._app_wr()._t0:.3f}', json)
             evl.call_soon_threadsafe(
                 create_send_task,
                 evl,
@@ -118,7 +118,7 @@ class Client:
     def summoned(self):
         self._safe_dunders_feature = (F.safe_dunders in self.features)
         if F.strict_feature_list in self.features and self.features != self.app._features:
-            raise ValueError('features computed {} different from requested {} while `strict_feature_list` feature turned on'.format(self.features, self.app._features))
+            raise ValueError(f'features computed {self.features} different from requested {self.app._features} while `strict_feature_list` feature turned on')
 
     @loggable()
     def close(self, dont_wait=False, _dont_remove_from_app=False):   # TODO: dont_wait not implemented
@@ -130,7 +130,7 @@ class Client:
                 c = self.command('*last*')()  # to consider: can an exception be rised in this line or only in next one? what consequences this have? and for other commands than `*last*`?
                 c.result    # TODO: maybe here as a parameter should the number of hanging commands been passed?, but obtaining their count... heavy mutexing needed...
             except exceptions.ClientClosedNormally:   # TODO: this exception change for a timeout
-                # print('{:.3f} ->'.format(time.time()-self.app._t0), '[1,{0},1,{{"result":null}}]'.format(c._ccid))
+                # print(f'{time.time()-self.app._t0:.3f} -> [1,{c._ccid},1,{{"result":null}}]')
                 pass
 
         if not _dont_remove_from_app:
@@ -199,11 +199,7 @@ class Client:
     @property
     @loggable('*.:', log_enter=False)
     def url(self):
-        return "http://{domain}:{port}/#{cid}".format(
-                domain = self.app._host,
-                port = self.app._port,
-                cid = self.cid,
-            )
+        return f"http://{self.app._host}:{self.app._port}/#{self.cid}"
 
 @loggable('client/base.py/sending_event', hidden=True)
 def log_sending_event(part, *args, **kwargs):

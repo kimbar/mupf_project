@@ -21,7 +21,7 @@ class RemoteObj(metaclass=MetaRemoteObj):
     def __setitem__(self, key, value):
         if isinstance(key, S._Symbol):
             if key.readonly:
-                raise AttributeError('Attribute `{}` is readonly'.format(key))
+                raise AttributeError(f'Attribute `{key}` is readonly')
             else:
                 object.__setattr__(self, key.internal_name, value)
         else:
@@ -70,12 +70,12 @@ class RemoteJsonEsc:
     def json_esc(self):
         return '@', self.rid
     def __repr__(self):
-        return '["~@",{}]'.format(self.rid)
+        return f'["~@",{self.rid}]'
 
 @loggable(
     'remote.py/*<obj>',
-    short = lambda self: "<{}>".format(getattr(self, '_ccid', '?')),
-    long = lambda self: "<CallbackTask {} {} {}>".format(getattr(self, '_noun', '?'), getattr(self, '_ccid', '?'), getattr(self, '_func', '-'))
+    short = lambda self: f"<{getattr(self, '_ccid', '?')}>",
+    long = lambda self: f"<CallbackTask {getattr(self, '_noun', '?')} {getattr(self, '_ccid', '?')} {getattr(self, '_func', '-')}>"
 )
 class CallbackTask:
     # TODO: this is very much a work in progress, serious rethinking
@@ -108,7 +108,7 @@ class CallbackJsonEsc:
     def json_esc(self):
         return '$', None, self.clbid
     def __repr__(self):
-        return '["~$",null,{}]'.format(self.clbid)
+        return f'["~$",null,{self.clbid}]'
 
 
 def _make_escapable(value):
@@ -120,5 +120,5 @@ def _make_escapable(value):
 
 loggable(
     outer_class = RemoteObj,
-    long = lambda self: "<RemoteObj {} of {} at {:X}>".format(self[S.rid], self[S.client]._cid[0:6], id(self)),
+    long = lambda self: f"<RemoteObj {self[S.rid]} of {self[S.client]._cid[0:6]} at {id(self):X}>",
 )

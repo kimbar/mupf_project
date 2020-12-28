@@ -5,7 +5,7 @@ _tracks = []
 _styles = dict(
     _reference = "|,`}+-{><.T^t",
     default =    "│┌└├┼─┤><·┐┘─",
-    rounded =    "│╭╰├┼─┤▶◀·╮╯─",
+    rounded =    "│╭╰├┼─┤><·╮╯─",
     simple =     "|,`|+-|><*,'-",
 )
 glyphs = {}

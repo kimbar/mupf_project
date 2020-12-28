@@ -120,7 +120,7 @@ class MacroByteStream:
                                 return adv_res
                         self._labels = subfile._labels
                 else:
-                    raise ValueError('Unknown directive `#{}`'.format(directive.decode('utf-8')))
+                    raise ValueError(f'Unknown directive `#{directive.decode("utf-8")}`')
             else:
                 if curr_state:
                     result.write(line)

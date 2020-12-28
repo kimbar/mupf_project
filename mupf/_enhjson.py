@@ -52,7 +52,7 @@ class EnhancedBlock:
             stream.write(b'}]')
             return True
         else:
-            raise ValueError('Unknown optimalization policy {}'.format(repr(self._opt)))
+            raise ValueError(f'Unknown optimalization policy {repr(self._opt)}')
 
     def esc_here(self, handler, stack, stream):
         self.nested_eb_ends_here()

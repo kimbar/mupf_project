@@ -39,9 +39,9 @@ class LogManager:
         printed_addr = address.build_path(self.printed_addr_tree)
         with main.log_mutex:
             if self._addr == printed_addr:
-                writer.just_info('state: {} {}'.format(state, self._addr))
+                writer.just_info(f'state: {state} {self._addr}')
             else:
-                writer.just_info('state: {} {}      as {}'.format(state, self._addr, printed_addr))
+                writer.just_info(f'state: {state} {self._addr}      as {printed_addr}')
 
     def on(self):
         """ Turn on logging for this manager
@@ -71,7 +71,7 @@ class LogManager:
         """ Add the manager to the registry
         """
         if self._addr in LogManager._managers_by_addr:
-            writer.just_info('ERROR: Adding `{}` manager failed - address already exists'.format(self._addr))
+            writer.just_info(f'ERROR: Adding `{self._addr}` manager failed - address already exists')
             return False
         LogManager._managers_by_addr[self._addr] = self
         if auto_on:
@@ -83,7 +83,7 @@ class LogManager:
         return True
 
     def on_event(self, event):
-        raise NotImplementedError('`LogManager.on_event()` not in `{}`'.format(self))
+        raise NotImplementedError(f'`LogManager.on_event()` not in `{self}`')
 
     def new_writer(self, * , printed_addr=None, style=None, group=None):
         if printed_addr is None:

@@ -39,7 +39,7 @@ class LogSentinel:
         return result
 
     def remove_yourself(self):
-        raise NotImplementedError('`LogSentinel.remove_yourself()` not in `{}`'.format(self))
+        raise NotImplementedError(f'`LogSentinel.remove_yourself()` not in `{self}`')
 
     def copy(self):
         # Here some registration of a copy can be made in the manager

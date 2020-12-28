@@ -65,10 +65,10 @@ def create_command_class_for_client(client):
     """
 
     @loggable(
-        'command.py/*<{0}><obj>'.format(client._cid[0:6]),
+        f'command.py/*<{client._cid[0:6]}><obj>',
         log_path = False,
-        short = lambda self: "<{}-{:X}>".format(getattr(self, '_ccid', '?'), id(self)),
-        long = lambda self: "<Command {} {} {} {:X}>".format(('run' if getattr(self, '_notification', False) else 'cmd'), getattr(self, '_ccid', '?'), getattr(self, '_cmd_name', '?'), id(self)),
+        short = lambda self: f"<{getattr(self, '_ccid', '?')}-{id(self):X}>",
+        long = lambda self: f"<Command {('run' if getattr(self, '_notification', False) else 'cmd')} {getattr(self, '_ccid', '?')} {getattr(self, '_cmd_name', '?')} {id(self):X}>",
     )
     class Command(metaclass=MetaCommand):
         """
@@ -101,7 +101,7 @@ def create_command_class_for_client(client):
         def __call__(self, *args, **kwargs):
             # TODO: notifications can be send multiple times and commands only once!
             if self._cmd_name not in Command._legal_names:
-                # print('*** Warning, there is no `{}` command ***'.format(self._cmd_name))
+                # print(f'*** Warning, there is no `{self._cmd_name}` command ***')
                 pass
             if self._is_resolved.is_set():
                 self._result = None
@@ -109,7 +109,7 @@ def create_command_class_for_client(client):
                 self._is_resolved.clear()
             with Command._global_mutex:
                 if Command._ccid_counter < 0:
-                    raise RuntimeError('`*last*` command was already sent, trying to send `{}`(args={}, kwargs={})'.format(self._cmd_name, args, kwargs))
+                    raise RuntimeError(f'`*last*` command was already sent, trying to send `{self._cmd_name}`(args={args}, kwargs={kwargs})')
                 if self._ccid in Command._unresolved:
                     raise RuntimeError('reissue impossible right now')
                 self._ccid = Command._ccid_counter
@@ -122,7 +122,7 @@ def create_command_class_for_client(client):
                 else:
                     Command._ccid_counter = -1
             j = self._jsonify(args, kwargs)
-            # print('<- {:.3f}'.format(time.time()-self._client_wr().app._t0), j)
+            # print(f'<- {time.time()-self._client_wr().app._t0:.3f}', j)
             if self._ccid > 0:    # `cmd_name=="__first__"` cannot be send, only received
                 Command._client_wr().send_json(j)
             if self._ccid in Command._resolved_in_advance:

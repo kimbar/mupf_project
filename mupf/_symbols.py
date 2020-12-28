@@ -10,7 +10,7 @@ class _Symbol:
         return hash(self.internal_name)
 
     def __repr__(self):
-        return "[Symbol: {}]".format(self.internal_name.lstrip('_'))
+        return f"[Symbol: {self.internal_name.removeprefix('_')}]"
 
 
 this = _Symbol("_this", readonly=True)

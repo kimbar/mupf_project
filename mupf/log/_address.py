@@ -35,7 +35,7 @@ def parse_path(path):
     return result
 
 def build_path(tree, specifiers={}):
-    return "/".join([".".join([obj[0]+"".join(["<{}>".format(specifiers.get(supl, supl).lstrip('<').rstrip('>')) for supl in obj[1:]]) for obj in pathpart]) for pathpart in tree])
+    return "/".join([".".join([obj[0]+"".join([f"<{specifiers.get(supl, supl).lstrip('<').rstrip('>')}>" for supl in obj[1:]]) for obj in pathpart]) for pathpart in tree])
 
 def make_regexp_from_filter(filter_):
     tree = parse_path(filter_)
