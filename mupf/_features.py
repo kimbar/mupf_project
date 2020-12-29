@@ -1,4 +1,5 @@
 import copy
+from ._utils import removeprefix as __removeprefix
 
 class __Feature:
 
@@ -53,7 +54,7 @@ feature_list = [x for x in globals().values() if isinstance(x, __Feature)]
 def __getattr__(name: str):
     global feature_list
     if name.startswith('_features__'):
-        return globals()[name.removeprefix('_features')]
+        return globals()[__removeprefix(name, '_features')]
     if not name.startswith("_"):
         raise ValueError(f'User defined features names must begin with `_`, got `{name}`')
     feature = __Feature(name, True)
