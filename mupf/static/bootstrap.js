@@ -82,7 +82,7 @@ function main() {
     // command run at the very beginning, setups `window.mupf`
     mupf.cmd['*first*'] = async function(args, kwargs){
         document.head.removeChild(document.getElementById('mupf-bootstrap'))
-        Object.assign(window.mupf.fts, kwargs)
+        Object.assign(window.mupf.fts, kwargs)                             // user features
         mupf.cid = window.location.hash.substring(1)                       // client id
         document.cookie = mupf.cid
         mupf.ws = await new Promise((ok, no) => {                          // web socket
@@ -129,6 +129,7 @@ function main() {
     // here. No other command is ever called like that, only `__first__`.
 
     mupf.recv([0,0,"*first*",{args:[],kwargs:{
+        // Some kind of `MacroByteStream` macro is needed here that calculates the feature states
         _user_feature: (2+2 == 4)
     }}])
 
