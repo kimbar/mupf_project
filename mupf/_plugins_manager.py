@@ -2,6 +2,8 @@ import mupf.plugins as plugins
 import pkgutil
 import importlib
 
+from ._utils import removeprefix
+
 _discovered_plugins = {}
 
 def _collect_plugins():
@@ -14,7 +16,7 @@ def _collect_plugins():
 def iterate_with_predicate(predicate, public=True):
     _collect_plugins()
     for plugin_name, plugin_package in _discovered_plugins.items():
-        plugin_name = plugin_name.removeprefix('mupf.plugins.')
+        plugin_name = removeprefix(plugin_name, 'mupf.plugins.')
         if plugin_name.startswith("_"):
             continue
         for var_name in dir(plugin_package):
