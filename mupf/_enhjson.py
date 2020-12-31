@@ -148,7 +148,7 @@ def _encode_string(s, stream):
 #    <key iterator> -- iterator generating subsequent keys for the container's `__getitem__()`
 #    <first pass> -- `bool` for puting a `,` or not.
 
-def encode(value):
+def encode(value, *, sanitize=lambda v: v, escape=lambda v: v.json_esc()):
     result = io.BytesIO()
     current_value = value
     stack = []
@@ -172,7 +172,7 @@ def encode(value):
         # we encode the value, encode some separators and/or biuld the stack. The stack
         # allows us to get deeper into the tree structure of JSON
 
-        current_value = _make_escapable(current_value)  # BIG PROBLEM WITH REMOTE???!!!!
+        current_value = sanitize(current_value)
 
         try:
             # check if it has dict-like type
@@ -211,7 +211,7 @@ def encode(value):
                         # mode had been already activated
                         try:
                             # The object has appropriate API
-                            handler, *arguments = current_value.json_esc()
+                            handler, *arguments = escape(current_value)
                         except:
                             # The object does not have API, we do what we can
                             handler, arguments = b'?', ("NoEnhJSONAPIError", repr(current_value))

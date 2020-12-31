@@ -8,7 +8,7 @@ from .. import _command
 from .. import _enhjson as enhjson
 from .. import _features as F
 from .. import _symbols as S
-from .._remote import CallbackJsonEsc, CallbackTask, RemoteObj
+from .._remote import CallbackTask, RemoteObj
 from ..log import loggable, LogManager, LogWriterStyle
 
 
@@ -49,8 +49,7 @@ class Client:
         }
         self._callback_queue = queue.Queue()
         self._preconnection_stash = []
-        self._healthy_connection = True
-        self._safe_dunders_feature = False
+        self._healthy_connection = True    # FIXME: this should not start as True by default
         self.command = _command.create_command_class_for_client(self)
         self.window = RemoteObj(0, self)
         self._remote_obj_byid = weakref.WeakValueDictionary()
@@ -66,7 +65,7 @@ class Client:
         else:
             evl = self._app_wr()._event_loop
             json[3] = enhjson.EnhancedBlock(json[3])
-            json = enhjson.encode(json)
+            json = enhjson.encode(json, sanitize=self.sanitize, escape=self.escape)
             # print(f'<- {time.time()-self._app_wr()._t0:.3f}', json)
             evl.call_soon_threadsafe(
                 create_send_task,
@@ -74,6 +73,18 @@ class Client:
                 self._websocket,
                 json,
             )
+
+    def sanitize(self, value):
+        try:
+            return value[S.json_esc_interface]
+        except Exception:
+            return value
+
+    def escape(self, value):
+        if callable(value):
+            return '$', None, self._get_callback_id(value)
+        else:
+            return value.json_esc()
 
     @loggable(log_enter=False)
     def __bool__(self):
@@ -164,16 +175,16 @@ class Client:
             self.command._legal_names = self.command('*getcmds*')().result
 
     @loggable()
-    def _wrap_callback(self, func):
+    def _get_callback_id(self, func):
         if func in self._clbid_by_callbacks:
-            return CallbackJsonEsc(self._clbid_by_callbacks[func])
-
-        self._clbid_by_callbacks[func] = self._callback_free_id
-        self._callbacks_by_clbid[self._callback_free_id] = func
-
-        res = CallbackJsonEsc(self._callback_free_id)
-        self._callback_free_id += 1
-        return res
+            return self._clbid_by_callbacks[func]
+            # return CallbackJsonEsc(self._clbid_by_callbacks[func])
+        else:
+            self._clbid_by_callbacks[func] = self._callback_free_id
+            self._callbacks_by_clbid[self._callback_free_id] = func
+            result = self._callback_free_id
+            self._callback_free_id += 1
+            return result
 
     @loggable()
     def shedule_callback(self, ccid, noun, pyld):

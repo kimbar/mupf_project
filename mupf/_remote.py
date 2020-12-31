@@ -1,67 +1,114 @@
 from . import _symbols as S
 import weakref
+import re
 
 from .log import loggable
 
-class MetaRemoteObj(type):
+class FinalClass(type):
 
     def __init__(cls, name, bases, dict_):
+        if len(bases):
+            raise RuntimeError(f"`{bases[0]}` is final -- cannot be subclassed")
         super().__init__(name, bases, dict_)
 
+_re_dunder = re.compile(r'^__[^_]+__$')
 
-class RemoteObj(metaclass=MetaRemoteObj):
+class RemoteObj(metaclass=FinalClass):
 
     def __init__(self, rid, client, this=None):
-        object.__setattr__(self, '_client_wr', weakref.ref(client))
-        object.__setattr__(self, '_command_wr', weakref.ref(client.command))
-        object.__setattr__(self, '_rid', rid)
-        object.__setattr__(self, '_this', this)
-        object.__setattr__(self, '_json_esc_interface', RemoteJsonEsc(rid))
+        object.__setattr__(self, S.client.internal_name, weakref.ref(client))
+        object.__setattr__(self, S.command.internal_name, weakref.ref(client.command))
+        object.__setattr__(self, S.rid.internal_name, rid)
+        object.__setattr__(self, S.this.internal_name, this)
+        object.__setattr__(self, S.json_esc_interface.internal_name, RemoteJsonEsc(rid))
+
+    def __getattribute__(self, key):
+        """ Interface for `obj.key` syntax
+
+        All `key` except "dunders" are translated to JS-side attributes.
+        "Dunders" (eg. `__class__`, `__qualname__` etc.) are always
+        Python-side, that is they refer directly to `RemoteObj` object, not to
+        its JS-side counterpart.
+
+        If a JS-side reference of a "dunder" is needed it can always be
+        achieved with `__getitem__` syntax, that is `obj["__class__"]`.
+        """
+        # print(f"__getattribute__ {repr(key)}")
+        if _re_dunder.match(key):
+            return object.__getattribute__(self, key)
+        # print(f"__getattribute__ {key} -> sending *get*")
+        return object.__getattribute__(self, '_command')()('*get*')(
+            object.__getattribute__(self, '_json_esc_interface'),
+            key,
+        ).result
+
+    def __setattr__(self, key, value):
+        """ Interface for `obj.key = value` syntax
+
+        All `key` are set at the JS-side (even the "dunders"). If value is a
+        callable it is registered at the client and only a reference is sent to
+        the JS-side.
+        """
+        # if value.__class__ != RemoteObj and callable(value):
+        #     value = CallbackJsonEsc(object.__getattribute__(self, '_client')()._get_callback_id(value))
+        object.__getattribute__(self, '_command')()('*set*')(
+            object.__getattribute__(self, '_json_esc_interface'),
+            key,
+            value,
+        ).wait
+
+    def __getitem__(self, key):
+        # print(f"__getitem__ {key}")
+        if isinstance(key, S._Symbol):
+            item = object.__getattribute__(self, key.internal_name)
+            if key.weakref:
+                return item()
+            else:
+                return item
+        else:
+            return object.__getattribute__(self, '_command')()('*seti*')(
+                object.__getattribute__(self, '_json_esc_interface'),
+                key,
+            ).result
 
     def __setitem__(self, key, value):
+        # print(f"__setitem__ {key}")
         if isinstance(key, S._Symbol):
             if key.readonly:
                 raise AttributeError(f'Attribute `{key}` is readonly')
             else:
                 object.__setattr__(self, key.internal_name, value)
         else:
-            object.__getattribute__(self, '_command_wr')()('*seti*')(self[S.json_esc_interface], key, value).result
+            # if value.__class__ != RemoteObj and callable(value):
+            #     value = CallbackJsonEsc(object.__getattribute__(self, '_client')()._get_callback_id(value))
+            object.__getattribute__(self, '_command')()('*seti*')(
+                object.__getattribute__(self, '_json_esc_interface'),
+                key,
+                value,
+            ).result
 
-    def __getitem__(self, key):
-        if isinstance(key, S._Symbol):
-            # if key == S.dunder_class:
-            #     # This is if you reaeaeally need to access `.__class__` on the JS side
-            #     return self[S.command_wr]()('*get*')(self[S.json_esc_interface], "__class__").result
-            return object.__getattribute__(self, key.internal_name)
-        else:
-            return object.__getattribute__(self, '_command_wr')()('*geti*')(self[S.json_esc_interface], key).result
-
-    def __setattr__(self, key, value):
-        if not isinstance(value, RemoteObj) and callable(value):
-            value = object.__getattribute__(self, '_client_wr')()._wrap_callback(value)
-        object.__getattribute__(self, '_command_wr')()('*set*')(self[S.json_esc_interface], key, value).wait
-
-    def __getattribute__(self, key):
-        if self[S.client_wr]()._safe_dunders_feature and key == "__class__":    # __dict__ __bases__ __name__ __qualname__ __mro__ __subclasses__
-            # this allows for `isinstance(self, <not RemoteObj>)` for `RemoteObj`
-            return RemoteObj
-        return self[S.command_wr]()('*get*')(self[S.json_esc_interface], key).result
-
+    # Is the `_make_escapable` really reqired here? It should be done in
+    # `_enhjson.py` anyway?
     def __call__(self, *args):
-        this = _make_escapable(self[S.this])
-        args = map(_make_escapable, args)
-        return object.__getattribute__(self, '_command_wr')()('*call*')(*args, id=self[S.rid], this_=this).result
+        return object.__getattribute__(self, '_command')()('*call*')(
+            *map(_make_escapable, args),
+            id = object.__getattribute__(self, '_rid'),
+            this_ = _make_escapable(object.__getattribute__(self, '_this')),
+        ).result
+
+    def __repr__(self):
+        client = object.__getattribute__(self, '_client')()
+        return f"<Remote ~@{object.__getattribute__(self, '_rid')} of {type(client).__name__} {getattr(client, '_cid', '?')[0:6]}>"
 
     def __del__(self):
-        command = object.__getattribute__(self, '_command_wr')()
+        # print(f"__del__")
+        command = self[S.command]
         # 1. some mutex here? because `command` may dissapear
         rid = self[S.rid]
-        if command is not None and rid != 0 and self[S.client_wr]()._healthy_connection:    # do not try to GC the `window`
+        # print(f"__del__ rid = {rid}")
+        if command is not None and rid != 0 and self[S.client]._healthy_connection:    # do not try to GC the `window`
+            # print(f"__del__ rid = {rid} command *gc*")
             command('*gc*').run(rid).result
-
-    @property
-    def _client(self):
-        return self[S.client_wr]()
 
 
 class RemoteJsonEsc:
@@ -71,6 +118,7 @@ class RemoteJsonEsc:
         return '@', self.rid
     def __repr__(self):
         return f'["~@",{self.rid}]'
+
 
 @loggable(
     'remote.py/*<obj>',
@@ -100,15 +148,6 @@ class CallbackTask:
             return
         if self._noun == '*close*':
             return
-
-
-class CallbackJsonEsc:
-    def __init__(self, clbid):
-        self.clbid = clbid
-    def json_esc(self):
-        return '$', None, self.clbid
-    def __repr__(self):
-        return f'["~$",null,{self.clbid}]'
 
 
 def _make_escapable(value):

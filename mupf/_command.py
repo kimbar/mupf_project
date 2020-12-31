@@ -1,6 +1,5 @@
 import weakref
 import threading
-from ._enhjson import EnhancedBlock, encode
 import time
 from ._remote import RemoteObj
 from .log import loggable
