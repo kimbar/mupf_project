@@ -28,6 +28,9 @@ def escape_lazy(x):
     if j.test_element_type(x) == j.JsonElement.Unknown:
         return j.JsonElement.Autonomous
 
+def bad_escape(x):
+    if x==3:
+        return "it's not a tuple at all - it's a string"
 
 
 class EnhJSON(unittest.TestCase):
@@ -72,6 +75,14 @@ class EnhJSON(unittest.TestCase):
         self.assertEqual(b, '[0,0,"*set*",["~",{"args":[["~@",650],"prop",0],"kwargs":{}},{}]]')
         c = j.encode(j.EnhancedBlock([7, "a", [3,5,6]], opt=j.OptPolicy.none),escape=escape)
         self.assertEqual(c, '[7,"a",[3,5,6]]')
+
+    def test_escape(self):
+        "enhjson: Bad escape routine -> Encoded strings"
+
+        a = j.encode(j.EnhancedBlock([1,2,3,4,5]), escape=bad_escape)
+        self.assertEqual(a, '[1,2,["~?","IllformedEscTupleError"],4,5]')    # Not sure if this is OK. Shouldn't there be enhanced block anyway?
+        b = j.encode([1,2,3,4,5], escape=bad_escape)
+        self.assertEqual(b, '[1,2,["~?","IllformedEscTupleError"],4,5]')    # What about here? The enhanced block should be added anyway?
 
 
 if __name__ == '__main__':

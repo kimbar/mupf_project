@@ -9,15 +9,16 @@ class OptPolicy(Enum):
 
 
 class JsonElement(Enum):
-    Object = 0
-    Array = 1
-    String = 2
-    Number = 3
-    Bool = 4
-    Null = 5
-    Unknown = 6
-    Autonomous = 7
-    EscapeBlock = 8
+    Object = 0          # JSON object `{"key1":3, "key2":"value"}`
+    Array = 1           # JSON array `[1, 2, "blah", 7]`
+    String = 2          # JSON string `"a string!"`
+    Number = 3          # JSON number `123.56`
+    Bool = 4            # JSON bool `true`
+    Null = 5            # JSON null value `null`
+    Unknown = 6         # Value unknown - it's unknown how to encode it
+    Autonomous = 7      # object that provides `.enh_json_esc()` method
+    EscapeBlock = 8     # a JSON array, but as an escape `["~@", 340]`
+    DirectJson = 9      # a `byte` stream directly put into JSON (potentially malformed!)
 
 
 def test_element_type(x) -> JsonElement:
@@ -222,7 +223,8 @@ def encode(value, *, escape=test_element_type):
         #
         if current_type == JsonElement.EscapeBlock:
             if not (isinstance(esc_result, tuple) and len(esc_result)>0 and isinstance(esc_result[0], (str, bytes))):
-                raise ValueError(f"Illegal escape sequence `{repr(esc_result)}`")
+                current_type = JsonElement.DirectJson
+                current_value = b'["~?","IllformedEscTupleError"]'
         #
         # Now the "type" is known, and we can proceed acordingly. Note that
         # `JsonElement.Autonomous` type is never passed on, becouse it is casted
@@ -280,9 +282,13 @@ def encode(value, *, escape=test_element_type):
         elif current_type == JsonElement.Unknown:
             # Despite the effort it is still clasiffied as `JsonElement.Unknown`
             result.write(b'["~?","UnknownObjectError"]')
+        elif current_type == JsonElement.DirectJson:
+            if not isinstance(current_value, bytes):
+                current_value = b'["~?","BadDirectJsonValueError"]'
+            result.write(current_value)
         else:
-            # That should never be raised
-            raise ValueError(f"Bad `JsonElement` value `{repr(current_type)}`")
+            # That should never be written. Someone subclassed `JsonElement`?
+            result.write(b'["~?","UnknownJsonElementError"]')
         #
         # Here we inform the enhanced block that a normal value has been encoded.
         # This is done to give the EB data on the position of escape structures
