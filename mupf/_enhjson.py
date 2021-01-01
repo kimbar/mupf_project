@@ -7,6 +7,37 @@ class OptPolicy(Enum):
     non_zero_count = 1
     always_count = 2
 
+
+class JsonElement(Enum):
+    Object = 0
+    Array = 1
+    String = 2
+    Number = 3
+    Bool = 4
+    Null = 5
+    Unknown = 6
+    Autonomous = 7
+    EscapeBlock = 8
+
+
+def test_element_type(x) -> JsonElement:
+    if hasattr(x, 'keys') and callable(x.keys) and hasattr(x, '__getitem__'):
+        return JsonElement.Object
+    if isinstance(x, str):
+        return JsonElement.String
+    if hasattr(x, '__len__') and hasattr(x, '__getitem__'):
+        return JsonElement.Array
+    if isinstance(x, bool):
+        return JsonElement.Bool
+    if x is None:
+        return JsonElement.Null
+    if isinstance(x, (int, float)):
+        return JsonElement.Number
+    if isinstance(x, IJsonEsc) or (isinstance(x, type) and issubclass(x, IJsonEsc)):
+        return JsonElement.Autonomous
+
+    return JsonElement.Unknown
+
 class EnhancedBlock:
 
     def __init__(self, value, explicit=False, opt=OptPolicy.non_zero_count):
@@ -147,7 +178,7 @@ def _encode_string(s, stream):
 #    <key iterator> -- iterator generating subsequent keys for the container's `__getitem__()`
 #    <first pass> -- `bool` for puting a `,` or not.
 
-def encode(value, *, sanitize=lambda v: v, escape=lambda v: v.json_esc()):
+def encode(value, *, escape=test_element_type):
     result = io.BytesIO()
     current_value = value
     stack = []
@@ -170,91 +201,88 @@ def encode(value, *, sanitize=lambda v: v, escape=lambda v: v.json_esc()):
         # Here we check the "type" of the value, and then act acordingly -- that is
         # we encode the value, encode some separators and/or biuld the stack. The stack
         # allows us to get deeper into the tree structure of JSON
-
-        current_value = sanitize(current_value)
-
-        try:
-            # check if it has dict-like type
+        #
+        # First we ask a function `escape()` (provided by the `Client`) what it thinks about
+        # the value. It returns either a tuple or an enum value of `JsonElement` type or `None`
+        esc_result = escape(current_value)
+        # If the `escape` returned `JsonElement.Unknown` the value
+        # must be tested for the type of JSON element.
+        current_type = JsonElement.EscapeBlock
+        if esc_result == JsonElement.Unknown or esc_result is None:
+            current_type = test_element_type(current_value)
+        elif isinstance(esc_result, JsonElement):
+            current_type = esc_result
+        #
+        if current_type == JsonElement.Autonomous:
+            try:
+                esc_result = current_value.enh_json_esc()
+            except Exception:
+                esc_result = IJsonEsc.enh_json_esc(current_value)
+            current_type = JsonElement.EscapeBlock
+        #
+        if current_type == JsonElement.EscapeBlock:
+            if not (isinstance(esc_result, tuple) and len(esc_result)>0 and isinstance(esc_result[0], (str, bytes))):
+                raise ValueError(f"Illegal escape sequence `{repr(esc_result)}`")
+        #
+        # Now the "type" is known, and we can proceed acordingly. Note that
+        # `JsonElement.Autonomous` type is never passed on, becouse it is casted
+        # to `JsonElement.EscapeBlock`
+        if current_type == JsonElement.Object:
             keys = current_value.keys()
-            if not hasattr(current_value, '__getitem__'):
-                raise TypeError
-        except:
-            # if not, explicitly check if it is a string
-            if isinstance(current_value, str):
-                # encode it as a string
-                _encode_string(current_value, result)
-            else:
-                # if it is not a string...
-                try:
-                    # ... it may have a list-like type
-                    length = len(current_value)
-                    if not hasattr(current_value, '__getitem__'):
-                        raise TypeError
-                except:
-                    # if it is not dict-like, string or list-like it may be...
-                    if isinstance(current_value, bool):
-                        # ... bool? ...
-                        if current_value:
-                            result.write(b'true')
-                        else:
-                            result.write(b'false')
-                    elif current_value is None:
-                        # ... None? ...
-                        result.write(b'null')
-                    elif isinstance(current_value, (int, float)):
-                        # ... Number? ...
-                        result.write(str(current_value).encode())
-                    elif current_enhanced_block:
-                        # ... here we are out of standard types a JSON can hold and we
-                        # start enhanced API. But first we need to check if enhanced
-                        # mode had been already activated
-                        try:
-                            # The object has appropriate API
-                            handler, *arguments = escape(current_value)
-                        except:
-                            # The object does not have API, we do what we can
-                            handler, arguments = b'?', ("NoEnhJSONAPIError", repr(current_value))
-                        # Building an escape structure
-                        current_enhanced_block.esc_here(handler, stack, result)
-                        # The arguments will be encoded in "ufa" mode, tahat is they will be appended
-                        # after the handler name string
-                        current_value = arguments
-                    else:
-                        # The enhanced API had not yet been started, and the value
-                        # is not of appropriate type. We could rise an exception
-                        # or just put a placeholder. In any case - we're in trouble if
-                        # we are here.
-                        result.write(b'["~?","NoEnhJSONBlockError","ENHANCED JSON ENCODING NOT STARTED"]')
-                else:    # The value is a list-like type
-                    if (    current_enhanced_block    # this long condition checks if value must be escaped, but...
-                        and length > 1
-                        and isinstance(current_value[0], str)
-                        and current_value[0][:1] == '~'
-                        # ... we don't want to escape it if we already in escape structure!
-                        and not (  # note: if `current_enhanced_block` exists there must be something on the stack
-                                len(stack) > 1
-                            and stack[-2][0] == 1      # mode == 1 == 'esc'
-                            and stack[-2][2] == b'~'
-                        )
-                    ):
-                        current_enhanced_block.esc_here(b'~', stack, result)
-                        # We need to wrap the current value in tuple.
-                        # We will put an escape frame on the stack -- it will fail the `if` condition
-                        # above on the next pass and encode the array normally, but an escape sequence can
-                        # encode muliple parameters (with "ufa" mode) so we need to wrap the list so it will
-                        # be treated as a single parameter.
-                        #
-                        current_value = (current_value,)
-                    else:    # Not in enhanced mode or no collision or inside the "~~" escape -- start regular array
-                        stack.append([2, current_value, (n for n in range(length)), True])    # mode == 2 == 'arr'
-                        result.write(b'[')
-                        if current_enhanced_block:
-                            current_enhanced_block.addr_append(None)
-        else:    # The value has dict-like type -- start the object
             stack.append([3, current_value, (k for k in keys), True])    # mode == 3 == 'obj'
             result.write(b'{')
             if current_enhanced_block:
                 current_enhanced_block.addr_append(None)
+        elif current_type == JsonElement.String:
+            _encode_string(current_value, result)
+        elif current_type == JsonElement.Array:
+            length = len(current_value)
+            if (    current_enhanced_block    # this long condition checks if value must be escaped, but...
+                and length > 1
+                and isinstance(current_value[0], str)
+                and current_value[0][:1] == '~'
+                # ... we don't want to escape it if we already in escape structure!
+                and not (  # note: if `current_enhanced_block` exists there must be something on the stack
+                        len(stack) > 1
+                    and stack[-2][0] == 1      # mode == 1 == 'esc'
+                    and stack[-2][2] == b'~'
+                )
+            ):
+                current_enhanced_block.esc_here(b'~', stack, result)
+                # We need to wrap the current value in tuple.
+                # We will put an escape frame on the stack -- it will encode the array normally,
+                # but an escape sequence can encode muliple parameters (with "ufa" mode)
+                # so we need to wrap the list so it will be treated as a single parameter.
+                #
+                current_value = (current_value,)
+            else:    # Not in enhanced mode or no collision or inside the "~~" escape -- start regular array
+                stack.append([2, current_value, (n for n in range(length)), True])    # mode == 2 == 'arr'
+                result.write(b'[')
+                if current_enhanced_block:
+                    current_enhanced_block.addr_append(None)
+        elif current_type == JsonElement.Bool:
+            result.write(b'true' if current_value else b'false')
+        elif current_type == JsonElement.Null:
+            result.write(b'null')
+        elif current_type == JsonElement.Number:
+            result.write(str(current_value).encode())
+        elif current_type == JsonElement.EscapeBlock:
+            if current_enhanced_block:
+                # The `escape` or the autonomous object returned a tuple. The
+                # first element of this tuple is the name of the handler for
+                # escape block.
+                current_enhanced_block.esc_here(esc_result[0], stack, result)
+                # Arguments of the escape structure (if any) will be encoded after the name
+                # of the handler in "ufa" mode.
+                current_value = esc_result[1:]
+            else:
+                result.write(b'["~?","NoEnhJSONBlockError","ENHANCED JSON ENCODING NOT STARTED"]')
+        elif current_type == JsonElement.Unknown:
+            # Despite the effort it is still clasiffied as `JsonElement.Unknown`
+            result.write(b'["~?","UnknownObjectError"]')
+        else:
+            # That should never be raised
+            raise ValueError(f"Bad `JsonElement` value `{repr(current_type)}`")
         #
         # Here we inform the enhanced block that a normal value has been encoded.
         # This is done to give the EB data on the position of escape structures
@@ -330,21 +358,25 @@ def encode(value, *, sanitize=lambda v: v, escape=lambda v: v.json_esc()):
 
 
 class IJsonEsc:
-    pass
+    @classmethod
+    def enh_json_esc(cls, x=None):
+        if x is None:
+            x = cls
+        return b"?", "NoEnhJSONAPIError", repr(x)
 
 class undefined(IJsonEsc):
     @classmethod
-    def json_esc(cls):
+    def enh_json_esc(cls):
         return b"S", "undefined"
 
 class NaN(IJsonEsc):
     @classmethod
-    def json_esc(cls):
+    def enh_json_esc(cls):
         return b"S", "NaN"
 
 class Infinity(IJsonEsc):
     @classmethod
-    def json_esc(cls):
+    def enh_json_esc(cls):
         return b'S', "Infinity"
 
 

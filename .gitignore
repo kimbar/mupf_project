@@ -50,6 +50,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+tests/*/*.log
 
 # Translations
 *.mo
@@ -87,3 +88,4 @@ venv.bak/
 # selenium
 geckodriver.log
 fireunc/*
+tests/selenium_env/hello.log

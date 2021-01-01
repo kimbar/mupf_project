@@ -65,8 +65,7 @@ class Client:
         else:
             evl = self._app_wr()._event_loop
             json[3] = enhjson.EnhancedBlock(json[3])
-            json = enhjson.encode(json, sanitize=self.sanitize_for_json, escape=self.escape_for_json)
-            # print(f'<- {time.time()-self._app_wr()._t0:.3f}', json)
+            json = enhjson.encode(json, escape=self._escape_for_json)
             evl.call_soon_threadsafe(
                 create_send_task,
                 evl,
@@ -74,19 +73,28 @@ class Client:
                 json,
             )
 
-    def sanitize_for_json(self, value):
-        if isinstance(value, enhjson.IJsonEsc):
-            return value
-        try:
-            return value[S.json_esc_interface]
-        except Exception:
-            return value
+    def _escape_for_json(self, value):
+        """ Encoding advanced types for JSON transport
 
-    def escape_for_json(self, value):
-        if callable(value):
-            return '$', None, self._get_callback_id(value)
+        This method is used by `mupf._enhjson.encode` to encode all types byond
+        dicts, arrays, floats etc. It should return either a
+        `enhjson.JsonElement` enum member or a tuple. The tuple is the escape
+        structure for an advanced type (handler and arguments).
+
+        We can here get a help from `enhjson.test_element_type()` function that
+        will return an`enhjson.JsonElement` enum member if it can.
+        """
+        if isinstance(value, RemoteObj):
+            return '@', value[S.rid]
+        json_type = enhjson.test_element_type(value)
+        if json_type == enhjson.JsonElement.Unknown:
+            if callable(value):
+                return '$', None, self._get_callback_id(value)
+            else:
+                # If we're here, `value` should have `.enh_json_esc()` method or fail
+                return enhjson.JsonElement.Autonomous
         else:
-            return value.json_esc()
+            return json_type
 
     @loggable(log_enter=False)
     def __bool__(self):
