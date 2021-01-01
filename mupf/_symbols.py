@@ -25,7 +25,6 @@ rid = _Symbol("_rid", readonly=True)
 client = _Symbol("_client", readonly=True, weakref=True)
 command = _Symbol("_command", readonly=True, weakref=True)
 json_esc_interface = _Symbol("_json_esc_interface", readonly=True)
-dunder_class = _Symbol("")
 
 def __getattr__(name: str) -> _Symbol:
     return _Symbol('_'+name)

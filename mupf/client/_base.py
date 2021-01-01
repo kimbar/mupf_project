@@ -65,7 +65,7 @@ class Client:
         else:
             evl = self._app_wr()._event_loop
             json[3] = enhjson.EnhancedBlock(json[3])
-            json = enhjson.encode(json, sanitize=self.sanitize, escape=self.escape)
+            json = enhjson.encode(json, sanitize=self.sanitize_for_json, escape=self.escape_for_json)
             # print(f'<- {time.time()-self._app_wr()._t0:.3f}', json)
             evl.call_soon_threadsafe(
                 create_send_task,
@@ -74,13 +74,15 @@ class Client:
                 json,
             )
 
-    def sanitize(self, value):
+    def sanitize_for_json(self, value):
+        if isinstance(value, enhjson.IJsonEsc):
+            return value
         try:
             return value[S.json_esc_interface]
         except Exception:
             return value
 
-    def escape(self, value):
+    def escape_for_json(self, value):
         if callable(value):
             return '$', None, self._get_callback_id(value)
         else:
@@ -178,7 +180,6 @@ class Client:
     def _get_callback_id(self, func):
         if func in self._clbid_by_callbacks:
             return self._clbid_by_callbacks[func]
-            # return CallbackJsonEsc(self._clbid_by_callbacks[func])
         else:
             self._clbid_by_callbacks[func] = self._callback_free_id
             self._callbacks_by_clbid[self._callback_free_id] = func

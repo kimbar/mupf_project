@@ -1,6 +1,7 @@
 from . import _symbols as S
 import weakref
 import re
+from ._enhjson import IJsonEsc
 
 from .log import loggable
 
@@ -33,10 +34,8 @@ class RemoteObj(metaclass=FinalClass):
         If a JS-side reference of a "dunder" is needed it can always be
         achieved with `__getitem__` syntax, that is `obj["__class__"]`.
         """
-        # print(f"__getattribute__ {repr(key)}")
         if _re_dunder.match(key):
             return object.__getattribute__(self, key)
-        # print(f"__getattribute__ {key} -> sending *get*")
         return object.__getattribute__(self, '_command')()('*get*')(
             object.__getattribute__(self, '_json_esc_interface'),
             key,
@@ -45,12 +44,10 @@ class RemoteObj(metaclass=FinalClass):
     def __setattr__(self, key, value):
         """ Interface for `obj.key = value` syntax
 
-        All `key` are set at the JS-side (even the "dunders"). If value is a
-        callable it is registered at the client and only a reference is sent to
-        the JS-side.
+        See description for `__getattribute__` for details.
         """
-        # if value.__class__ != RemoteObj and callable(value):
-        #     value = CallbackJsonEsc(object.__getattribute__(self, '_client')()._get_callback_id(value))
+        if _re_dunder.match(key):
+            object.__setattr__(self, key, value)
         object.__getattribute__(self, '_command')()('*set*')(
             object.__getattribute__(self, '_json_esc_interface'),
             key,
@@ -58,7 +55,12 @@ class RemoteObj(metaclass=FinalClass):
         ).wait
 
     def __getitem__(self, key):
-        # print(f"__getitem__ {key}")
+        """ Interface for `obj[key]` syntax
+
+        All `key` exept `_Symbol` are translated to JS-side attributes.
+        `_Symbol` are resolved on the Py-side, automatically stripped of
+        `weakref` if needed.
+        """
         if isinstance(key, S._Symbol):
             item = object.__getattribute__(self, key.internal_name)
             if key.weakref:
@@ -66,39 +68,45 @@ class RemoteObj(metaclass=FinalClass):
             else:
                 return item
         else:
-            return object.__getattribute__(self, '_command')()('*seti*')(
+            return object.__getattribute__(self, '_command')()('*get*')(
                 object.__getattribute__(self, '_json_esc_interface'),
                 key,
             ).result
 
     def __setitem__(self, key, value):
-        # print(f"__setitem__ {key}")
+        """ Interface for `obj[key] = value` syntax
+
+        See description for `__getitem__` for details. If a `_Symbol` attribute
+        is readonly an `AttributeError` is risen.
+        """
         if isinstance(key, S._Symbol):
             if key.readonly:
                 raise AttributeError(f'Attribute `{key}` is readonly')
+            elif key.weakref:
+                object.__setattr__(self, key.internal_name, weakref.ref(value))
             else:
                 object.__setattr__(self, key.internal_name, value)
         else:
-            # if value.__class__ != RemoteObj and callable(value):
-            #     value = CallbackJsonEsc(object.__getattribute__(self, '_client')()._get_callback_id(value))
-            object.__getattribute__(self, '_command')()('*seti*')(
+            object.__getattribute__(self, '_command')()('*set*')(
                 object.__getattribute__(self, '_json_esc_interface'),
                 key,
                 value,
             ).result
 
-    # Is the `_make_escapable` really reqired here? It should be done in
-    # `_enhjson.py` anyway?
     def __call__(self, *args):
+        """ Interface for `obj(arg1, arg2, ...)` syntax
+
+        A function call is made on the JS-side.
+        """
         return object.__getattribute__(self, '_command')()('*call*')(
-            *map(_make_escapable, args),
+            *args,
             id = object.__getattribute__(self, '_rid'),
-            this_ = _make_escapable(object.__getattribute__(self, '_this')),
+            this_ = object.__getattribute__(self, '_this'),
         ).result
 
     def __repr__(self):
         client = object.__getattribute__(self, '_client')()
-        return f"<Remote ~@{object.__getattribute__(self, '_rid')} of {type(client).__name__} {getattr(client, '_cid', '?')[0:6]}>"
+        return f"<RemoteObj ~@{object.__getattribute__(self, '_rid')} of {getattr(client, '_cid', '?')[0:6]}>"
 
     def __del__(self):
         # print(f"__del__")
@@ -111,7 +119,7 @@ class RemoteObj(metaclass=FinalClass):
             command('*gc*').run(rid).result
 
 
-class RemoteJsonEsc:
+class RemoteJsonEsc(IJsonEsc):
     def __init__(self, rid):
         self.rid = rid
     def json_esc(self):
@@ -148,16 +156,3 @@ class CallbackTask:
             return
         if self._noun == '*close*':
             return
-
-
-def _make_escapable(value):
-    try:
-        return value[S.json_esc_interface]
-    except Exception:
-        return value
-
-
-loggable(
-    outer_class = RemoteObj,
-    long = lambda self: f"<RemoteObj {self[S.rid]} of {self[S.client]._cid[0:6]} at {id(self):X}>",
-)

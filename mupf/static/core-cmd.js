@@ -6,12 +6,6 @@ mupf.cmd['*get*'] = function (args, kwargs) {
     return new mupf.esc.Any(x, args[0])
 }
 
-mupf.cmd['*geti*'] = function(args, kwargs) {
-    let x = args[0][args[1]]
-    if (x === undefined) throw new mupf.MupfError('DOMAttributeError', 'object has no attribute \'' + args[1] + '\'')
-    return new mupf.esc.Any(x, args[0])
-}
-
 mupf.cmd['*set*'] = function(args, kwargs) {
     args[0][args[1]] = args[2]
 }
@@ -22,7 +16,7 @@ mupf.cmd['*call*'] = function(args, kwargs) {
 }
 
 mupf.cmd['*gc*'] = function(args, kwargs) { mupf.obj.del(args[0]) }
-mupf.cmd['*gc*'] .noautoesc = true
+mupf.cmd['*gc*'].noautoesc = true
 
 // #if friendly_obj_names
 mupf.cmd['*setfrn*'] = function(args, kwargs) { mupf.obj.byid(mupf.obj.getid(args[0]))[1].frn = args[1] }

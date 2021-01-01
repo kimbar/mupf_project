@@ -1,7 +1,6 @@
 import io
 from enum import Enum
 from . import _symbols as S
-from ._remote import _make_escapable
 
 class OptPolicy(Enum):
     none = 0
@@ -330,17 +329,20 @@ def encode(value, *, sanitize=lambda v: v, escape=lambda v: v.json_esc()):
                 return result.getvalue().translate(None, delete=b'\x00').decode('utf-8')
 
 
-class undefined:
+class IJsonEsc:
+    pass
+
+class undefined(IJsonEsc):
     @classmethod
     def json_esc(cls):
         return b"S", "undefined"
 
-class NaN:
+class NaN(IJsonEsc):
     @classmethod
     def json_esc(cls):
         return b"S", "NaN"
 
-class Infinity:
+class Infinity(IJsonEsc):
     @classmethod
     def json_esc(cls):
         return b'S', "Infinity"
