@@ -120,18 +120,17 @@ class Client:
         return json.loads(raw_json)
 
     @loggable()
-    def get_remote_obj(self, *args):
-        rid = args[0]
-        ctxrid = args[1] if len(args)>1 else None
+    def get_remote_obj(self, rid, ctxrid=None):
         if rid == 0:
             return self.window
-        elif rid is None:
-            return None
         # here a mutex - or maybe not... because this is always on eventloop anyway?
         if (rid, ctxrid) in self._remote_obj_byid:
             return self._remote_obj_byid[(rid, ctxrid)]
         else:
-            rem_obj = RemoteObj(rid, self, self.get_remote_obj(ctxrid))
+            if ctxrid is None:
+                rem_obj = RemoteObj(rid, self, None)
+            else:
+                rem_obj = RemoteObj(rid, self, self.get_remote_obj(ctxrid))
             self._remote_obj_byid[(rid, ctxrid)] = rem_obj
             return rem_obj
 
