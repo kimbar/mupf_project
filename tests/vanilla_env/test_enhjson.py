@@ -31,6 +31,8 @@ def escape_lazy(x):
 def bad_escape(x):
     if x==3:
         return "it's not a tuple at all - it's a string"
+    if x==1000:
+        return "very long "*100    # This should be truncated from 1000 to 128 characters
 
 
 class EnhJSON(unittest.TestCase):
@@ -61,28 +63,34 @@ class EnhJSON(unittest.TestCase):
     def test_no_api_object(self):
         "enhjson: Object (`print` function) with no API as an input -> encoded string with `~?` escape"
 
-        a = j.encode(j.EnhancedBlock(print))
-        self.assertEqual(a, '["~?","UnknownObjectError"]')    # Not sure if this is OK. Shouldn't there be enhanced block anyway?
-        b = j.encode(j.EnhancedBlock(print), escape=escape_lazy)
-        self.assertEqual(b, '["~",["~?","NoEnhJSONAPIError","<built-in function print>"],{"c":1}]')
+        a = j.encode(print)
+        self.assertEqual(a, '["~",["~?","NoEnhJSONBlockError","(\'?\', \'UnknownObjectError\', \'<built-in function print>\')"],{"e":true}]')
+        b = j.encode(print, escape=escape_lazy)
+        self.assertEqual(b, '["~",["~?","NoEnhJSONBlockError","(b\'?\', \'NoEnhJSONAPIError\', \'<built-in function print>\')"],{"e":true}]')
+        c = j.encode(j.EnhancedBlock(print))
+        self.assertEqual(c, '["~",["~?","UnknownObjectError","<built-in function print>"],{"c":1}]')
+        d = j.encode(j.EnhancedBlock(print), escape=escape_lazy)
+        self.assertEqual(d, '["~",["~?","NoEnhJSONAPIError","<built-in function print>"],{"c":1}]')
 
     def test_simple_opt_policies(self):
         "enhjson: Inputs with different optimization policies -> Encoded strings"
 
-        a = j.encode(j.EnhancedBlock([7, "a", [3,5,6]], opt=j.OptPolicy.always_count),escape=escape)
+        a = j.encode(j.EnhancedBlock([7, "a", [3,5,6]], opt=j.OptPolicy.always_count), escape=escape)
         self.assertEqual(a, '["~",[7,"a",[3,5,6]],{"c":0}]')
         b = j.encode([0,0,'*set*',j.EnhancedBlock({"args":[K(), "prop", 0], "kwargs":{}}, opt=j.OptPolicy.none)], escape=escape)
         self.assertEqual(b, '[0,0,"*set*",["~",{"args":[["~@",650],"prop",0],"kwargs":{}},{}]]')
-        c = j.encode(j.EnhancedBlock([7, "a", [3,5,6]], opt=j.OptPolicy.none),escape=escape)
+        c = j.encode(j.EnhancedBlock([7, "a", [3,5,6]], opt=j.OptPolicy.none), escape=escape)
         self.assertEqual(c, '[7,"a",[3,5,6]]')
 
     def test_escape(self):
         "enhjson: Bad escape routine -> Encoded strings"
 
         a = j.encode(j.EnhancedBlock([1,2,3,4,5]), escape=bad_escape)
-        self.assertEqual(a, '[1,2,["~?","IllformedEscTupleError"],4,5]')    # Not sure if this is OK. Shouldn't there be enhanced block anyway?
+        self.assertEqual(a, '["~",[1,2,["~?","IllformedEscTupleError","\\"it\'s not a tuple at all - it\'s a string\\""],4,5],{"c":1}]')
         b = j.encode([1,2,3,4,5], escape=bad_escape)
-        self.assertEqual(b, '[1,2,["~?","IllformedEscTupleError"],4,5]')    # What about here? The enhanced block should be added anyway?
+        self.assertEqual(b, '[1,2,["~",["~?","NoEnhJSONBlockError","(\'?\', \'IllformedEscTupleError\', \'\\"it\\\\\'s not a tuple at all - it\\\\\'s a string\\"\')"],{"e":true}],4,5]')
+        c = j.encode(j.EnhancedBlock([1,2,1000,4,5]), escape=bad_escape)
+        self.assertEqual(c, '["~",[1,2,["~?","IllformedEscTupleError","\'very long very long very long very long very long very long very long very long very long very long very long very long very lo"],4,5],{"c":1}]')
 
 
 if __name__ == '__main__':

@@ -2,6 +2,8 @@ import io
 from enum import Enum
 from . import _symbols as S
 
+MAXERRREPR = 128
+
 class OptPolicy(Enum):
     none = 0
     non_zero_count = 1
@@ -223,8 +225,8 @@ def encode(value, *, escape=test_element_type):
         #
         if current_type == JsonElement.EscapeBlock:
             if not (isinstance(esc_result, tuple) and len(esc_result)>0 and isinstance(esc_result[0], (str, bytes))):
-                current_type = JsonElement.DirectJson
-                current_value = b'["~?","IllformedEscTupleError"]'
+                current_type = JsonElement.EscapeBlock
+                esc_result = ("?", "IllformedEscTupleError", repr(esc_result)[:MAXERRREPR])
         #
         # Now the "type" is known, and we can proceed acordingly. Note that
         # `JsonElement.Autonomous` type is never passed on, becouse it is casted
@@ -268,7 +270,22 @@ def encode(value, *, escape=test_element_type):
             result.write(b'null')
         elif current_type == JsonElement.Number:
             result.write(str(current_value).encode())
-        elif current_type == JsonElement.EscapeBlock:
+        elif current_type == JsonElement.Unknown:
+            current_type = JsonElement.EscapeBlock
+            esc_result = ("?", "UnknownObjectError", repr(current_value)[:MAXERRREPR])
+            # Despite the effort it is still clasiffied as `JsonElement.Unknown`
+        elif current_type == JsonElement.DirectJson:
+            if not isinstance(current_value, bytes):
+                current_type = JsonElement.EscapeBlock
+                esc_result = ("?", "BadDirectJsonValueError")
+            else:
+                result.write(current_value)
+        elif current_type != JsonElement.EscapeBlock:
+            # That should never be written. Someone subclassed `JsonElement`?
+            current_type = JsonElement.EscapeBlock
+            esc_result = ("?", "UnknownJsonElementError")
+
+        if current_type == JsonElement.EscapeBlock:
             if current_enhanced_block:
                 # The `escape` or the autonomous object returned a tuple. The
                 # first element of this tuple is the name of the handler for
@@ -278,17 +295,10 @@ def encode(value, *, escape=test_element_type):
                 # of the handler in "ufa" mode.
                 current_value = esc_result[1:]
             else:
-                result.write(b'["~?","NoEnhJSONBlockError","ENHANCED JSON ENCODING NOT STARTED"]')
-        elif current_type == JsonElement.Unknown:
-            # Despite the effort it is still clasiffied as `JsonElement.Unknown`
-            result.write(b'["~?","UnknownObjectError"]')
-        elif current_type == JsonElement.DirectJson:
-            if not isinstance(current_value, bytes):
-                current_value = b'["~?","BadDirectJsonValueError"]'
-            result.write(current_value)
-        else:
-            # That should never be written. Someone subclassed `JsonElement`?
-            result.write(b'["~?","UnknownJsonElementError"]')
+                result.write(b'["~",["~?","NoEnhJSONBlockError",')
+                _encode_string(repr(esc_result)[:MAXERRREPR], result)
+                result.write(b'],{"e":true}]')
+
         #
         # Here we inform the enhanced block that a normal value has been encoded.
         # This is done to give the EB data on the position of escape structures
