@@ -18,37 +18,13 @@ def loggable(
     long=None,
     short_det = None,
     long_det = None,
-    outer_class=None,
     hidden=False,
 ):
-    """ All-purpose decorator/function for setting up logging for "loggables"
+    """ All-purpose decorator for setting up logging for "loggables"
 
     It is used as a decorator for functions, methods, properties and classes (it must be used for classes which have
-    decorated methods or else the methods will be "dangling"!). It is also used as a regular function for so-called
-    outer classes (i.e. classes imported from other modules that still should have nice representation in logs).
+    decorated methods or else the methods will be "dangling"!).
     """
-    # A class that is not in our control (like a class imported from another module) that can be an argument or result
-    # of our code, can be assigned a "short" and "long" "repr". For description see docstring of `enh_repr`. This kind
-    # of class is called "outer".
-    if outer_class is not None:
-        if short is not None:
-            # Assigning a short repr for outer class is meaningless because an outer class can never be a producer of a
-            # log (it have no decortated methods). But maybe short and long will be used somwhere else.
-            if not settings.deterministic_identificators:
-                writer.short_class_repr[outer_class] = short
-            elif short_det is not None:
-                writer.short_class_repr[outer_class] = short_det
-            else:
-                writer.short_class_repr[outer_class] = lambda x: f"{type(x)}"
-        if long is not None:
-            if not settings.deterministic_identificators:
-                writer.long_class_repr[outer_class] = long
-            elif long_det is not None:
-                writer.long_class_repr[outer_class] = long_det
-            else:
-                writer.long_class_repr[outer_class] = lambda x: f"{type(x)}"
-        return
-
     verbosity_settings = dict(
         log_args = log_args,
         log_results = log_results,
@@ -154,22 +130,41 @@ def loggable(
                             pass
                 # When we decorate a class we can assign a logging "repr"s here. One is "short" and one is "long". For
                 # description see docstring of `enh_repr` function.
-                if short is not None:
-                    if not settings.deterministic_identificators:
-                        writer.short_class_repr[x] = short
-                    elif short_det is not None:
-                        writer.short_class_repr[x] = short_det
-                    else:
-                        writer.short_class_repr[x] = lambda y: f"{type(y)}"
-                if long is not None:
-                    if not settings.deterministic_identificators:
-                        writer.long_class_repr[x] = long
-                    elif long_det is not None:
-                        writer.long_class_repr[x] = long_det
-                    else:
-                        writer.long_class_repr[x] = lambda y: f"{type(y)}"
+                loggable_class(x, short=short, long=long, short_det=short_det, long_det=long_det)
         # After decoration we return the original method/function, so the class/module has exactly the same structure as
         # it would have it wasn't decorated at all. All the information needed is stored in the managers now. When the
         # logging is turned on, the wrappers are created, and module/class is altered
         return x
     return loggable_decorator
+
+
+def loggable_class(class_, *,
+    short = None,
+    long = None,
+    short_det = None,
+    long_det = None,
+):
+    """ Kind-of decorator for classes that are not in our control
+
+    It is used for so-called outer classes (i.e. classes imported from other modules that still should have nice
+    representation in logs).
+    """
+    # A class that is not in our control (like a class imported from another module) that can be an argument or result
+    # of our code, can be assigned a "short" and "long" "repr". For description see docstring of `enh_repr`. This kind
+    # of class is called "outer".
+    if short is not None:
+        # Assigning a short repr for outer class is meaningless because an outer class can never be a producer of a
+        # log (it have no decortated methods). But maybe short and long will be used somwhere else.
+        if not settings.deterministic_identificators:
+            writer.short_class_repr[class_] = short
+        elif short_det is not None:
+            writer.short_class_repr[class_] = short_det
+        else:
+            writer.short_class_repr[class_] = lambda y: "<>"
+    if long is not None:
+        if not settings.deterministic_identificators:
+            writer.long_class_repr[class_] = long
+        elif long_det is not None:
+            writer.long_class_repr[class_] = long_det
+        else:
+            writer.long_class_repr[class_] = lambda y: f"<obj of {str(type(y)).strip('<>')}>"

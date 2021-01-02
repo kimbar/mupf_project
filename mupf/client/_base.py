@@ -21,7 +21,7 @@ async def send_task_body(wbs, json):
     finally:
         log_sending_event('end')
 
-@loggable('client/base.py/*')
+@loggable('client/base.py/*', log_results=False,)
 def create_send_task(evl, wbs, json):
     evl.create_task(send_task_body(wbs, json))
 
@@ -38,7 +38,7 @@ class Client:
     It is not called "Window", because `window` is already a top-level object of the JavaSript side, and this object is
     a little more than that. A `RemoteObj` of `window` can be easily obtained by `client.window`.
     """
-    @loggable()
+    @loggable(log_results=False)
     def __init__(self, app, client_id):
         self._app_wr = weakref.ref(app)
         self._cid = client_id
@@ -59,7 +59,7 @@ class Client:
         self._callback_free_id = 0
         self._first_command = self.command('*first*')()    # ccid=0
 
-    @loggable()
+    @loggable(log_results=False)
     def send_json(self, json):
         if not self._websocket:
             self._preconnection_stash.append(json)
@@ -135,7 +135,7 @@ class Client:
             self._remote_obj_byid[(rid, ctxrid)] = rem_obj
             return rem_obj
 
-    @loggable()
+    @loggable(log_results=False)
     def summoned(self):
         self._safe_dunders_feature = (F.safe_dunders in self.features)
         if F.strict_feature_list in self.features and self.features != self.app._features:

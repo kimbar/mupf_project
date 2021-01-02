@@ -89,7 +89,7 @@ def create_command_class_for_client(client):
         _ccid_counter = 0
         _legal_names = ['*first*', '*last*', '*install*', '*features*']
 
-        @loggable()
+        @loggable(log_results=False)
         def __init__(self, cmd_name, notification=False):
             self._ccid = None
             self._cmd_name = cmd_name
@@ -169,7 +169,7 @@ def create_command_class_for_client(client):
             return self._result
 
         @result.setter
-        @loggable('*.=')
+        @loggable('*.=', log_results=False)
         def result(self, result):
             if self._notification:
                 raise RuntimeError('cannot resolve notification')

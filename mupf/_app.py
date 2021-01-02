@@ -17,7 +17,7 @@ from . import _features as F
 from . import client, exceptions
 from ._macro import MacroByteStream
 from . import log
-from .log import loggable
+from .log import loggable, loggable_class
 
 
 @loggable(
@@ -396,14 +396,14 @@ def log_server_event(*args, **kwargs):
 def log_websocket_event(*args, **kwargs):
     pass
 
-loggable(
-    outer_class = websockets.server.WebSocketServer,
+loggable_class(websockets.server.WebSocketServer,
     long = lambda self: f"<WebSocket Server {id(self):X}>",
+    long_det = lambda self: f"<obj of WebSocket Server>",
 )
 
-loggable(
-    outer_class = websockets.server.WebSocketServerProtocol,
+loggable_class(websockets.server.WebSocketServerProtocol,
     long = lambda self: f"<WebSocket Protocol {id(self):X}>",
+    long_det = lambda self: f"<obj of WebSocket Protocol>",
 )
 
 def _eventloop_logger(evl):
@@ -413,12 +413,12 @@ def _eventloop_logger(evl):
         return "<EventLoop halted>"
     return "<EventLoop>"
 
-loggable(
-    outer_class = asyncio.selector_events.BaseSelectorEventLoop,
+loggable_class(asyncio.BaseEventLoop,
     long = _eventloop_logger,
+    long_det= _eventloop_logger,
 )
 
-loggable(
-    outer_class = websockets.http.Headers,
+loggable_class(websockets.http.Headers,
     long = lambda self: f"<HTTP Header from {self['Host']}>",
+    long_det = lambda self: f"<HTTP Header from {self['Host']}>",
 )
