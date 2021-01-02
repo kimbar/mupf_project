@@ -16,9 +16,8 @@ class _Symbol:
         return f"[Symbol: {_removeprefix(self.internal_name, '_')}]"
 
 
-# Underlines on the begining of the internal names are here because these
-# internal names are used as private properties of `RemoteObj`, not because
-# there is some requirement for `_Symbol`
+# Underlines on the begining of the internal names are here because these internal names are used as private properties
+# of `RemoteObj`, not because there is some requirement for `_Symbol`
 #
 this = _Symbol("_this", readonly=True)
 rid = _Symbol("_rid", readonly=True)

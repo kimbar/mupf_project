@@ -23,19 +23,17 @@ def loggable(
 ):
     """ All-purpose decorator/function for setting up logging for "loggables"
 
-    It is used as a decorator for functions, methods, properties and classes (it must be used for
-    classes which have decorated methods or else the methods will be "dangling"!). It is also used
-    as a regular function for so-called outer classes (i.e. classes imported from other modules
-    that still should have nice representation in logs).
+    It is used as a decorator for functions, methods, properties and classes (it must be used for classes which have
+    decorated methods or else the methods will be "dangling"!). It is also used as a regular function for so-called
+    outer classes (i.e. classes imported from other modules that still should have nice representation in logs).
     """
-    # A class that is not in our control (like a class imported from another module) that can be
-    # an argument or result of our code, can be assigned a "short" and "long" "repr". For description
-    # see docstring of `enh_repr`. This kind of class is called "outer".
+    # A class that is not in our control (like a class imported from another module) that can be an argument or result
+    # of our code, can be assigned a "short" and "long" "repr". For description see docstring of `enh_repr`. This kind
+    # of class is called "outer".
     if outer_class is not None:
         if short is not None:
-            # Assigning a short repr for outer class is meaningless because an outer class can
-            # never be a producer of a log (it have no decortated methods). But maybe short and long
-            # will be used somwhere else.
+            # Assigning a short repr for outer class is meaningless because an outer class can never be a producer of a
+            # log (it have no decortated methods). But maybe short and long will be used somwhere else.
             if not settings.deterministic_identificators:
                 writer.short_class_repr[outer_class] = short
             elif short_det is not None:
@@ -70,11 +68,11 @@ def loggable(
             # replace the wildcard `*` in the given name with the actual name of the function
             log_addr = log_addr.replace('*',  x.__name__.strip('_'), 1)
             if x.__qualname__ != x.__name__:
-                # It is a method, so a manager is created that has parent temporarily set to `None`
-                # it will be sorted out when the class will be decorated. It is also temporarily attached to
-                # `_methodtolog` property of the method. It hangs there until the class is decorated -- then all
-                # the `_methodtolog` will be cleaned up. If not, the logger is "dangling" -- that means that
-                # the class of this method was not decorated as it should.
+                # It is a method, so a manager is created that has parent temporarily set to `None` it will be sorted
+                # out when the class will be decorated. It is also temporarily attached to `_methodtolog` property of
+                # the method. It hangs there until the class is decorated -- then all the `_methodtolog` will be cleaned
+                # up. If not, the logger is "dangling" -- that means that the class of this method was not decorated as
+                # it should.
                 x._methodtolog = LogSimpleManager(
                     addr = log_addr,
                     log_path = log_path,
@@ -96,8 +94,8 @@ def loggable(
                 # That's it for a function, so it can be added to the registry
                 lfm.add(auto_on=main._logging_enabled)
         elif isinstance(x, classmethod):
-            # if it is a class method, the manager is created similarily as for a method, only the name must be digged
-            # a one step deeper
+            # if it is a class method, the manager is created similarily as for a method, only the name must be digged a
+            # one step deeper
             log_addr = log_addr.replace('*',  x.__func__.__name__.strip('_'), 1)
             x._methodtolog = LogSimpleManager(
                 addr = log_addr,
@@ -110,13 +108,13 @@ def loggable(
         elif isinstance(x, type):
             # Finally a class is decorated.
             if issubclass(x, LogManager):
-                # If it is an "aunt" class, the decorator performes a singlenton semantic
-                # That is it creates a single object, and registers it in the registry
+                # If it is an "aunt" class, the decorator performes a singlenton semantic That is it creates a single
+                # object, and registers it in the registry
                 manager = x(log_addr, log_path, hidden)
                 manager.add(auto_on=main._logging_enabled)
             else:
-                # It is a regular user's class Now we will hopefully collect all the managers
-                # that were temporarily attached to methods `_methodtolog` properties
+                # It is a regular user's class Now we will hopefully collect all the managers that were temporarily
+                # attached to methods `_methodtolog` properties
                 log_addr = log_addr.replace('*',  x.__name__.strip('_'), 1)
                 for prop_name in dir(x):
                     # for each member of the class we try...
@@ -130,14 +128,14 @@ def loggable(
                     for member, subname in members:
                         try:
                             # Now we just try to update the manager that is hanging in the function. If it is not
-                            # hanging there that means that we have something other than decorated method here
-                            # end the exception occurs.
+                            # hanging there that means that we have something other than decorated method here end the
+                            # exception occurs.
                             #
-                            # The `log_path` value is really only meaningful in the class decorator, but it is needed
-                            # in all method managers, hence it is copied here
+                            # The `log_path` value is really only meaningful in the class decorator, but it is needed in
+                            # all method managers, hence it is copied here
                             member._methodtolog.log_path = log_path
-                            # New name for the wrapper is created from the name given in the class decorator, and the name
-                            # obtained when the method was decorated
+                            # New name for the wrapper is created from the name given in the class decorator, and the
+                            # name obtained when the method was decorated
                             member._methodtolog.addr = log_addr + '.' + member._methodtolog.addr
                             # the parent is finally known and can be assigned to the manager
                             member._methodtolog.func_parent = x
@@ -154,8 +152,8 @@ def loggable(
                         except Exception:
                             # It was not a decorated method (most of the time it is not), so we do nothing
                             pass
-                # When we decorate a class we can assign a logging "repr"s here. One is "short" and one
-                # is "long". For description see docstring of `enh_repr` function.
+                # When we decorate a class we can assign a logging "repr"s here. One is "short" and one is "long". For
+                # description see docstring of `enh_repr` function.
                 if short is not None:
                     if not settings.deterministic_identificators:
                         writer.short_class_repr[x] = short
@@ -170,9 +168,8 @@ def loggable(
                         writer.long_class_repr[x] = long_det
                     else:
                         writer.long_class_repr[x] = lambda y: f"{type(y)}"
-        # After decoration we return the original method/function, so the class/module has exactly the
-        # same structure as it would have it wasn't decorated at all. All the information needed is stored
-        # in the managers now. When the logging is turned on, the wrappers are created, and module/class
-        # is altered
+        # After decoration we return the original method/function, so the class/module has exactly the same structure as
+        # it would have it wasn't decorated at all. All the information needed is stored in the managers now. When the
+        # logging is turned on, the wrappers are created, and module/class is altered
         return x
     return loggable_decorator

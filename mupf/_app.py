@@ -54,8 +54,7 @@ class App:
         self._server_opened_mutex = threading.Event()
         self._server_closed_mutex = threading.Event()
 
-        # Checking the format of `features` argument.
-        # Tested in `vanilla_env/test_featyres.py/Features`
+        # Checking the format of `features` argument.  Tested in `vanilla_env/test_featyres.py/Features`
         try:
             feat_type_check = any([not isinstance(f, F.__dict__['__Feature']) for f in features])
         except Exception:
@@ -63,19 +62,16 @@ class App:
         if feat_type_check:
             raise TypeError("all features must be of `mupf.F.__Feature` type")
 
-        # Features are added in reverse order than listed in `features`,
-        # because of the semantics of `set()` creator - doing nothing when an
-        # element already exists. The features are hashed by their names only
-        # (not name and state) This way stored state of a feature is taken from
-        # the last occurence of a given feature on the list.
+        # Features are added in reverse order than listed in `features`, because of the semantics of `set()` creator -
+        # doing nothing when an element already exists. The features are hashed by their names only (not name and state)
+        # This way stored state of a feature is taken from the last occurence of a given feature on the list.
         self._features = set(reversed(features))
-        # `.update()` has the same semantics as creator, so only features not
-        # on the list are added (with their default states).
+        # `.update()` has the same semantics as creator, so only features not on the list are added (with their default
+        # states).
         self._features.update(F.feature_list)
         self._features = set(filter(lambda f: f.state, self._features))
 
-        # The main event loop of the App. However, if event-loop cannot be done
-        # this holds an offending exception
+        # The main event loop of the App. However, if event-loop cannot be done this holds an offending exception
         self._event_loop: asyncio.BaseEventLoop = None
         self._clients_by_cid: dict[str, client.Client] = {}
         self._root_path: str = os.path.split(sys.argv[0])[0]
@@ -193,10 +189,8 @@ class App:
     def is_closed(self, get_culprit: bool = False) -> T.Union[bool, BaseException]:
         """ Is app closed?
 
-        It returns `False` if it is not closed. Otherwise it returns `True` by
-        default or an exception if asked for the culprit of the app being
-        closed. The exception is not rised - it is only returned and must be
-        rised outside.
+        It returns `False` if it is not closed. Otherwise it returns `True` by default or an exception if asked for the
+        culprit of the app being closed. The exception is not rised - it is only returned and must be rised outside.
         """
         if get_culprit:
             if not self.is_closed():
@@ -204,9 +198,8 @@ class App:
             elif isinstance(self._event_loop, asyncio.events.AbstractEventLoop):
                 return RuntimeError(f'Event loop in `{self}` was closed')
             elif self._event_loop is None:
-                # It's hard to give a reason, because this should never happen
-                # (FLW) unless user creates App, does not open it and asks why
-                # it is closed.
+                # It's hard to give a reason, because this should never happen (FLW) unless user creates App, does not
+                # open it and asks why it is closed.
                 return RuntimeError(f'Event loop in `{self}` was never created (`App` was never opened?)')
             else:
                 return self._event_loop # if event-loop is not opened this is an exception
@@ -227,9 +220,8 @@ class App:
 
 #region It's a mess
 
-    # The serving of so-called static files become quite a mess. It is because
-    # this subsystem was never really designed as a whole. Right now it
-    # consists of following parts:
+    # The serving of so-called static files become quite a mess. It is because this subsystem was never really designed
+    # as a whole. Right now it consists of following parts:
     #
     #  * mupf.App._process_HTTP_request
     #  * mupf.App.register_route
@@ -243,8 +235,7 @@ class App:
 
     @loggable(log_results=False) # FIXME: temporary turned off because of the length of the output
     def _process_HTTP_request(self, path, request_headers):
-        # This is a temporary solution just to make basics work
-        # it should be done in some more systemic way.
+        # This is a temporary solution just to make basics work it should be done in some more systemic way.
 
         # An error here is pretty catastrophic!!! The `mupf` itself hangs
 
@@ -339,8 +330,8 @@ class App:
         log_websocket_event('websocket assigned to client', new_websocket, client=the_client)
         the_client._user_agent = result['ua']
 
-        # this line accepts a response from  `command('*first*')` because if the websocket is
-        # open then the `*first` have been just executed
+        # this line accepts a response from  `command('*first*')` because if the websocket is open then the `*first`
+        # have been just executed
         the_client.command.resolve_by_id_mupf(ccid=0, result=None)
         log_websocket_event('websocket awaiting for client...', new_websocket, client=the_client)
         the_client.await_connection()
@@ -378,7 +369,9 @@ class App:
         # here we are after communication breakdown
         the_client._healthy_connection = False
         if break_reason == '*last*':
-            the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())    # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*` didn't close them
+            the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())
+            # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*`
+            # didn't close them
         else:
             the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
 

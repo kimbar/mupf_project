@@ -156,7 +156,12 @@ def _encode_string(s, stream):
         stream.write(_string_esc[i])
     stream.write(b'"')
 
-#  stack's frame first element is mode:
+#  Encoding is done on a stack machine. The main loop consists of two stages: first, the stack is populated with frames
+#  by consuming the input, and secopnd, the stack is processed. If the stack is not empty on the end of processing the
+#  loop continues. The processing of the stack may remove or add frames on the stack, but overall it is always emty when
+#  all of the input is processed. Frames of the stack a `list()`s.
+
+#  Stack's frame first element is mode of the frame:
 #  mode mnemonic = "enh" | "esc" | "arr" | "obj" | "ufa"
 #  magic number =    0   |   1   |   2   |   3   |   4
 #
@@ -164,16 +169,16 @@ def _encode_string(s, stream):
 #  "esc" - Escape sequence
 #  "arr" - Array (list, tuple)
 #  "obj" - Object (dict)
-#  "ufa" - unfenced array (array without `[` and `]`)
-#
+#  "ufa" - unfenced array (array without `[` and `]` - usefull for extending of arrays)
+
 #  Frames put on the stack have one of the forms:
 #
 #  [0, <previous enhanced block object>] -- frame for enhancement
 #    <previous enhanced block object> -- class `EnhancedBlock` object if nested, otherwise `None`
 #
 #  [1, <first pass>, <handler>] -- frame for escaping
-#    <first pass> -- `bool` showing if the frame is passed for the first time (encode the value) or
-#      second time (close the escape structure and clean up)
+#    <first pass> -- `bool` showing if the frame is passed for the first time (encode the value) or second time (close
+#      the escape structure and clean up)
 #    <handler> -- the name of the handler being encoded, used to properly service the escape structure
 #
 #  [<mode == 2|3|4>, <container>, <key iterator>, <first pass>] -- frame for array, object and "unfenced array"
@@ -181,35 +186,43 @@ def _encode_string(s, stream):
 #    <key iterator> -- iterator generating subsequent keys for the container's `__getitem__()`
 #    <first pass> -- `bool` for puting a `,` or not.
 
+# "Enhanced block" is a special object that controls encoding of all enhanced features. It is a wrapper for data that
+# can be encoded using escaping etc. For example the input:
+# ```
+# [0, 1, EnhancedBlock(["e1", "e2"]), 3, 4]
+# ```
+# only the `["e1", "e2"]` list can utilize enhancements. It doesn't in this example, so the enhanced block will be
+# discarded, and the result JSON will be:
+# ```
+# '[0,1,["e1","e2"],3,4]'
+# ```
+# However, if `EnhancedBlock()` would contain any objects that cannot be directly translated into JSON, but for which
+# appropriate API has been provided, they will be wrapped into appropriate wrapper escape block. This escape block can
+# be easily recognized on decoding, and escaped values substitued with objects.
+
 def encode(value, *, escape=test_element_type):
     result = io.BytesIO()
     current_value = value
     stack = []
     current_enhanced_block = None
     #
-    # This loop is never broken -- when the stack is empty, we jump out of this function
-    # altogether
+    # This loop is never broken -- when the stack is empty, we jump out of this function altogether
     while True:
         if isinstance(current_value, EnhancedBlock):
-            # `EnhancedBlock` object act just as a wrapper for a value, but its occurence
-            # in the encoded structure switches on the enhanced mode, where atypical objects
-            # can be encoded with escape structures.
+            # `EnhancedBlock` object act just as a wrapper for a value, but its occurence in the encoded structure
+            # switches on the enhanced mode, where atypical objects can be encoded with escape structures.
             stack.append([0, current_enhanced_block]) # mode == 0 == 'enh'
             current_enhanced_block = current_value
             current_enhanced_block.start(result)
             current_value = current_value.value
-            # important here: if enhanced blocks are nested, the inner must be encoded
-            # explicitely with "~!" handler
         #
-        # Here we check the "type" of the value, and then act acordingly -- that is
-        # we encode the value, encode some separators and/or biuld the stack. The stack
-        # allows us to get deeper into the tree structure of JSON
+        # Here we check the "type" of the value, and then act acordingly -- that is we encode the value, encode some
+        # separators and/or biuld the stack. The stack allows us to get deeper into the tree structure of JSON
         #
-        # First we ask a function `escape()` (provided by the `Client`) what it thinks about
-        # the value. It returns either a tuple or an enum value of `JsonElement` type or `None`
+        # First we ask a function `escape()` (provided by the `Client`) what it thinks about the value. It returns
+        # either a tuple or an enum value of `JsonElement` type or `None`
         esc_result = escape(current_value)
-        # If the `escape` returned `JsonElement.Unknown` the value
-        # must be tested for the type of JSON element.
+        # If the `escape` returned `JsonElement.Unknown` the value must be tested for the type of JSON element.
         current_type = JsonElement.EscapeBlock
         if esc_result == JsonElement.Unknown or esc_result is None:
             current_type = test_element_type(current_value)
@@ -228,9 +241,8 @@ def encode(value, *, escape=test_element_type):
                 current_type = JsonElement.EscapeBlock
                 esc_result = ("?", "IllformedEscTupleError", repr(esc_result)[:MAXERRREPR])
         #
-        # Now the "type" is known, and we can proceed acordingly. Note that
-        # `JsonElement.Autonomous` type is never passed on, becouse it is casted
-        # to `JsonElement.EscapeBlock`
+        # Now the "type" is known, and we can proceed acordingly. Note that `JsonElement.Autonomous` type is never
+        # passed on, becouse it is casted to `JsonElement.EscapeBlock`
         if current_type == JsonElement.Object:
             keys = current_value.keys()
             stack.append([3, current_value, (k for k in keys), True])    # mode == 3 == 'obj'
@@ -253,10 +265,9 @@ def encode(value, *, escape=test_element_type):
                 )
             ):
                 current_enhanced_block.esc_here(b'~', stack, result)
-                # We need to wrap the current value in tuple.
-                # We will put an escape frame on the stack -- it will encode the array normally,
-                # but an escape sequence can encode muliple parameters (with "ufa" mode)
-                # so we need to wrap the list so it will be treated as a single parameter.
+                # We need to wrap the current value in tuple.  We will put an escape frame on the stack -- it will
+                # encode the array normally, but an escape sequence can encode muliple parameters (with "ufa" mode) so
+                # we need to wrap the list so it will be treated as a single parameter.
                 #
                 current_value = (current_value,)
             else:    # Not in enhanced mode or no collision or inside the "~~" escape -- start regular array
@@ -287,35 +298,30 @@ def encode(value, *, escape=test_element_type):
 
         if current_type == JsonElement.EscapeBlock:
             if current_enhanced_block:
-                # The `escape` or the autonomous object returned a tuple. The
-                # first element of this tuple is the name of the handler for
-                # escape block.
+                # The `escape` or the autonomous object returned a tuple. The first element of this tuple is the name of
+                # the handler for escape block.
                 current_enhanced_block.esc_here(esc_result[0], stack, result)
-                # Arguments of the escape structure (if any) will be encoded after the name
-                # of the handler in "ufa" mode.
+                # Arguments of the escape structure (if any) will be encoded after the name of the handler in "ufa"
+                # mode.
                 current_value = esc_result[1:]
             else:
                 result.write(b'["~",["~?","NoEnhJSONBlockError",')
                 _encode_string(repr(esc_result)[:MAXERRREPR], result)
                 result.write(b'],{"e":true}]')
-
         #
-        # Here we inform the enhanced block that a normal value has been encoded.
-        # This is done to give the EB data on the position of escape structures
-        # inside all of the data, so it could choose apropriate optimization
-        # strategy.
+        # Here we inform the enhanced block that a normal value has been encoded.  This is done to give the EB data on
+        # the position of escape structures inside all of the data, so it could choose apropriate optimization strategy.
         if current_enhanced_block and (stack[-1][0] != 1 or stack[-1][1]):
             current_enhanced_block.encoded_value_here()
         #
-        # In this part we are acting acordingly to the content of the stack. Top element
-        # of the stack will (a) tell us what to do in the next iteration, or (b) the top
-        # element should be removed from the stack. The loop is repeated until (a) occurs or
-        # the stack is empty. If the stack is empty the encoding is done.
+        # In this part we are acting acordingly to the content of the stack. Top element of the stack will (a) tell us
+        # what to do in the next iteration, or (b) the top element should be removed from the stack. The loop is
+        # repeated until (a) occurs or the stack is empty. If the stack is empty the encoding is done.
         while True:
             if stack:    # Process top element of the stack
                 if stack[-1][0] == 0:      # mode: 'enh'
-                    # End of enhanced mode, we revert to previous enhancement block
-                    # (which can be `None`) and remove this frame from the stack
+                    # End of enhanced mode, we revert to previous enhancement block (which can be `None`) and remove
+                    # this frame from the stack
                     nested_explicit = current_enhanced_block.end(result)
                     current_enhanced_block = stack[-1][1]
                     if current_enhanced_block and nested_explicit:
@@ -330,7 +336,8 @@ def encode(value, *, escape=test_element_type):
                         if current_enhanced_block:
                             current_enhanced_block.addr_append(None)
                         stack[-1][1] = False    # Not first pass anymore
-                        stack.append([4, current_value, (n for n in range(len(current_value))), True])    # mode == 4 == 'ufa'
+                        # mode == 4 == 'ufa'
+                        stack.append([4, current_value, (n for n in range(len(current_value))), True])
                         continue
                     else:
                         # Second pass: end of handler-escape structure, remove frame from stack
@@ -339,11 +346,11 @@ def encode(value, *, escape=test_element_type):
                             current_enhanced_block.addr_pop()
                         stack.pop()
                         continue
-                else:                      # mode: 'arr' | 'obj' | 'ufa' -- dict-like or list-like elements
-                    try:                     # get new element key (hashable for dict, and int for list)
+                else:                                 # mode: 'arr' | 'obj' | 'ufa' -- dict-like or list-like elements
+                    try:                              # get new element key (hashable for dict, and int for list)
                         key = next(stack[-1][2])
-                    except StopIteration:    # no more keys -- end the structure, remove frame from the stack
-                        if stack[-1][0] == 3: # mode == 3 == 'obj'
+                    except StopIteration:             # no more keys -- end the structure, remove frame from the stack
+                        if stack[-1][0] == 3:         # mode == 3 == 'obj'
                             result.write(b'}')
                         elif stack[-1][0] == 2:
                             result.write(b']')
@@ -357,16 +364,20 @@ def encode(value, *, escape=test_element_type):
                         else:
                             result.write(b',')     # put the separator
                         if current_enhanced_block:
-                            # the key in object is always a string in JSON, even if it is an int in Python
-                            # so the `if` below is done to distingish arrays indices from object keys
-                            # (by their type: str - object, int - array)
-                            current_enhanced_block.addr_change((key+(1 if (stack[-1][0]==4) else 0)) if (stack[-1][0]==2 or stack[-1][0]==4) else str(key))
+                            # the key in object is always a string in JSON, even if it is an int in Python so the `if`
+                            # below is done to distingish arrays indices from object keys (by their type: str - object,
+                            # int - array)
+                            current_enhanced_block.addr_change(
+                                (key+(1 if (stack[-1][0]==4) else 0))
+                                    if (stack[-1][0]==2 or stack[-1][0]==4)
+                                else str(key)
+                            )
                         if stack[-1][0] == 3: # mode == 3 == 'obj'
                             # Print the key for the object structure
                             _encode_string(key, result)
                             result.write(b':')
-                        # Now stack is in cleaned condition, but still not empty
-                        # We can obtain current structure element that need to be encoded now:
+                        # Now stack is in cleaned condition, but still not empty We can obtain current structure element
+                        # that need to be encoded now:
                         current_value = stack[-1][1][key]
                         break
             else:        # The stack is now empty -- the work is done

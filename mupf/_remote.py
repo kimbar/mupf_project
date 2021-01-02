@@ -25,13 +25,11 @@ class RemoteObj(metaclass=FinalClass):
     def __getattribute__(self, key):
         """ Interface for `obj.key` syntax
 
-        All `key` except "dunders" are translated to JS-side attributes.
-        "Dunders" (eg. `__class__`, `__qualname__` etc.) are always
-        Python-side, that is they refer directly to `RemoteObj` object, not to
-        its JS-side counterpart.
+        All `key` except "dunders" are translated to JS-side attributes.  "Dunders" (eg. `__class__`, `__qualname__`
+        etc.) are always Python-side, that is they refer directly to `RemoteObj` object, not to its JS-side counterpart.
 
-        If a JS-side reference of a "dunder" is needed it can always be
-        achieved with `__getitem__` syntax, that is `obj["__class__"]`.
+        If a JS-side reference of a "dunder" is needed it can always be achieved with `__getitem__` syntax, that is
+        `obj["__class__"]`.
         """
         if _re_dunder.match(key):
             return object.__getattribute__(self, key)
@@ -50,9 +48,8 @@ class RemoteObj(metaclass=FinalClass):
     def __getitem__(self, key):
         """ Interface for `obj[key]` syntax
 
-        All `key` exept `_Symbol` are translated to JS-side attributes.
-        `_Symbol` are resolved on the Py-side, automatically stripped of
-        `weakref` if needed.
+        All `key` exept `_Symbol` are translated to JS-side attributes. `_Symbol` are resolved on the Py-side,
+        automatically stripped of `weakref` if needed.
         """
         if isinstance(key, S._Symbol):
             item = object.__getattribute__(self, key.internal_name)
@@ -63,8 +60,8 @@ class RemoteObj(metaclass=FinalClass):
     def __setitem__(self, key, value):
         """ Interface for `obj[key] = value` syntax
 
-        See description for `__getitem__` for details. If a `_Symbol` attribute
-        is readonly an `AttributeError` is risen.
+        See description for `__getitem__` for details. If a `_Symbol` attribute is readonly an `AttributeError` is
+        risen.
         """
         if isinstance(key, S._Symbol):
             if key.readonly:

@@ -77,13 +77,12 @@ class Client:
     def _escape_for_json(self, value):
         """ Encoding advanced types for JSON transport
 
-        This method is used by `mupf._enhjson.encode` to encode all types byond
-        dicts, arrays, floats etc. It should return either a
-        `enhjson.JsonElement` enum member or a tuple. The tuple is the escape
-        structure for an advanced type (handler and arguments).
+        This method is used by `mupf._enhjson.encode` to encode all types byond dicts, arrays, floats etc. It should
+        return either a `enhjson.JsonElement` enum member or a tuple. The tuple is the escape structure for an advanced
+        type (handler and arguments).
 
-        We can here get a help from `enhjson.test_element_type()` function that
-        will return an`enhjson.JsonElement` enum member if it can.
+        We can here get a help from `enhjson.test_element_type()` function that will return an`enhjson.JsonElement` enum
+        member if it can.
         """
         if isinstance(value, RemoteObj):
             return '@', value[S.rid]

@@ -9,8 +9,7 @@
 ╰─────────────────╯
 """
 
-# This is a HACK for developement purposes.
-# If you do not have mupf-test-venv-helper module on your system you can
+# This is a HACK for developement purposes.  If you do not have mupf-test-venv-helper module on your system you can
 # safely ignore/delete this code.
 try:
     import mupftestsvenvhelper
@@ -20,8 +19,8 @@ else:
     mupftestsvenvhelper.repair_plugins(__path__)
     del mupftestsvenvhelper
 
-# Log must be imported first, because it does a lot of its setup job during
-# imports of all other modules (monkey-patching etc.)
+# Log must be imported first, because it does a lot of its setup job during imports of all other modules
+# (monkey-patching etc.)
 from . import log
 
 from ._app import App
