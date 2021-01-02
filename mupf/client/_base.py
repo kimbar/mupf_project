@@ -46,7 +46,7 @@ class Client:
         self._user_agent = None
         self.features = set()
         self.enhjson_decoders = {
-            "~@": self.get_remote_obj,
+            "@": self.get_remote_obj,
         }
         self._callback_queue = queue.Queue()
         self._preconnection_stash = []
@@ -105,7 +105,7 @@ class Client:
     def decode_json(self, raw_json):
         msg = json.loads(raw_json)
         if F.core_features in self.features:
-            msg[3] = enhjson.decode(msg[3], self.enhjson_decoders)
+            msg[3] = enhjson.decode_enhblock(msg[3], self.enhjson_decoders)
         if msg[0] == 1 and msg[2] != 0:
             error_data = msg[3]['result']
             if line_id := self._app_wr()._identify_line_in_code(error_data[2:5]):

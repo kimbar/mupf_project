@@ -407,23 +407,26 @@ class Infinity(IJsonEsc):
         return b'S', "Infinity"
 
 
-def decode(value, esc_decoders):
+def decode_enhblock(value, esc_decoders):
     if isinstance(value, list) and isinstance(value[0], str) and value[0] == "~":
-        return _decode_req(value[1], esc_decoders)
+        return decode(value[1], esc_decoders)
     return value
 
-def _decode_req(value, esc_decoders):
+def decode(value, esc_decoders):
     if isinstance(value, list):
-        if len(value) > 1 and isinstance(value[0], str) and value[0][:1] == "~":
+        esc_like_array = len(value) >= 2 and isinstance(value[0], str)
+        if esc_like_array and value[0] == "~":
+            return decode(value[1], esc_decoders)
+        if esc_like_array and value[0].startswith("~"):
             if  value[0] == "~-":
                 return value[1]
             elif value[0] == "~~":
-                return [_decode_req(x, esc_decoders) for x in value[1]]
+                return [decode(x, esc_decoders) for x in value[1]]
             else:
-                return esc_decoders[value[0]](*[_decode_req(x, esc_decoders) for x in value[1:]])
+                return esc_decoders[value[0][1:]](*[decode(x, esc_decoders) for x in value[1:]])
         else:
-            return [_decode_req(x, esc_decoders) for x in value]
+            return [decode(x, esc_decoders) for x in value]
     elif isinstance(value, dict):
-        return {k: _decode_req(v, esc_decoders) for k,v in value.items()}
+        return {k: decode(v, esc_decoders) for k,v in value.items()}
     else:
         return value
