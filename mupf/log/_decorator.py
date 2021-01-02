@@ -4,10 +4,11 @@ import types
 from . import _main as main
 from . import _writer as writer
 from ._manager import LogManager, LogSimpleManager
-
+from . import settings
 
 def loggable(
     log_addr='*',
+    *,
     log_args=True,
     log_results=True,
     log_enter=True,
@@ -15,9 +16,10 @@ def loggable(
     log_path=True,
     short=None,
     long=None,
+    short_det = None,
+    long_det = None,
     outer_class=None,
-    joined=True, # FIXME: to remove
-    hidden=False
+    hidden=False,
 ):
     """ All-purpose decorator/function for setting up logging for "loggables"
 
@@ -34,9 +36,19 @@ def loggable(
             # Assigning a short repr for outer class is meaningless because an outer class can
             # never be a producer of a log (it have no decortated methods). But maybe short and long
             # will be used somwhere else.
-            writer.short_class_repr[outer_class] = short
+            if not settings.deterministic_identificators:
+                writer.short_class_repr[outer_class] = short
+            elif short_det is not None:
+                writer.short_class_repr[outer_class] = short_det
+            else:
+                writer.short_class_repr[outer_class] = lambda x: f"{type(x)}"
         if long is not None:
-            writer.long_class_repr[outer_class] = long
+            if not settings.deterministic_identificators:
+                writer.long_class_repr[outer_class] = long
+            elif long_det is not None:
+                writer.long_class_repr[outer_class] = long_det
+            else:
+                writer.long_class_repr[outer_class] = lambda x: f"{type(x)}"
         return
 
     verbosity_settings = dict(
@@ -145,9 +157,19 @@ def loggable(
                 # When we decorate a class we can assign a logging "repr"s here. One is "short" and one
                 # is "long". For description see docstring of `enh_repr` function.
                 if short is not None:
-                    writer.short_class_repr[x] = short
+                    if not settings.deterministic_identificators:
+                        writer.short_class_repr[x] = short
+                    elif short_det is not None:
+                        writer.short_class_repr[x] = short_det
+                    else:
+                        writer.short_class_repr[x] = lambda y: f"{type(y)}"
                 if long is not None:
-                    writer.long_class_repr[x] = long
+                    if not settings.deterministic_identificators:
+                        writer.long_class_repr[x] = long
+                    elif long_det is not None:
+                        writer.long_class_repr[x] = long_det
+                    else:
+                        writer.long_class_repr[x] = lambda y: f"{type(y)}"
         # After decoration we return the original method/function, so the class/module has exactly the
         # same structure as it would have it wasn't decorated at all. All the information needed is stored
         # in the managers now. When the logging is turned on, the wrappers are created, and module/class

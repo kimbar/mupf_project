@@ -16,6 +16,7 @@ import websockets
 from . import _features as F
 from . import client, exceptions
 from ._macro import MacroByteStream
+from . import log
 from .log import loggable
 
 
@@ -80,8 +81,13 @@ class App:
         self._root_path: str = os.path.split(sys.argv[0])[0]
         self._file_routes: dict[str, str] = {}
 
+        self._clients_generated = 0
+
     @loggable()
     def get_unique_client_id(self) -> str:
+        if log.settings.deterministic_identificators:
+            self._clients_generated += 1
+            return f"cl{self._clients_generated:>04}abcdefghABCDEFGH"
         while True:
             # This should be HTTP cookie safe. It is hence it is `[-_0-9A-Za-z]+`
             cid = base64.urlsafe_b64encode(uuid.uuid4().bytes).decode('ascii').rstrip('=')
@@ -91,6 +97,7 @@ class App:
                         break
                 else:
                     break
+        self._clients_generated += 1
         return cid
 
     @loggable()

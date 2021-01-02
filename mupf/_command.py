@@ -68,6 +68,8 @@ def create_command_class_for_client(client):
         log_path = False,
         short = lambda self: f"<{getattr(self, '_ccid', '?')}-{id(self):X}>",
         long = lambda self: f"<Command {('run' if getattr(self, '_notification', False) else 'cmd')} {getattr(self, '_ccid', '?')} {getattr(self, '_cmd_name', '?')} {id(self):X}>",
+        short_det = lambda self: f"<{getattr(self, '_ccid', '?')}>",
+        long_det = lambda self: f"<Command {('run' if getattr(self, '_notification', False) else 'cmd')} {getattr(self, '_ccid', '?')} {getattr(self, '_cmd_name', '?')}>",
     )
     class Command(metaclass=MetaCommand):
         """

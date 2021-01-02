@@ -20,12 +20,15 @@ else:
     mupftestsvenvhelper.repair_plugins(__path__)
     del mupftestsvenvhelper
 
+# Log must be imported first, because it does a lot of its setup job during
+# imports of all other modules (monkey-patching etc.)
+from . import log
+
 from ._app import App
 from . import _symbols as S
 from . import _features as F
 from . import client    # This and following ones just to be explicit
 from . import exceptions
-from . import log
 from . import plugins
 
 # Importing public modules from plugins directly into `mupf.`

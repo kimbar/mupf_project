@@ -1,11 +1,16 @@
 import unittest
 import os
+
+# Mupf Log Deterministic Identifiers
+os.environ['MUPFLOGDETIDS'] = "TRUE"
+
 import sys
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 import mupf
 import time
 import socket
+import shutil
 
 class Connection(unittest.TestCase):
 
@@ -53,10 +58,22 @@ class Connection(unittest.TestCase):
 
 class LowLevelApp(unittest.TestCase):
 
+    def logfile_id(self):
+        result = self.id()
+        to_trim = os.path.basename(os.path.dirname(__file__))+"."
+        where_trim = result.find(to_trim)
+        if where_trim != -1:
+            result = result[where_trim+len(to_trim):]
+        return result
+
     def setUp(self) -> None:
         print(self.shortDescription())
         os.chdir(os.path.dirname(__file__))
+
         self.t0 = time.time()
+
+        mupf.log.settings.graph_style = 'default'
+        mupf.log.enable(self.logfile_id()+'.RECENT.log')
 
     def test_hello_world(self):
         "selenium/basics: None -> Display 'Hello, World!' example"
@@ -83,9 +100,21 @@ class LowLevelApp(unittest.TestCase):
             span = body.find_element_by_tag_name('span')
             self.assertIsInstance(span, webdriver.remote.webelement.WebElement)
 
+    def _list_to_reason(self, exc_list):
+        if exc_list and exc_list[-1][0] is self:
+            return exc_list[-1][1]
+
     def tearDown(self) -> None:
         print(f'Test run time: {int((time.time()-self.t0)*1000)} ms')
 
+        result = self.defaultTestResult()
+        self._feedErrorsToResult(result, self._outcome.errors)
+        error = self._list_to_reason(result.errors)
+        failure = self._list_to_reason(result.failures)
+        ok = not error and not failure
+
+        if ok:
+            shutil.copy(self.logfile_id()+'.RECENT.log', self.logfile_id()+'.SUCESS.log')
 
 if __name__ == '__main__':
     unittest.main()

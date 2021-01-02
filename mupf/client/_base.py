@@ -29,6 +29,7 @@ def create_send_task(evl, wbs, json):
     'client/base.py/*<obj>',
     log_path=False,
     long = lambda self: f"<{type(self).__name__} {getattr(self, '_cid', '?')[0:6]}>",
+    long_det = lambda self: f"<{type(self).__name__} {getattr(self, '_cid', '?')[0:6]}>"
 )
 class Client:
     """
