@@ -45,18 +45,15 @@ def disable():
 def add_filters(*args, **kwargs):
     """ Add filters deciding which managers should be on
 
-    Filters are strings in format `"<marker> <address pattern>"`. `<marker>` is
-    one of the `"+"`, `"-"` or `"#"` characters. `<address pattern>` is a simplified
-    regular expression, similar to those used in system shells. The pattern
-    should "match" some addresses of the managers (it can be just an address of
-    a single manager.) If the pattern matches `<marker>` decides if the manager
-    should be switched on (`"+"`) or off (`"+"`). Filters with `"#"` are not
-    used (are commented.) Filters are matched in the sequence they were added.
-    For each manager, the last filter matched (and not commented) decides of
-    the state of the manager.
+    Filters are strings in format `"<marker> <address pattern>"`. `<marker>` is one of the `"+"`, `"-"` or `"#"`
+    characters. `<address pattern>` is a simplified regular expression, similar to those used in system shells. The
+    pattern should "match" some addresses of the managers (it can be just an address of a single manager.) If the
+    pattern matches `<marker>` decides if the manager should be switched on (`"+"`) or off (`"+"`). Filters with `"#"`
+    are not used (are commented.) Filters are matched in the sequence they were added.  For each manager, the last
+    filter matched (and not commented) decides of the state of the manager.
 
-    Filters should be passed as unnamed or named. The advantege of naming a
-    filter is that one can change its state (`<marker>`) later on. For example:
+    Filters should be passed as unnamed or named. The advantege of naming a filter is that one can change its state
+    (`<marker>`) later on. For example:
 
     ```
     add_filters("+ app.py/**", dj="# **/Client.decode_json")
@@ -68,8 +65,7 @@ def add_filters(*args, **kwargs):
     set_filter_state(dj="+")
     ```
 
-    Currently it is impossible to change order or delete the filters (commenting
-    is the closest to deletion right now.)
+    Currently it is impossible to change order or delete the filters (commenting is the closest to deletion right now.)
     """
     with log_mutex:
         for filter_ in args:

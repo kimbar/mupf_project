@@ -170,7 +170,7 @@ class Client:
         return self
 
     @loggable()
-    def install_javascript(self, code=None, src=None, remove=True):
+    def install_javascript(self, code=None, *, src=None, remove=True):
         if code is not None and src is None:
             return self.command('*install*')(code, remove=remove)
         elif src is not None and code is None:
