@@ -21,6 +21,9 @@ class LogEvent:
     def exiting(self, sentinel_nickname=None):
         return not self._entering and (sentinel_nickname is None or self._sentinel_nickname == sentinel_nickname)
 
+    def from_sentinel(self, sentinel_nickname):
+        return self._sentinel_nickname == sentinel_nickname
+
     @property
     def result(self):
         if self._call_id is not None:

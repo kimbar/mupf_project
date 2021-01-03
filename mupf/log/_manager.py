@@ -120,8 +120,15 @@ class LogManager:
 
     def dismiss_all_sentinels(self):
         for manager in self._employed_managers:
-            manager.dismiss()
+            manager.dismiss(self)
         del self._employed_managers[:]
+
+    def dissmiss_sentinel(self, *args):
+        for manager in self._employed_managers:
+            if nick_name := manager.aunt_nicknames.get(self, None):
+                if nick_name in args:
+                    manager.dismiss(self)
+                    self._employed_managers.remove(manager)
 
     @property
     def state(self):
@@ -155,6 +162,8 @@ class LogSimpleManager(LogManager):
         self.aunt_nicknames = {}
         self._employed = False
         self._silent_events_count = 0
+        self._delayed_aunts_management = False
+        self._delayed_aunts = []
 
         self._log_args = verbosity_settings['log_args']
         self._log_results = verbosity_settings['log_results']
@@ -207,13 +216,20 @@ class LogSimpleManager(LogManager):
         super().off()
 
     def employ(self, aunt, nickname=None):
+        if self._delayed_aunts_management:
+            self._delayed_aunts.append(("+", aunt, nickname))
+            return
         self.aunt_nicknames[aunt] = nickname
         self._employed = True
         if self.sentinel is None:
             self._soft_on()
 
     def dismiss(self, aunt):
-        del self.aunt_nicknames[aunt]
+        if self._delayed_aunts_management:
+            self._delayed_aunts.append(("-", aunt))
+            return
+        if aunt in self.aunt_nicknames:
+            del self.aunt_nicknames[aunt]
         if len(self.aunt_nicknames) == 0:
             self._employed = False
         if self._state == False:
@@ -261,11 +277,19 @@ class LogSimpleManager(LogManager):
                 self._silent_events_count += 1
         self._current_event = None
 
+        self._delayed_aunts_management = True
         for aunt, nickname in self.aunt_nicknames.items():
             event._sentinel_nickname = nickname
             aunt._current_event = event
             aunt.on_event(event)
             aunt._current_event = None
+        self._delayed_aunts_management = False
+        # Manamement of aunts which occured during event processing
+        for delayed_aunt_task in self._delayed_aunts:
+            if delayed_aunt_task[0] == '+':
+                self.employ(delayed_aunt_task[1], delayed_aunt_task[2])
+            elif delayed_aunt_task[0] == '-':
+                self.dismiss(delayed_aunt_task[1])
 
 
 def refresh(only_aunts=False):
