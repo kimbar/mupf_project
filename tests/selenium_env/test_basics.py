@@ -73,6 +73,7 @@ class LowLevelApp(unittest.TestCase):
         self.t0 = time.time()
 
         mupf.log.settings.graph_style = 'default'
+        # mupf.log.add_filters('- ***', '# app.py/websocket_event', '+ crrcan', '# app.py/server_event', '# app.py/App.process_HTTP_request')
         mupf.log.enable(self.logfile_id()+'.RECENT.log')
 
     def test_hello_world(self):

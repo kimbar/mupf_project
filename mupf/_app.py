@@ -233,7 +233,7 @@ class App:
     #  * mupf.F.__Feature
     #
 
-    @loggable(log_results=False) # FIXME: temporary turned off because of the length of the output
+    @loggable(log_exit=False) # FIXME: temporary turned off because of the length of the output
     def _process_HTTP_request(self, path, request_headers):
         # This is a temporary solution just to make basics work it should be done in some more systemic way.
 
