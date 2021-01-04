@@ -86,6 +86,7 @@ class LogWriter:
                 line += " "*(len_line-len(line)) + ruler
 
             line += ' ' + text
+            line = line.rstrip()
 
             logging.getLogger('mupf').info(line)
 
