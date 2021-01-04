@@ -233,16 +233,25 @@ class App:
     #  * mupf.F.__Feature
     #
 
+    @loggable()
+    def _process_url(self, path):
+        url = list(urllib.parse.urlparse(path).path.split('/'))[1:]
+        cid = None
+        if url[0] == 'mupf' and len(url)>=2:
+            cid = url[1]
+            url = url[2:]
+        url = tuple(url)
+        return url, cid
+
     @loggable(log_exit=False) # FIXME: temporary turned off because of the length of the output
     def _process_HTTP_request(self, path, request_headers):
         # This is a temporary solution just to make basics work it should be done in some more systemic way.
 
         # An error here is pretty catastrophic!!! The `mupf` itself hangs
 
-        cid = request_headers.get('Cookie', None)    # This can now be used to set `Client` features to `core.js`
-        url = tuple(urllib.parse.urlparse(path).path.split('/'))
+        url, cid = self._process_url(path)
 
-        if url == ('', ''):
+        if url == ('',):
             return (
                 HTTPStatus.OK,
                 websockets.http.Headers({
@@ -250,7 +259,7 @@ class App:
                 }),
                 pkg_resources.resource_stream(__name__, "static/main.html").read()
             )
-        elif url == ('', 'mupf', 'bootstrap'):
+        elif url == ('mupf', 'bootstrap'):
             return (
                 HTTPStatus.OK,
                 websockets.http.Headers({
@@ -258,7 +267,7 @@ class App:
                 }),
                 pkg_resources.resource_stream(__name__, "static/bootstrap.js").read()
             )
-        elif url == ('', 'mupf', 'core'):
+        elif url == ('mupf', 'core'):
             return (
                 HTTPStatus.OK,
                 websockets.http.Headers({
@@ -270,9 +279,9 @@ class App:
                     code_name = "static/core-base.js",
                 ).set_from_features(self._features).read()
             )
-        elif url == ('', 'mupf', 'ws'):
+        elif url == ('mupf', 'ws'):
             return None
-        elif url[0:2] == ('', 'mupf') :
+        elif url[0:1] == ('mupf') :
             return (
                 HTTPStatus.GONE,
                 websockets.http.Headers(),
@@ -294,8 +303,8 @@ class App:
 
     @loggable()
     def register_route(self, route: str, **kwargs) -> None:
-        route = tuple(urllib.parse.urlparse('/'+route).path.split('/'))
-        if route[0:2] == ('', 'mupf') or route == ('', ''):
+        route, cid = self._process_url('/'+route)
+        if cid is not None or route[0:1] == ('mupf',) or route == ('',):
             raise ValueError('route reserved')
         if 'file' in kwargs:
             self._file_routes[route] = kwargs['file']
@@ -320,6 +329,8 @@ class App:
 
     async def _websocket_request(self, new_websocket, path):
         log_websocket_event('entering websocket request body', new_websocket, path=path)
+        url, cid = self._process_url(path)
+        log_websocket_event('websocket path information', new_websocket, cid=cid, url=url)
         raw_msg = await new_websocket.recv()
         log_websocket_event('websocket received result of *first*', new_websocket, msg=raw_msg)
         msg = client.Client.decode_json_simple(raw_msg)

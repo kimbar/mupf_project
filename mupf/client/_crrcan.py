@@ -24,7 +24,7 @@ class LogCrrcan(LogManager):
 
     def on_event(self, event):
         if self.state:
-            if event.entering('first_start') and event.arg('path') == '/mupf/bootstrap':
+            if event.entering('first_start') and event.arg('path').endswith('/mupf/bootstrap'):
                 self._log_data(0, 0, "[0, 0, '*first*', {'args': (), 'kwargs': {'_user_feature': (2+2 == 4)}}]")
                 self.dissmiss_sentinel('first_start')
             elif event.entering('first_end') and event.args[0] == 'websocket received result of *first*':

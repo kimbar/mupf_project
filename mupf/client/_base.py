@@ -219,7 +219,7 @@ class Client:
     @property
     @loggable('*.:', log_enter=False)
     def url(self):
-        return f"http://{self.app._host}:{self.app._port}/#{self.cid}"
+        return f"http://{self.app._host}:{self.app._port}/mupf/{self.cid}/"
 
 @loggable('client/base.py/sending_event', hidden=True)
 def log_sending_event(part, *args, **kwargs):

@@ -1,6 +1,7 @@
 import mupf
 import time
 
+mupf.log.enable('app.log', default_all_on=True)
 print(mupf.F.feature_list)
 
 with mupf.App(

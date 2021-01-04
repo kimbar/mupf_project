@@ -83,10 +83,13 @@ function main() {
     mupf.cmd['*first*'] = async function(args, kwargs){
         document.head.removeChild(document.getElementById('mupf-bootstrap'))
         Object.assign(window.mupf.fts, kwargs)                             // user features
-        mupf.cid = window.location.hash.substring(1)                       // client id
-        document.cookie = mupf.cid
+        var pparts = window.location.pathname.split('/')
+        mupf.cid = '0000000000000000000000'
+        if (pparts[1]=='mupf' && pparts.length>=3) mupf.cid = pparts[2]
+        // mupf.cid = window.location.hash.substring(1)                       // client id
+        // document.cookie = "cid="+mupf.cid+"; SameSite=Lax"  // it seems rather pointless
         mupf.ws = await new Promise((ok, no) => {                          // web socket
-            let ws = new WebSocket("ws://"+window.location.host+"/mupf/ws")
+            let ws = new WebSocket("ws://"+window.location.host+window.location.pathname+"mupf/ws")
             ws.onopen = () => { ok(ws) }
             ws.onerror = (e) => { no(e) }   // co z tym errorerm?
             ws.onmessage = (ev) => {mupf.recv(mupf.hk.getmsg(ev)) }
