@@ -180,7 +180,7 @@ class Client:
 
     @loggable()
     def install_commands(self, code=None, src=None):
-        self.install_javascript(code, src, remove=True).result
+        self.install_javascript(code, src=src, remove=True).result
         if F.core_features in self.features:
             self.command._legal_names = self.command('*getcmds*')().result
 
