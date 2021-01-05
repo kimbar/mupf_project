@@ -34,10 +34,11 @@ def create_send_task(evl, wbs, json):
 )
 class Client:
     """
-    Object represents a window of a browser.
+    Object of this class represents a window of a browser.
 
-    It is not called "Window", because `window` is already a top-level object of the JavaSript side, and this object is
-    a little more than that. A `RemoteObj` of `window` can be easily obtained by `client.window`.
+    It is not called "Window", because ``window`` is already a top-level object of the JS-side, and this object is a
+    little more than that. A :class:`~mupf._remote.RemoteObj` of ``window`` can be obtained by :attr:`window`.
+
     """
     @loggable(log_results=False)
     def __init__(self, app, client_id):
@@ -53,7 +54,11 @@ class Client:
         self._preconnection_stash = []
         self._healthy_connection = True    # FIXME: this should not start as True by default
         self.command = _command.create_command_class_for_client(self)
+        """ A ``command`` class used in command invoking syntax. """
+
         self.window = RemoteObj(0, self)
+        """ A :class:`~mupf._remote.RemoteObj` object representing the ``window`` object on the JS-side. """
+
         self._remote_obj_byid = weakref.WeakValueDictionary()
         self._clbid_by_callbacks = {}
         self._callbacks_by_clbid = {}
@@ -78,12 +83,12 @@ class Client:
     def _escape_for_json(self, value):
         """ Encoding advanced types for JSON transport
 
-        This method is used by `mupf._enhjson.encode` to encode all types byond dicts, arrays, floats etc. It should
-        return either a `enhjson.JsonElement` enum member or a tuple. The tuple is the escape structure for an advanced
-        type (handler and arguments).
+        This method is used by :func:`mupf._enhjson.encode` to encode all types byond dicts, arrays, floats etc. It
+        should return either a :class:`enhjson.JsonElement` enum member or a tuple. The tuple is the escape structure
+        for an advanced type (handler and arguments).
 
-        We can here get a help from `enhjson.test_element_type()` function that will return an`enhjson.JsonElement` enum
-        member if it can.
+        We can here get a help from :func:`enhjson.test_element_type` function that will return a
+        :class:`enhjson.JsonElement` enum member if it can.
         """
         if isinstance(value, RemoteObj):
             return '@', value[S.rid]
