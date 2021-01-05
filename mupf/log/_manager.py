@@ -254,17 +254,17 @@ class LogSimpleManager(LogManager):
                             if connect_to_track is not None:
                                 break
                     if self._log_args:
-                        wr.write(self.format_args(event), connect_to_track = connect_to_track)
+                        wr.write(self.format_args(event), connect_to_track = connect_to_track, exception=event.exception)
                     else:
-                        wr.write(connect_to_track = connect_to_track)
+                        wr.write(connect_to_track = connect_to_track, exception=event.exception)
                     if stack is not None:
                         tracks.register_stack_frame(stack[0].frame, wr._track)
             elif self._log_exit:
                 wr = self.find_writer(id_=event.call_id)
                 if self._log_results:
-                    wr.write(writer.enh_repr(event.result), finish=True)
+                    wr.write(writer.enh_repr(event.result), finish=True, exception=event.exception)
                 else:
-                    wr.write(finish=True)
+                    wr.write(finish=True, exception=event.exception)
                 if settings.graph_call_stack_connect:
                     tracks.deregister_stack_frame(wr._track)
             if wr is not None and wr.finished:

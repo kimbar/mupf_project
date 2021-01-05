@@ -37,7 +37,7 @@ class LogWriter:
         self._inner = not (style & LogWriterStyle.outer)
         self.finished = False
 
-    def write(self, text="", finish=False, connect_to_track=None):
+    def write(self, text="", finish=False, connect_to_track=None, exception=False):
         if self._single_line:
             branch = self._single_line_branch
             if branch == '<':
@@ -58,7 +58,10 @@ class LogWriter:
             elif finish:
                 branch = 'end'
                 if self._inner:
-                    ruler = ' '+tracks.ligatures["}>"]
+                    if exception:
+                        ruler = tracks.ligatures["E}>"]
+                    else:
+                        ruler = ' '+tracks.ligatures["}>"]
                 else:
                     ruler = tracks.ligatures["<{"]+' '
                 line_id = ".f"

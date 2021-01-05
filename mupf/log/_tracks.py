@@ -3,10 +3,10 @@ from . import settings
 
 _tracks = []
 _styles = dict(
-    _reference = "|,`}+-{><.T^t",
-    default =    "│┌└├┼─┤><·┐┘─",
-    rounded =    "│╭╰├┼─┤><·╮╯─",
-    simple =     "|,`|+-|><*,'-",
+    _reference = "|,`}+-{><.T^tE",
+    default =    "│┌└├┼─┤><·┐┘─E",
+    rounded =    "│╭╰├┼─┤><·╮╯─E",
+    simple =     "|,`|+-|><*,'-E",
 )
 glyphs = {}
 ligatures = {}
@@ -17,7 +17,7 @@ def set_style(characters):
         raise ValueError('Wrong length of character set')
     glyphs = {_styles['_reference'][i]:characters[i] for i in range(len(characters))}
     ligatures = {lig: "".join(characters[_styles['_reference'].index(ch)] for ch in lig) for lig in (
-        "<-", "->", "<{", "}>"
+        "<-", "->", "<{", "}>", "E}>"
     )}
 
 set_style(_styles['default'])

@@ -25,18 +25,23 @@ class LogSentinel:
         stack = None
         if settings.graph_call_stack_connect:
             stack = inspect.stack()
-        ev = LogEvent(None, self, self._func, args, kwargs, None, threading.current_thread(), stack)
+        ev = LogEvent(None, self, self._func, args, kwargs, None, threading.current_thread(), stack, exception=False)
         self._manager.on_event(ev)
         call_id = ev.call_id
         del ev
         if stack is not None:
             del stack
 
-        result = self._func(*args, **kwargs)
-
-        ev = LogEvent(call_id, self, self._func, args, kwargs, result, threading.current_thread(), None)
-        self._manager.on_event(ev)
-        return result
+        try:
+            result = self._func(*args, **kwargs)
+        except Exception as exc:
+            ev = LogEvent(call_id, self, self._func, args, kwargs, exc, threading.current_thread(), None, exception=True)
+            self._manager.on_event(ev)
+            raise exc
+        else:
+            ev = LogEvent(call_id, self, self._func, args, kwargs, result, threading.current_thread(), None, exception=False)
+            self._manager.on_event(ev)
+            return result
 
     def remove_yourself(self):
         raise NotImplementedError(f'`LogSentinel.remove_yourself()` not in `{self}`')
