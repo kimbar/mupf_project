@@ -72,8 +72,13 @@ class LowLevelApp(unittest.TestCase):
 
         self.t0 = time.time()
 
+        logfile_name = self.logfile_id()
+        if os.path.exists(f'{logfile_name}.RECENT.log'):
+            shutil.copy(f'{logfile_name}.RECENT.log', f'{logfile_name}.PREVIOUS.log')
+
         mupf.log.settings.graph_style = 'default'
-        # mupf.log.add_filters('- ***', '# app.py/websocket_event', '+ crrcan', '# app.py/server_event', '# app.py/App.process_HTTP_request')
+        mupf.log.add_filters('- ***', '+ app.py/websocket_event', '+ crrcan', '+ app.py/server_event', '+ app.py/App.process_HTTP_request')
+        # mupf.log.add_filters('+ ***')
         mupf.log.enable(self.logfile_id()+'.RECENT.log')
 
     def test_hello_world(self):
@@ -115,7 +120,8 @@ class LowLevelApp(unittest.TestCase):
         ok = not error and not failure
 
         if ok:
-            shutil.copy(self.logfile_id()+'.RECENT.log', self.logfile_id()+'.SUCESS.log')
+            logfile_name = self.logfile_id()
+            shutil.copy(f'{logfile_name}.RECENT.log', f'{logfile_name}.SUCESS.log')
 
 if __name__ == '__main__':
     unittest.main()
