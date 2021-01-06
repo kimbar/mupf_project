@@ -6,6 +6,7 @@ class LogCrrcan(LogManager):
     undecoded_by_event_id = {}
     internal_writers = {}
     external_writers = {}
+    last_ccid = None
 
     def on(self):
         count_d = self.employ_sentinels('***/Client.decode_json', nickname='decode')
@@ -37,6 +38,14 @@ class LogCrrcan(LogManager):
                 del LogCrrcan.undecoded_by_event_id[event.call_id]
             elif event.entering('send'):
                 self._log_data(event.arg('json')[0], event.arg('json')[1], repr(event.arg('json')))
+                if event.arg('json')[2]=='*last*':
+                    self.employ_sentinels('***/Command.result.:', nickname='last_end')
+                    LogCrrcan.last_ccid = event.arg('json')[1]
+            elif event.exiting('last_end'):
+                if event.exception:
+                    self._log_data(1, LogCrrcan.last_ccid, f'virtual *last*, result={event.result}')
+                    self.off()
+
 
     def _log_data(self, mode, ccid, text):
         if mode >= 5:
