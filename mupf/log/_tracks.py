@@ -11,6 +11,11 @@ _styles = dict(
 glyphs = {}
 ligatures = {}
 
+def get_style(name):
+    if not isinstance(name, str):
+        name = name.value
+    return _styles.get(name, "default")
+
 def set_style(characters):
     global ligatures, glyphs, _styles
     if len(characters) != len(_styles['_reference']):

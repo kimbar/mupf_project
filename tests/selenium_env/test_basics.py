@@ -76,7 +76,7 @@ class LowLevelApp(unittest.TestCase):
         if os.path.exists(f'{logfile_name}.RECENT.log'):
             shutil.copy(f'{logfile_name}.RECENT.log', f'{logfile_name}.PREVIOUS.log')
 
-        mupf.log.settings.graph_style = 'default'
+        mupf.log.settings.graph_style = mupf.log.settings.GraphStyle.rounded
         mupf.log.add_filters('- ***', '+ app.py/websocket_event', '+ crrcan', '+ app.py/server_event', '+ app.py/App.process_HTTP_request')
         # mupf.log.add_filters('+ ***')
         mupf.log.enable(self.logfile_id()+'.RECENT.log')

@@ -29,7 +29,7 @@ def enable(file_name, * , file_mode = 'w', default_all_on=True):
     hand.setFormatter(logging.Formatter(settings.logging_format))
     logging.getLogger('').addHandler(hand)
     # Setting up the style for tracks
-    _tracks.set_style(_tracks._styles.get(settings.graph_style, 'default'))
+    _tracks.set_style(_tracks.get_style(settings.graph_style))
     # Enabling logging
     with log_mutex:
         _logging_enabled = True
