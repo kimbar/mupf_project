@@ -281,7 +281,15 @@ class App:
             )
         elif url == ('mupf', 'ws'):
             return None
-        elif url[0:1] == ('mupf') :
+        elif url == ('mupf','closed'):
+            return (
+                HTTPStatus.OK,
+                websockets.http.Headers({
+                    'Content-Type': f'text/html; charset={self._charset}',
+                }),
+                pkg_resources.resource_stream(__name__, "static/closed.html").read()
+            )
+        elif url[0:1] == ('mupf',) :
             return (
                 HTTPStatus.GONE,
                 websockets.http.Headers(),

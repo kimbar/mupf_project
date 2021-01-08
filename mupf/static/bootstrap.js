@@ -104,6 +104,7 @@ function main() {
         if (mupf.pending > 1) await new Promise((ok, no) => {mupf.last_resolve = ok})
         mupf.hk.preclose()
         window.mupf.ws.close(1000, "*last*")
+        window.location = 'mupf/closed'
         // This command returns `null` through a closed websocket. Is this a problem?
     }
 
