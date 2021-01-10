@@ -167,6 +167,8 @@ class App:
     @loggable()
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
+        if exc_value is not None:
+            raise exc_value
 
     @loggable()
     def open(self):

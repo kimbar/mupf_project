@@ -27,7 +27,12 @@ class MetaCommand(type):
     def __init__(cls, name, bases, dict_):
         super().__init__(name, bases, dict_)
 
-    def __getattr__(cls, name):
+    def __getattr__(cls, name: str):
+        if name.endswith('mupf'):
+            # In principle this could be done like in `RemoteObj`, but that'd require full `__getattribute__` spiel,
+            # which may be a little too complicated for such a low-level stuff as naming commands. After all, this is
+            # the main purpose of the "mupf" name - to name reserved things internally.
+            raise RuntimeError('Command names cannot end with `mupf`')
         return cls(name)    #pylint: disable=no-value-for-parameter
 
     def resolve_all_mupf(cls, result):
