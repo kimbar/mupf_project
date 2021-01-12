@@ -254,43 +254,15 @@ class App:
         url, cid = self._process_url(path)
 
         if url == ('',):
-            return (
-                HTTPStatus.OK,
-                websockets.http.Headers({
-                    'Content-Type': f'text/html; charset={self._charset}',
-                }),
-                pkg_resources.resource_stream(__name__, "static/main.html").read()
-            )
+            return self._serve_static('main.html', 'html')
         elif url == ('mupf', 'bootstrap'):
-            return (
-                HTTPStatus.OK,
-                websockets.http.Headers({
-                    'Content-Type': 'application/javascript',
-                }),
-                pkg_resources.resource_stream(__name__, "static/bootstrap.js").read()
-            )
+            return self._serve_static('bootstrap.js', 'js')
         elif url == ('mupf', 'core'):
-            return (
-                HTTPStatus.OK,
-                websockets.http.Headers({
-                    'Content-Type': 'application/javascript',
-                }),
-                MacroByteStream(
-                    pkg_resources.resource_stream(__name__, "static/core-base.js"),
-                    substream_finder = lambda fname: pkg_resources.resource_stream(__name__, fname),
-                    code_name = "static/core-base.js",
-                ).set_from_features(self._features).read()
-            )
+            return self._serve_static('core-base.js', 'jsm')
         elif url == ('mupf', 'ws'):
             return None
         elif url == ('mupf','closed'):
-            return (
-                HTTPStatus.OK,
-                websockets.http.Headers({
-                    'Content-Type': f'text/html; charset={self._charset}',
-                }),
-                pkg_resources.resource_stream(__name__, "static/closed.html").read()
-            )
+            return self._serve_static('closed.html', 'html')
         elif url[0:1] == ('mupf',) :
             return (
                 HTTPStatus.GONE,
@@ -300,15 +272,31 @@ class App:
         else:
             return self._get_route_response(url)
 
+    def _serve_static(self, path, type_, *, data_resolved=True):
+        header = {}
+        path = "static/"+path
+        if type_ == 'html':
+            header = {'Content-Type': f'text/html; charset={self._charset}',}
+        elif type_ == 'js' or type_ == 'jsm':
+            header = {'Content-Type': 'application/javascript',}
+        if type_ == 'jsm':
+            datastream = MacroByteStream(
+                    pkg_resources.resource_stream(__name__, path),
+                    substream_finder = lambda fname: pkg_resources.resource_stream(__name__, fname),
+                    code_name = path,
+                ).set_from_features(self._features)
+        else:
+            datastream = pkg_resources.resource_stream(__name__, path)
+        if data_resolved:
+            return (HTTPStatus.OK, websockets.http.Headers(header), datastream.read())
+        else:
+            return (HTTPStatus.OK, websockets.http.Headers(header), datastream)
+
     @loggable()
     def _identify_line_in_code(self, position_data):
         file_name, line, col = position_data
         if file_name.endswith('/mupf/core'):
-            if position_data := MacroByteStream(
-                    pkg_resources.resource_stream(__name__, "static/core-base.js"),
-                    substream_finder = lambda fname: pkg_resources.resource_stream(__name__, fname),
-                    code_name = "static/core-base.js",
-                ).set_from_features(self._features).identify_line(line):
+            if position_data := self._serve_static('core-base.js', 'jsm', data_resolved=False)[2].identify_line(line):
                 return (position_data[0], position_data[1], col)
 
     @loggable()
