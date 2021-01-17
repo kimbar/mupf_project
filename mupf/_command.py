@@ -26,6 +26,9 @@ class MetaCommand(type):
 
     def __init__(cls, name, bases, dict_):
         super().__init__(name, bases, dict_)
+        cls._global_mutex = threading.RLock()
+        cls._unresolved = {}
+        cls._resolved_in_advance = []
 
     def __getattr__(cls, name: str):
         if name.endswith('mupf'):
@@ -87,10 +90,11 @@ def create_command_class_for_client(client):
         until the result is known. If an error occured during execution, attempt to read the `result` will rise an
         appropriate exception.
         """
+        # This should end in `_mupf`? Because they can be confused with command names
         _client_wr = weakref.ref(client)
-        _unresolved = {}
-        _resolved_in_advance = []
-        _global_mutex = threading.RLock()
+        # _unresolved = {}
+        # _resolved_in_advance = []
+        # _global_mutex = threading.RLock()
         _ccid_counter = 0
         _legal_names = ['*first*', '*last*', '*install*', '*features*']
 
