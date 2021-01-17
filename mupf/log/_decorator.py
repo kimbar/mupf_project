@@ -94,7 +94,23 @@ def loggable(
                 log_addr = log_addr.replace('*',  x.__name__.strip('_'), 1)
                 for prop_name in dir(x):
                     # for each member of the class we try...
-                    member = x.__getattribute__(x, prop_name)
+                    # First we must find the member, and that means we must traverse the Method Resolution Order
+                    for mro_class in x.__mro__:
+                        try:
+                            member = x.__getattribute__(mro_class, prop_name)
+                        except AttributeError:
+                            # The member is not in this class so we move one step in MRO.
+                            pass
+                        else:
+                            # We found the member, so we can break from the loop
+                            break
+                    else:
+                        # The loop was never broken.
+                        # So we haven't found the member anuwhere in the `__mro__` - this should never happen, because
+                        # the member was returned by `dir(x)` so it should exist somwhere. To fail safe (quaietly) we
+                        # assign a `None` value to the member that will fail in expected manner down the line at
+                        # `member._methodtolog.log_path`.
+                        member = None
                     if isinstance(member, property):
                         # if it is an actual property we will have potentially three managers to sort out
                         members = ((member.fget, 'fget'), (member.fset, 'fset'), (member.fdel, 'fdel'))
