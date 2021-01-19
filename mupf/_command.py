@@ -28,7 +28,6 @@ class MetaCommand(type, MetaCommand_SrvThrItf):
 
     def __init__(cls, name, bases, dict_):
         type.__init__(cls, name, bases, dict_)
-        cls._ccid_counter = 1
         cls._last_ccid = None
         cls._legal_names = ['*first*', '*last*', '*install*', '*features*']
         MetaCommand_SrvThrItf.__init__(cls)
@@ -107,17 +106,21 @@ def create_command_class_for_client(client):
                     if self._ccid in Command._unresolved:
                         # Trying to reissue a command when it is still unresolved, we must first clear the `_global_mutex`
                         raise CommandReissueFast
+
+                    # TODO: Does this block need to be in the mutex?
                     if self._cmd_name == '*first*':
                         self._ccid = 0
                     else:
                         self._ccid = Command._ccid_counter
                     if self._cmd_name == '*last*':
                         Command._last_ccid = self._ccid
+
                     if self._notification:
                         self._is_resolved.set()
                         self._result = NotificationNullResult
                     else:
                         Command._unresolved[self._ccid] = self
+
                     Command._ccid_counter += 1
             except CommandReissueFast:
                 # Previous call for the command is still unresolved and new call has been already made. We simply "copy"
@@ -127,7 +130,9 @@ def create_command_class_for_client(client):
                 # is a problem with `self.result` because it is overwritten or duplicated depending on low-level
                 # communication timing.
                 return Command(self._cmd_name, self._notification)(*args, **kwargs)
-            if self._ccid > 0:    # `cmd_name=="__first__"` cannot be send, only received
+            if self._ccid > 0:
+                # The `*first*` command (`ccid==0`) is sent directly in the code of `bootstrap.js` so the data message
+                # through the websocket is suppressed here.
                 Command._client_wr()._send(self._jsonify(args, kwargs))
 
             return self

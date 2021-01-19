@@ -1,4 +1,12 @@
-""" Code run in the server thread of the `App`
+""" Code run in the server thread of the `App` (mostly)
+
+Most of the code which is run in the separate "server" thread is moved to this module. It provides abstract classes
+which are supposed to be inherited by `App`, `Client` and so on. It is only a code management trick - there is no reason
+not to include all of this code directly into non-abstract classes. However, it is much more managable to keep most of
+the "server" thread code in one place, even if it spans through many classes.
+
+The `Client_SrvThrItf._websocket_communication()` method is the propper heart of this module.
+
 """
 
 import asyncio
@@ -12,16 +20,26 @@ from ._remote import CallbackTask
 
 
 class _WSTT:
-    "Web Socket Task Type"
+    """ Web Socket Task Type
 
+    A helper class keeping names of tasks used in the websocket coroutine.
+    """
     recieve_data ='recieve_data'
     consume_outqueue = 'consume_outqueue'
     send_data = 'send_data'
 
 class _CrrcanMode:
+    """ CRRCAN mode
+
+    A helper class keeping magic numbers of CRRCAN protocol modes.
+    """
     cmd = 0; res = 1; run = 2; clb = 5; ans = 6; ntf = 7
 
 re_crrcan_start = re.compile(r'\s*\[\s*(\d+)\s*,\s*(\d+)\s*,')
+""" A regexp matching proper begining of the CRRCAN message
+
+The groups in the regexp allow for quick extracting of the `mode` and `ccid` of the message
+"""
 
 class App_SrvThrItf(abc.ABC):
 
@@ -75,6 +93,12 @@ class App_SrvThrItf(abc.ABC):
         log_server_event('exiting server thread body', server)
 
     async def _websocket_request(self, new_websocket, path):
+        """ Finds a matching client for incoming websocket
+
+        After finding the client the control is given to appropriate client method. When the client is done with the
+        websocket some cleaning code can be done here (non so far).
+
+        """
         log_websocket_event('entering websocket request body', new_websocket, path=path)
         url, cid = self._process_url(path)
         log_websocket_event('websocket path information', new_websocket, cid=cid, url=url)
@@ -89,6 +113,9 @@ class App_SrvThrItf(abc.ABC):
 
     @loggable(log_exit=False) # FIXME: temporary turned off because of the length of the output
     async def _process_HTTP_request(self, path, request_headers):
+        """ Processing of regular GET requests
+
+        """
         # This is a temporary solution just to make basics work it should be done in some more systemic way.
         # An error here is pretty catastrophic!!! The `mupf` itself hangs
         url, cid = self._process_url(path)
@@ -97,11 +124,15 @@ class App_SrvThrItf(abc.ABC):
         elif url == ('mupf', 'bootstrap'):
             client = self._clients_by_cid.get(cid, None)
             await client._pyside_ready
+            # This future is resolved if the Py-side is ready for commands, and the first command can be sent. In fact
+            # the `*first*` command is sent directly in the `bootstrap.js` file and the regular data message for this
+            # command through the websocket is supressed.
             client.command('*first*')()
             return self._serve_static('bootstrap.js', 'js')
         elif url == ('mupf', 'core'):
             return self._serve_static('core-base.js', 'jsm')
         elif url == ('mupf', 'ws'):
+            # Here the `_websocket_request()` is run by the `websockets` library
             return None
         elif url == ('mupf','closed'):
             return self._serve_static('closed.html', 'html')
@@ -136,7 +167,6 @@ class Client_SrvThrItf(abc.ABC):
 
     def __init__(self):
         self.__pending_websocket_tasks = set()
-        self._pyside_ready = threading.Event()
         self._outqueue: asyncio.Queue = None
         evl = self._get_eventloop()
         self._pyside_ready = evl.create_future()
@@ -144,12 +174,20 @@ class Client_SrvThrItf(abc.ABC):
 
     def __init_srvthr(self):
         """ The part of the `__init__` that must be run in the thread of the event loop
+
+        After the code is run in the eventloop the `_pyside_ready` future is resolved and this can be seen in other
+        coroutines. This means that the Python side of the client is properly initialized and the Python code can start
+        to issue CRRCAN protocol messages, even if those messages won't hit the JS-side yet (because the connection with
+        the browser is lagging behind.)
         """
         self._outqueue = asyncio.Queue()
         self._pyside_ready.set_result(None)
         log_server_event('client pyside ready', client=self)
 
     def __add_websocket_task(self, name, *, websocket=None, data=None):
+        """ Helper method for cleaner creating of the event loop tasks
+
+        """
         if name == _WSTT.recieve_data:
             coro = websocket.recv()
         elif name == _WSTT.consume_outqueue:
@@ -163,6 +201,14 @@ class Client_SrvThrItf(abc.ABC):
         self.__pending_websocket_tasks.add(asyncio.create_task(coro, name=name))
 
     async def _websocket_communication(self, websocket):
+        """ Main loop of the client communication
+
+        The tasks required for communication are kept in `self.__pending_websocket_tasks`. Approprietly to the state of
+        data queues task are created, consumed and resheduled. The results of this process in the rawest form possible
+        is then processed by appropriate methods of other `*_SrvThrItf` classes. All further processing of this data is
+        made in the non-abstract counerparts of the `*_SrvThrItf` classes in the main thread.
+
+        """
         log_websocket_event('entering client websocket request body', client=self)
         self.__add_websocket_task(_WSTT.recieve_data, websocket=websocket)
         self.__add_websocket_task(_WSTT.consume_outqueue)
@@ -239,7 +285,6 @@ class Client_SrvThrItf(abc.ABC):
 
         log_websocket_event('exiting client websocket request body', client=self)
 
-
     def close(self):
         for task in self.__pending_websocket_tasks:
             sucess = task.cancel()
@@ -249,6 +294,7 @@ class Client_SrvThrItf(abc.ABC):
         """ Empty the outgoing queue
 
         This coro waits for at least one message on the outgoing queue, but if there is more, it takes them all.
+
         """
         result = []
         result.append(await self._outqueue.get())
@@ -260,7 +306,8 @@ class Client_SrvThrItf(abc.ABC):
         """ Puts data to send on the outgoing queue
 
         The data is put thread-safe on the `asyncio.Queue`, so any number of messages can be sent even if the connection
-        is not established or halted for some reason.
+        is not established or halted for some reason. The data from the queue is processed by `self.__consume_outqueue`
+        coro.
         """
         self._get_eventloop().call_soon_threadsafe(lambda x: self._outqueue.put_nowait(x), data)
 
@@ -273,11 +320,14 @@ class MetaCommand_SrvThrItf:
 
     def __init__(cls):
         cls._global_mutex = threading.RLock()
+        """ This global mutex is required to read and alter `_unresolved` """
+        cls._ccid_counter = 1
+        # TODO: Does the counter need to be protected by th mutex?
         cls._unresolved = {}
-        cls._resolved_in_advance = []
-        cls._resolved_raw_data = {}
 
     def set_resolved_mupf(cls, ccid, raw_data):
+        """ Put raw result data on the command object and unlock its mutex
+        """
         with cls._global_mutex:
             if ccid in cls._unresolved:
                 log_websocket_event('resolving', ccid=ccid, raw=raw_data)
@@ -287,7 +337,6 @@ class MetaCommand_SrvThrItf:
                 del cls._unresolved[ccid]
             else:
                 raise RuntimeError(f'Response data `{raw_data!r}` from client, with no ccid={ccid} command waiting for resolution')
-
 
 
 @loggable('app.py/websocket_event', log_exit=False)
