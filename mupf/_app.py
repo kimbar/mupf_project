@@ -19,6 +19,8 @@ from ._macro import MacroByteStream
 from . import log
 from .log import loggable, loggable_class
 
+from ._srvthr import App_SrvThrItf
+
 
 @loggable(
     'app.py/*<obj>',
@@ -26,7 +28,7 @@ from .log import loggable, loggable_class
     short = lambda self: f"<{id(self):X}>",
     long = lambda self: f"<App {id(self):X}>",
 )
-class App:
+class App(App_SrvThrItf):
     """
     Class for an app. Object represents a server and port, and a thread with an event-loop.
 
@@ -51,9 +53,6 @@ class App:
         self._charset: str = charset
         self._features: set[F._features__Feature] = set()
 
-        self._server_opened_mutex = threading.Event()
-        self._server_closed_mutex = threading.Event()
-
         # Checking the format of `features` argument.  Tested in `vanilla_env/test_featyres.py/Features`
         try:
             feat_type_check = any([not isinstance(f, F.__dict__['__Feature']) for f in features])
@@ -71,13 +70,12 @@ class App:
         self._features.update(F.feature_list)
         self._features = set(filter(lambda f: f.state, self._features))
 
-        # The main event loop of the App. However, if event-loop cannot be done this holds an offending exception
-        self._event_loop: asyncio.BaseEventLoop = None
         self._clients_by_cid: dict[str, client.Client] = {}
         self._root_path: str = os.path.split(sys.argv[0])[0]
         self._file_routes: dict[str, str] = {}
 
         self._clients_generated = 0
+        App_SrvThrItf.__init__(self)
 
     @loggable()
     def get_unique_client_id(self) -> str:
@@ -98,10 +96,8 @@ class App:
 
     @loggable()
     def summon_client(self, frontend: client.Client = client.WebBrowser, **kwargs) -> client.Client:
-        cid = self.get_unique_client_id()
-        client = frontend(self, cid, **kwargs)
-        self._clients_by_cid[cid] = client
-        client.install_javascript(src='mupf/core').result
+        client = frontend(self, self.get_unique_client_id(), **kwargs)
+        client.install_javascript(src='mupf/core').wait
         for feat, state in client.command('*features*')().result.items():
             if state:
                 client.features.add(+getattr(F, feat))
@@ -110,49 +106,6 @@ class App:
             client.command._legal_names = client.command('*getcmds*')().result
         client.summoned()
         return client
-
-    def _server_thread_body(self):
-        """ Main body of the server, run in a separate thread in `self.open()`
-        """
-        log_server_event('entering server thread body')
-        self._event_loop = asyncio.new_event_loop()
-        log_server_event('creating event loop', eloop=self._event_loop)
-        asyncio.set_event_loop(self._event_loop)
-        log_server_event('creating server object')
-        start_server = websockets.serve(
-            ws_handler = self._websocket_request,
-            host = self._host,
-            port = self._port,
-            process_request = self._process_HTTP_request,
-        )
-        server = None
-        try:
-            log_server_event('server starting ...')
-            server = self._event_loop.run_until_complete(start_server)
-            log_server_event('server started', server)
-            self._server_opened_mutex.set()
-            log_server_event('server open state mutex set', server)
-            self._event_loop.run_forever()
-            # Here everything happens
-            log_server_event('event loop main run ended', server, eloop=self._event_loop)
-        except OSError as err:
-            log_server_event('server OSError', err, server)
-            self._event_loop = err
-        finally:
-            if server is None:
-                self._server_opened_mutex.set()
-                log_server_event('server open state mutex set', server)
-            else:
-                log_server_event('server closing ...', server)
-                server.close()
-                log_server_event('server closed', server)
-                self._event_loop.run_until_complete(server.wait_closed())
-                log_server_event('event loop completed', server, eloop=self._event_loop)
-                self._event_loop.close()
-                log_server_event('event loop closed', server, eloop=self._event_loop)
-                self._server_closed_mutex.set()
-                log_server_event('server close state mutex set', server)
-        log_server_event('exiting server thread body', server)
 
     @loggable()
     def __enter__(self):
@@ -212,6 +165,10 @@ class App:
                 return True
 
     @loggable()
+    def _get_client_by_cid(self, cid):
+        return self._clients_by_cid[cid]
+
+    @loggable()
     def close(self, wait=False):
         for cl in self._clients_by_cid.values():
             cl.close(_dont_remove_from_app=True)
@@ -245,32 +202,13 @@ class App:
         url = tuple(url)
         return url, cid
 
-    @loggable(log_exit=False) # FIXME: temporary turned off because of the length of the output
-    def _process_HTTP_request(self, path, request_headers):
-        # This is a temporary solution just to make basics work it should be done in some more systemic way.
-
-        # An error here is pretty catastrophic!!! The `mupf` itself hangs
-
-        url, cid = self._process_url(path)
-
-        if url == ('',):
-            return self._serve_static('main.html', 'html')
-        elif url == ('mupf', 'bootstrap'):
-            return self._serve_static('bootstrap.js', 'js')
-        elif url == ('mupf', 'core'):
-            return self._serve_static('core-base.js', 'jsm')
-        elif url == ('mupf', 'ws'):
-            return None
-        elif url == ('mupf','closed'):
-            return self._serve_static('closed.html', 'html')
-        elif url[0:1] == ('mupf',) :
-            return (
-                HTTPStatus.GONE,
-                websockets.http.Headers(),
-                b"410 GONE\nReason: all paths in `/mupf` are reserved for internal use",
-            )
-        else:
-            return self._get_route_response(url)
+    @staticmethod
+    def _HTTP_error_response(status: HTTPStatus, reason: str):
+        return(
+            status,
+            websockets.http.Headers(),
+            f"{status.value} {status.name}\nReason: {reason}".encode('utf-8')
+        )
 
     def _serve_static(self, path, type_, *, data_resolved=True):
         header = {}
@@ -310,7 +248,7 @@ class App:
             raise TypeError('route destination required')
 
     @loggable()
-    def _get_route_response(self, route):
+    def _get_route_response(self, route, cid):
         if route in self._file_routes:
             return (
                 HTTPStatus.OK,
@@ -320,71 +258,10 @@ class App:
                 open(os.path.join(self._root_path, self._file_routes[route]), 'rb').read()   # TODO: check if exists
             )
         else:
-            log_server_event('HTTP Status 404', route=route)
-            pass
+            log_server_event('HTTP 404', route=route)
+            return self._HTTP_error_response(HTTPStatus.NOT_FOUND, f"no route {route!r}")
 
 #endregion
-
-    async def _websocket_request(self, new_websocket, path):
-        log_websocket_event('entering websocket request body', new_websocket, path=path)
-        url, cid = self._process_url(path)
-        log_websocket_event('websocket path information', new_websocket, cid=cid, url=url)
-        raw_msg = await new_websocket.recv()
-        log_websocket_event('websocket received result of *first*', new_websocket, msg=raw_msg)
-        msg = client.Client.decode_json_simple(raw_msg)
-        result = msg[3]['result']
-        cid = result['cid']
-        the_client = self._clients_by_cid[cid]
-        the_client._websocket = new_websocket
-        log_websocket_event('websocket assigned to client', new_websocket, client=the_client)
-        the_client._user_agent = result['ua']
-
-        # this line accepts a response from  `command('*first*')` because if the websocket is open then the `*first`
-        # have been just executed
-        the_client.command.resolve_by_id_mupf(ccid=0, result=None)
-        log_websocket_event('websocket awaiting for client...', new_websocket, client=the_client)
-        the_client.await_connection()
-        log_websocket_event('websocket contacted by client', new_websocket, client=the_client)
-        break_reason = None
-        while True:
-            log_websocket_event('websocket going to sleep', new_websocket)
-            try:
-                raw_msg = await new_websocket.recv()
-            except websockets.exceptions.ConnectionClosed as e:
-                break_reason = e.reason
-                break
-
-            # print(f'{time.time()-self._t0:.3f} ->', raw_msg)
-            msg = the_client.decode_json(raw_msg)
-
-            mode = msg[0]
-            ccid = msg[1]
-            noun = msg[2]
-            pyld = msg[3]
-
-            if mode == 1:   # response for a cmd
-                the_client.command.resolve_by_id_mupf(ccid, pyld['result'])
-            elif mode == 5:
-                the_client.shedule_callback(ccid, noun, pyld)
-            elif mode == 7:
-                the_client.shedule_callback(ccid, noun, pyld)
-                if noun == '*close*':
-                    break_reason = noun
-                    break
-            else:
-                pass
-
-        log_websocket_event('websocket communication breakdown', new_websocket, break_reason=break_reason)
-        # here we are after communication breakdown
-        the_client._healthy_connection = False
-        if break_reason == '*last*':
-            the_client.command.resolve_all_mupf(exceptions.ClientClosedNormally())
-            # TODO: what if not only `*last*` sits here - they should receive a `TimeoutError`, because the `*last*`
-            # didn't close them
-        else:
-            the_client.command.resolve_all_mupf(exceptions.ClientClosedUnexpectedly(break_reason))
-
-        log_websocket_event('exiting websocket request body', new_websocket)
 
     @loggable()
     def piggyback_call(self, function, *args):

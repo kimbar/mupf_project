@@ -106,21 +106,14 @@ class CallbackTask:
     # of this class is needed
 
     @loggable()
-    def __init__(self, client, ccid, noun, pyld):
+    def __init__(self, client, ccid, raw_data):
         self._client = client
         self._ccid = ccid
-        self._noun = noun
-        self._args = None
-        if isinstance(noun, int):
-            self._func = client._callbacks_by_clbid[noun]
-            self._noun = None
-            self._args = pyld['args']
+        self._raw_data = raw_data
 
     @loggable()
     def run(self):
-        if self._noun is None:
-            answer = self._func(*self._args)
-            self._client.send_json([6, self._ccid, 0, answer])
-            return
-        if self._noun == '*close*':
-            return
+        mode, ccid, noun, pyld = self._client._decode_json(self._raw_data)
+        func = self._client._callbacks_by_clbid[noun]
+        answer = func(*pyld['args'])
+        self._client._send([6, self._ccid, 0, answer])

@@ -4,7 +4,9 @@ import time
 from ._remote import RemoteObj
 from .log import loggable
 
-class MetaCommand(type):
+from._srvthr import MetaCommand_SrvThrItf
+
+class MetaCommand(type, MetaCommand_SrvThrItf):
     """
     Class of all commands. Object represents all possible commands for a specific client. Object is a class.
 
@@ -25,10 +27,12 @@ class MetaCommand(type):
     """
 
     def __init__(cls, name, bases, dict_):
-        super().__init__(name, bases, dict_)
-        cls._global_mutex = threading.RLock()
-        cls._unresolved = {}
-        cls._resolved_in_advance = []
+        type.__init__(cls, name, bases, dict_)
+        cls._ccid_counter = 1
+        cls._last_ccid = None
+        cls._legal_names = ['*first*', '*last*', '*install*', '*features*']
+        MetaCommand_SrvThrItf.__init__(cls)
+
 
     def __getattr__(cls, name: str):
         if name.endswith('mupf'):
@@ -38,32 +42,15 @@ class MetaCommand(type):
             raise RuntimeError('Command names cannot end with `mupf`')
         return cls(name)    #pylint: disable=no-value-for-parameter
 
-    def resolve_all_mupf(cls, result):
-        unres = []
-        with cls._global_mutex:
-            for ccid in cls._unresolved.keys():
-                unres.append(cls._unresolved[ccid])
-                if unres[-1]._is_resolved.is_set():
-                    raise RuntimeError("Command already resolved")
-            for cmd in unres:
-                cmd._is_error = isinstance(result, Exception)
-                cmd._result = result
-            cls._unresolved.clear()
-            for cmd in unres:
-                cmd._is_resolved.set()
 
-    def await_all_mupf(command_cls):
-        pass
+class NoResult:
+    pass
 
-    def resolve_by_id_mupf(cls, ccid, result):
-        with cls._global_mutex:
-            if (ccid not in cls._unresolved):  #pylint: disable=no-value-for-parameter # this should be compared with `cls._ccid_counter`
-                if result is not None:
-                    raise RuntimeError("only `None` result allowed for commands from the future")
-                cls._resolved_in_advance.append(ccid)
-            else:
-                cls._unresolved[ccid].result = result
+class NotificationNullResult:
+    pass
 
+class CommandReissueFast(Exception):
+    pass
 
 @loggable('command.py/*')
 def create_command_class_for_client(client):
@@ -92,11 +79,7 @@ def create_command_class_for_client(client):
         """
         # This should end in `_mupf`? Because they can be confused with command names
         _client_wr = weakref.ref(client)
-        # _unresolved = {}
-        # _resolved_in_advance = []
-        # _global_mutex = threading.RLock()
-        _ccid_counter = 0
-        _legal_names = ['*first*', '*last*', '*install*', '*features*']
+
 
         @loggable(log_results=False)
         def __init__(self, cmd_name, notification=False):
@@ -104,41 +87,49 @@ def create_command_class_for_client(client):
             self._cmd_name = cmd_name
             self._notification = notification
             self._is_resolved = threading.Event()
-            self._result = None
+            self._result = NoResult
+            self._raw_result = None
             self._is_error = False
 
         @loggable('()')
         def __call__(self, *args, **kwargs):
-            # TODO: notifications can be send multiple times and commands only once!
             if self._cmd_name not in Command._legal_names:
-                # print(f'*** Warning, there is no `{self._cmd_name}` command ***')
                 pass
             if self._is_resolved.is_set():
-                self._result = None
+                self._result = NoResult
+                self._raw_result = None
                 self._is_error = False
                 self._is_resolved.clear()
-            with Command._global_mutex:
-                if Command._ccid_counter < 0:
-                    raise RuntimeError(f'`*last*` command was already sent, trying to send `{self._cmd_name}`(args={args}, kwargs={kwargs})')
-                if self._ccid in Command._unresolved:
-                    raise RuntimeError('reissue impossible right now')
-                self._ccid = Command._ccid_counter
-                if self._notification:
-                    self._is_resolved.set()
-                else:
-                    Command._unresolved[self._ccid] = self
-                if self._cmd_name != '*last*':
-                    Command._ccid_counter += 1
-                else:
-                    Command._ccid_counter = -1
-            j = self._jsonify(args, kwargs)
-            # print(f'<- {time.time()-self._client_wr().app._t0:.3f}', j)
-            if self._ccid > 0:    # `cmd_name=="__first__"` cannot be send, only received
-                Command._client_wr().send_json(j)
-            if self._ccid in Command._resolved_in_advance:
+            try:
                 with Command._global_mutex:
-                    self.result = None
-                    del Command._resolved_in_advance[self._ccid]
+                    # if Command._ccid_counter < 0:
+                    #     raise RuntimeError(f'`*last*` command was already sent, trying to send `{self._cmd_name}`(args={args}, kwargs={kwargs})')
+                    if self._ccid in Command._unresolved:
+                        # Trying to reissue a command when it is still unresolved, we must first clear the `_global_mutex`
+                        raise CommandReissueFast
+                    if self._cmd_name == '*first*':
+                        self._ccid = 0
+                    else:
+                        self._ccid = Command._ccid_counter
+                    if self._cmd_name == '*last*':
+                        Command._last_ccid = self._ccid
+                    if self._notification:
+                        self._is_resolved.set()
+                        self._result = NotificationNullResult
+                    else:
+                        Command._unresolved[self._ccid] = self
+                    Command._ccid_counter += 1
+            except CommandReissueFast:
+                # Previous call for the command is still unresolved and new call has been already made. We simply "copy"
+                # the command and call it.
+                # TODO: this needs to be reconsidered, because the behaviour is quite unpredictable here. Depending on
+                # the state of previous call of the command new instance is made or the `Command` object is reused. It
+                # is a problem with `self.result` because it is overwritten or duplicated depending on low-level
+                # communication timing.
+                return Command(self._cmd_name, self._notification)(*args, **kwargs)
+            if self._ccid > 0:    # `cmd_name=="__first__"` cannot be send, only received
+                Command._client_wr()._send(self._jsonify(args, kwargs))
+
             return self
 
         @loggable()
@@ -173,25 +164,17 @@ def create_command_class_for_client(client):
         @loggable('*.:')
         def result(self):
             self.wait
+            if self._result is NoResult:
+                mode, ccid, noun, pyld = Command._client_wr()._decode_json(self._raw_result)
+                self._result = pyld['result']
+                if isinstance(self._result, RemoteObj):
+                    self._is_error = False
+                else:
+                    self._is_error = isinstance(self._result, Exception)
             if self._is_error:
                 raise self._result
             return self._result
 
-        @result.setter
-        @loggable('*.=', log_results=False)
-        def result(self, result):
-            if self._notification:
-                raise RuntimeError('cannot resolve notification')
-            with Command._global_mutex:
-                if self._is_resolved.is_set():
-                    raise RuntimeError("command already resolved")
-                if isinstance(result, RemoteObj):
-                    self._is_error = False
-                else:
-                    self._is_error = isinstance(result, Exception)
-                self._result = result
-                del Command._unresolved[self._ccid]
-                self._is_resolved.set()
 
         @loggable()
         def is_in_bad_state(self):

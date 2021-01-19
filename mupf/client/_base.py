@@ -13,18 +13,8 @@ from ..log import loggable, LogManager
 
 from . import _crrcan
 
-async def send_task_body(wbs, json):
-    log_sending_event('start', wbs, json)
-    try:
-        await wbs.send(json)
-    except Exception as err:
-        log_sending_event('mid', 'Exception:', err)
-    finally:
-        log_sending_event('end')
+from .._srvthr import Client_SrvThrItf
 
-@loggable('client/base.py/*', log_results=False,)
-def create_send_task(evl, wbs, json):
-    evl.create_task(send_task_body(wbs, json))
 
 @loggable(
     'client/base.py/*<obj>',
@@ -32,7 +22,7 @@ def create_send_task(evl, wbs, json):
     long = lambda self: f"<{type(self).__name__} {getattr(self, '_cid', '?')[0:6]}>",
     long_det = lambda self: f"<{type(self).__name__} {getattr(self, '_cid', '?')[0:6]}>"
 )
-class Client:
+class Client(Client_SrvThrItf):
     """
     Object of this class represents a window of a browser.
 
@@ -44,14 +34,15 @@ class Client:
     def __init__(self, app, client_id):
         self._app_wr = weakref.ref(app)
         self._cid = client_id
-        self._websocket = None
+        app._clients_by_cid[client_id] = self
+
         self._user_agent = None
         self.features = set()
         self.enhjson_decoders = {
             "@": self.get_remote_obj,
         }
         self._callback_queue = queue.Queue()
-        self._preconnection_stash = []
+
         self._healthy_connection = True    # FIXME: this should not start as True by default
         self.command = _command.create_command_class_for_client(self)
         """ A ``command`` class used in command invoking syntax. """
@@ -63,22 +54,13 @@ class Client:
         self._clbid_by_callbacks = {}
         self._callbacks_by_clbid = {}
         self._callback_free_id = 0
-        self._first_command = self.command('*first*')()    # ccid=0
+        Client_SrvThrItf.__init__(self)
 
-    @loggable(log_results=False)
-    def send_json(self, json):
-        if not self._websocket:
-            self._preconnection_stash.append(json)
-        else:
-            evl = self._app_wr()._event_loop
-            json[3] = enhjson.EnhancedBlock(json[3])
-            json = enhjson.encode(json, escape=self._escape_for_json)
-            evl.call_soon_threadsafe(
-                create_send_task,
-                evl,
-                self._websocket,
-                json,
-            )
+    def _send(self, data):
+        if F.core_features in self.features:
+            data[3] = enhjson.EnhancedBlock(data[3])
+        data = enhjson.encode(data, escape=self._escape_for_json)
+        Client_SrvThrItf._send(self, data)
 
     def _escape_for_json(self, value):
         """ Encoding advanced types for JSON transport
@@ -108,7 +90,7 @@ class Client:
         return self._healthy_connection
 
     @loggable()
-    def decode_json(self, raw_json):
+    def _decode_json(self, raw_json):
         msg = json.loads(raw_json)
         if F.core_features in self.features:
             msg[3] = enhjson.decode_enhblock(msg[3], self.enhjson_decoders)
@@ -159,20 +141,14 @@ class Client:
                 # print(f'{time.time()-self.app._t0:.3f} -> [1,{c._ccid},1,{{"result":null}}]')
                 pass
 
+        Client_SrvThrItf.close(self)
+
         if not _dont_remove_from_app:
             del self.app._clients_by_cid[self._cid]
 
     @loggable()
     def await_connection(self):
-        if self._first_command:
-            self._first_command.wait
-            if self._first_command.is_in_bad_state():
-                pass
-            self._first_command = None
-        for json in self._preconnection_stash:
-            self.send_json(json)
-        self._preconnection_stash.clear()
-        return self
+        pass
 
     @loggable()
     def install_javascript(self, code=None, *, src=None, remove=True):
@@ -201,10 +177,6 @@ class Client:
             return result
 
     @loggable()
-    def shedule_callback(self, ccid, noun, pyld):
-        self._callback_queue.put(CallbackTask(self, ccid, noun, pyld))
-
-    @loggable()
     def run_one_callback_blocking(self):
         if not self._healthy_connection:
             return
@@ -226,10 +198,14 @@ class Client:
     def url(self):
         return f"http://{self.app._host}:{self.app._port}/mupf/{self.cid}/"
 
+    def _get_eventloop(self):
+        return self._app_wr()._event_loop
+
+
+
 @loggable('client/base.py/sending_event', hidden=True)
 def log_sending_event(part, *args, **kwargs):
     pass
-
 
 @loggable('client/base.py/send_task_body')
 class LogSentTaskBody(LogManager):

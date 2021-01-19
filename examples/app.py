@@ -42,4 +42,5 @@ with mupf.App(
     cprint(f'Circle area for r = {r} is equal to A = {3.141592653589793*r*r}')
     cprint('Thank you for your cooperation', color='red')
 
-    client.command.sleep(1)
+    client.command.sleep(1).wait
+    # FIXME: without this `wait` there is some serious error now, because server quits earlier than websocket coroutine
