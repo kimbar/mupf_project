@@ -71,8 +71,9 @@ class App_SrvThrItf(abc.ABC):
             log_server_event('server started', server)
             self._server_opened_mutex.set()
             log_server_event('server open state mutex set', server)
-            self._event_loop.run_forever()
             # Here everything happens
+            self._event_loop.run_forever()
+            # This loop is broken in `App.close()`
             log_server_event('event loop main run ended', server, eloop=self._event_loop)
         except OSError as err:
             log_server_event('server OSError', err, server)
@@ -106,9 +107,30 @@ class App_SrvThrItf(abc.ABC):
         log_websocket_event('websocket path information', new_websocket, cid=cid, url=url)
         if the_client := self._get_client_by_cid(cid):
             log_websocket_event('client found, passing websocket', new_websocket, cid=cid, client=the_client)
+
+            # All client messaging happens here
             exit_exception = await the_client._websocket_communication(new_websocket)
-            the_client._healthy_connection = False
+
             the_client.command.set_all_resolved_with_exception_mupf(exit_exception)
+
+            # This is probabbly not stricly required, but all cancelled messages should be at least logged. At this
+            # point no new incoming messages are possible, so no new callbacks will be created. However, old callbacks
+            # can still be present in the client's queue. The execution of notification callbacks is local so they are
+            # no problem. If a regular callback would be strated now it still would be processed to the end, and the
+            # answer will be attempted to be sent, and will try to land in `the_client._outqueue`.
+            #
+            # There is maybe a brief moment between connection breakdown and full cleaning of the
+            # `the_client.__pending_websocket_tasks` when new data can land on the `the_client._outqueue` and after all
+            # some data can be there from before the connection breakdown. That's why it is cleaned here. Before `await`
+            # above returns the `the_client._healthy_connection` is set to `False` and this coro executes as a single
+            # block to the end. All new `the_client.__put_on_outqueue` will be run after that, so they will see
+            # `the_client._healthy_connection == False` and the dropped messages are logged there.
+            #
+            # Finally, the sheduling of callbacks in `Client` will see `the_client._healthy_connection == False` and
+            # further calls to callbacks will be dropped altogether in `CallbackTask.run()`.
+            while not the_client._outqueue.empty():
+                data = the_client._outqueue.get_nowait()
+                log_websocket_event('cancelling data send', client=the_client, data=data)
             log_websocket_event('client done with websocket', new_websocket, client=the_client)
         else:
             # no such client!
@@ -244,13 +266,31 @@ class Client_SrvThrItf(abc.ABC):
                 exception = None
                 if not cancelled:
                     exception = task.exception()
-                log_websocket_event(f'processing a task `{task_name}`', client=self, cancelled=cancelled, exception=exception)
+                log_websocket_event(f'[task] `{task_name}`', client=self, cancelled=cancelled, exception=exception)
                 if cancelled:
+                    continue
+
+                if exception:
+                    for task in self.__pending_websocket_tasks:
+                        sucess = task.cancel()
+                        log_websocket_event(f'       `{task_name}`: canceling task', client=self, task_name=task.get_name(), sucess=sucess)
+                    if isinstance(exception, websockets.exceptions.ConnectionClosedOK):
+                        self._healthy_connection = False
+                        if exception.reason == '*last*':
+                            data = f'[{_CrrcanMode.res},{self.command._last_ccid},0,{{"result":null}}]'
+                        else:
+                            # This notification is needed to assure last run of `Client.run_one_callback_blocking()` The
+                            # notification itself does nothing - it only unblocks the main thread.
+                            data = f'[{_CrrcanMode.ntf},-1,"*close*",{{"kwargs":{{"code":{exception.code}}}}}]'
+                            exit_exception = exceptions.ClientClosedUnexpectedly()
+                        self.__crrcan_switchboard(data, task_name)
+                    else:
+                        log_websocket_event(f'       `{task_name}`: UNKNOWN EXCEPTION IN TASK', client=self, exception=exception)
                     continue
 
                 if task_name == _WSTT.consume_outqueue:
                     data_list = task.result()
-                    log_websocket_event(f'                  `{task_name}`', client=self, msg_count=len(data_list))
+                    log_websocket_event(f'       `{task_name}`', client=self, msg_count=len(data_list))
                     for data in data_list:
                         # Translate each data taken from the outgoing queue into a sending task
                         self.__add_websocket_task(_WSTT.send_data, websocket=websocket, data=data)
@@ -258,47 +298,32 @@ class Client_SrvThrItf(abc.ABC):
                     self.__add_websocket_task(_WSTT.consume_outqueue)
 
                 elif task_name == _WSTT.send_data:
-                    if exception:
-                        log_websocket_event(f'EXCEPTION IN TASK `{task_name}`', client=self, exception=exception)
-                        continue
+                    pass
 
                 elif task_name == _WSTT.recieve_data:
-                    if exception:
-                        for task in self.__pending_websocket_tasks:
-                            sucess = task.cancel()
-                            log_websocket_event('canceling task', client=self, task_name=task.get_name(), sucess=sucess)
-                        if isinstance(exception, websockets.exceptions.ConnectionClosedOK):
-                            if exception.reason == '*last*':
-                                data = f'[1,{self.command._last_ccid},0,{{"result":null}}]'
-                            else:
-                                data = f'[7,-1,"*close*",{{"kwargs":{{"code":{exception.code}}}}}]'
-                                exit_exception = exceptions.ClientClosedUnexpectedly()
-                        else:
-                            log_websocket_event(f'EXCEPTION IN TASK `{task_name}`', client=self, exception=exception)
-                            continue
-                    else:
-                        self.__add_websocket_task(_WSTT.recieve_data, websocket=websocket)
-                        data = task.result()
-                    log_websocket_event(f'                  `{task_name}`', client=self, data=data)
-                    if match := re_crrcan_start.match(data):
-                        mode, ccid = map(int, match.groups())
-                        log_websocket_event(f'                  `{task_name}`', client=self, mode=mode, ccid=ccid)
-
-                        if mode == _CrrcanMode.res:
-                            self.command.set_resolved_mupf(ccid, data)
-                        elif mode == _CrrcanMode.clb or mode == _CrrcanMode.ntf:
-                            self._callback_queue.put(_remote.CallbackTask(self, ccid, data))
-                        else:
-                            # This really should schedule some kind of error callback
-                            log_websocket_event(f'ILLEGAL CRRCAN MODE `{mode!r}`', client=self, data=data)
-                    else:
-                        log_websocket_event(f'BAD CRRCAN MESSAGE FORMAT', client=self, data=data)
+                    self.__add_websocket_task(_WSTT.recieve_data, websocket=websocket)
+                    data = task.result()
+                    self.__crrcan_switchboard(data, task_name)
 
         log_websocket_event('exiting client websocket request body', client=self, exit_exc=exit_exception)
         if exit_exception is None:
             return exceptions.ClientClosedNormally()
         return exit_exception
 
+    def __crrcan_switchboard(self, data, task_name):
+        log_websocket_event(f'       `{task_name}`: crrcan', client=self, data=data)
+        if match := re_crrcan_start.match(data):
+            mode, ccid = map(int, match.groups())
+            log_websocket_event(f'       `{task_name}`: crrcan', client=self, mode=mode, ccid=ccid)
+            if mode == _CrrcanMode.res:
+                self.command.set_resolved_mupf(ccid, data)
+            elif mode == _CrrcanMode.clb or mode == _CrrcanMode.ntf:
+                self._callback_queue.put(_remote.CallbackTask(self, mode, ccid, data))
+            else:
+                # This really should schedule some kind of error callback
+                log_websocket_event(f'       `{task_name}`: ILLEGAL CRRCAN MODE `{mode!r}`', client=self, data=data)
+        else:
+            log_websocket_event(f'       `{task_name}`: BAD CRRCAN MESSAGE FORMAT', client=self, data=data)
 
     async def __consume_outqueue(self):
         """ Empty the outgoing queue
@@ -317,9 +342,16 @@ class Client_SrvThrItf(abc.ABC):
 
         The data is put thread-safe on the `asyncio.Queue`, so any number of messages can be sent even if the connection
         is not established or halted for some reason. The data from the queue is processed by `self.__consume_outqueue`
-        coro.
+        coro. The data is put on the queue through `self.__put_on_outqueue`.
+
         """
-        self._get_eventloop().call_soon_threadsafe(lambda x: self._outqueue.put_nowait(x), data)
+        self._get_eventloop().call_soon_threadsafe(self.__put_on_outqueue, data)
+
+    def __put_on_outqueue(self, data):
+        if self._healthy_connection:
+            self._outqueue.put_nowait(data)
+        else:
+            log_websocket_event(f'data dropped from sending', client=self, data=data)
 
     @abc.abstractmethod
     def _get_eventloop(self) -> asyncio.AbstractEventLoop:

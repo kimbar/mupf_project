@@ -3,6 +3,7 @@ import queue
 import weakref
 
 import mupf.exceptions as exceptions
+import time
 
 from .. import _command
 from .. import _enhjson as enhjson
@@ -56,6 +57,7 @@ class Client(Client_SrvThrItf):
         self._callback_free_id = 0
         Client_SrvThrItf.__init__(self)
 
+        # This callback unblocks `self.run_one_callback_blocking()`, otherwise the goggles - do nothing.
         self._get_callback_id(log_debug, '*close*')
 
     def _send(self, data):
@@ -92,7 +94,7 @@ class Client(Client_SrvThrItf):
         return self._healthy_connection
 
     @loggable()
-    def _decode_json(self, raw_json):
+    def _decode_crrcan_msg(self, raw_json):
         msg = json.loads(raw_json)
         if F.core_features in self.features:
             msg[3] = enhjson.decode_enhblock(msg[3], self.enhjson_decoders)
@@ -104,16 +106,9 @@ class Client(Client_SrvThrItf):
         return msg
 
     @loggable()
-    @classmethod
-    def decode_json_simple(cls, raw_json):
-        # called through class for `*first*`
-        return json.loads(raw_json)
-
-    @loggable()
     def get_remote_obj(self, rid, ctxrid=None):
         if rid == 0:
             return self.window
-        # here a mutex - or maybe not... because this is always on eventloop anyway?
         if (rid, ctxrid) in self._remote_obj_byid:
             return self._remote_obj_byid[(rid, ctxrid)]
         else:
@@ -132,17 +127,12 @@ class Client(Client_SrvThrItf):
 
     @loggable()
     def close(self, dont_wait=False, _dont_remove_from_app=False):   # TODO: dont_wait not implemented
-        # Mutex here to set this and issue `*last*` atomicly?
         if self._healthy_connection:
-            self._healthy_connection = False
-            # wait for previous commands (or maybe this is not needed since we're waiting for `*last*.result` anyway?)
             try:
-                c = self.command('*last*')()  # to consider: can an exception be rised in this line or only in next one? what consequences this have? and for other commands than `*last*`?
-                c.result    # TODO: maybe here as a parameter should the number of hanging commands been passed?, but obtaining their count... heavy mutexing needed...
+                c = self.command('*last*')()
+                c.result
             except exceptions.ClientClosedNormally:   # TODO: this exception change for a timeout
-                # print(f'{time.time()-self.app._t0:.3f} -> [1,{c._ccid},1,{{"result":null}}]')
                 pass
-
         if not _dont_remove_from_app:
             del self.app._clients_by_cid[self._cid]
 
@@ -179,13 +169,32 @@ class Client(Client_SrvThrItf):
             self._callbacks_by_clbid[clbid] = func
             return clbid
 
-
     @loggable()
     def run_one_callback_blocking(self):
         if not self._healthy_connection:
+            self.run_callbacks_nonblocking()    # This is to run all notifications (callbacks will be supressed)
             return
         callback_task = self._callback_queue.get(block=True)
         callback_task.run()
+
+    @loggable()
+    def run_callbacks_nonblocking(self, count_limit=None, time_limit=None):
+        t0 = time.time()
+        count = 0
+        while True:
+            if (
+                   (time_limit is not None and time.time() >= t0+time_limit)
+                or (count_limit is not None and count >= count_limit)
+                ):
+                break
+            try:
+                callback_task = self._callback_queue.get_nowait()
+            except queue.Empty:
+                break
+            else:
+                callback_task.run(only_notifications = not self._healthy_connection)
+                count += 1
+
 
     @property
     @loggable('*.:', log_enter=False)

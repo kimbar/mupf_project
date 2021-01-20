@@ -170,7 +170,7 @@ def create_command_class_for_client(client):
         def result(self):
             self.wait
             if self._result is NoResult:
-                mode, ccid, noun, pyld = Command._client_wr()._decode_json(self._raw_result)
+                mode, ccid, noun, pyld = Command._client_wr()._decode_crrcan_msg(self._raw_result)
                 self._resolve(pyld['result'])
             if self._is_error:
                 raise self._result

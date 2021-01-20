@@ -104,18 +104,20 @@ class RemoteObj(metaclass=FinalClass):
     long = lambda self: f"<CallbackTask {getattr(self, '_noun', '?')} {getattr(self, '_ccid', '?')} {getattr(self, '_func', '-')}>"
 )
 class CallbackTask:
-    # TODO: this is very much a work in progress, serious rethinking
-    # of this class is needed
 
     @loggable()
-    def __init__(self, client, ccid, raw_data):
+    def __init__(self, client, mode, ccid, raw_data):
         self._client = client
+        self._mode = mode
         self._ccid = ccid
         self._raw_data = raw_data
 
     @loggable()
-    def run(self):
-        mode, ccid, noun, pyld = self._client._decode_json(self._raw_data)
+    def run(self, only_notifications=False):
+        mode, ccid, noun, pyld = self._client._decode_crrcan_msg(self._raw_data)
+        if only_notifications and mode == _srvthr._CrrcanMode.clb:
+            # The callbacks are cancelled, the notifications are run
+            return
         func = self._client._callbacks_by_clbid[noun]
         answer = func(*pyld.get('args',[]), **pyld.get('kwargs',{}))
         if mode == _srvthr._CrrcanMode.clb:
