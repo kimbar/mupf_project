@@ -95,7 +95,7 @@ function main() {
             ws.onmessage = (ev) => {mupf.recv(mupf.hk.getmsg(ev)) }
             ws.onclose = (e) => {}
         })
-        window.addEventListener('unload',async function(e){await mupf.send([7,0,'*close*',{result:null}])}) // TODO: this send as ntf
+        // window.addEventListener('unload',async function(e){await mupf.send([7,0,'*close*',{result:null}])}) // TODO: this send as ntf
         return {cid: mupf.cid, ua: navigator.userAgent}
     }
 

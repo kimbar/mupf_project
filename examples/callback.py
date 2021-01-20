@@ -10,7 +10,7 @@ mupf.log.settings.print_ruler = True
 mupf.log.settings.graph_call_stack_connect = False
 
 mupf.log.add_filters(
-    '- ***',
+    '+ ***',
     '+ crrcan',
 )
 

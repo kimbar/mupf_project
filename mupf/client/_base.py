@@ -56,6 +56,8 @@ class Client(Client_SrvThrItf):
         self._callback_free_id = 0
         Client_SrvThrItf.__init__(self)
 
+        self._get_callback_id(log_debug, '*close*')
+
     def _send(self, data):
         if F.core_features in self.features:
             data[3] = enhjson.EnhancedBlock(data[3])
@@ -141,8 +143,6 @@ class Client(Client_SrvThrItf):
                 # print(f'{time.time()-self.app._t0:.3f} -> [1,{c._ccid},1,{{"result":null}}]')
                 pass
 
-        Client_SrvThrItf.close(self)
-
         if not _dont_remove_from_app:
             del self.app._clients_by_cid[self._cid]
 
@@ -166,15 +166,19 @@ class Client(Client_SrvThrItf):
             self.command._legal_names = self.command('*getcmds*')().result
 
     @loggable()
-    def _get_callback_id(self, func):
+    def _get_callback_id(self, func, clbid=None):
         if func in self._clbid_by_callbacks:
             return self._clbid_by_callbacks[func]
         else:
-            self._clbid_by_callbacks[func] = self._callback_free_id
-            self._callbacks_by_clbid[self._callback_free_id] = func
-            result = self._callback_free_id
-            self._callback_free_id += 1
-            return result
+            if clbid is None:
+                clbid = self._callback_free_id
+                self._callback_free_id += 1
+            elif clbid in self._callbacks_by_clbid:
+                raise ValueError(f'Callback id `{clbid!r}` already in use for callback `{self._callbacks_by_clbid[clbid]!r}`')
+            self._clbid_by_callbacks[func] = clbid
+            self._callbacks_by_clbid[clbid] = func
+            return clbid
+
 
     @loggable()
     def run_one_callback_blocking(self):
@@ -202,6 +206,9 @@ class Client(Client_SrvThrItf):
         return self._app_wr()._event_loop
 
 
+@loggable('client/base.py/debug')
+def log_debug(*args, **kwargs):
+    pass
 
 @loggable('client/base.py/sending_event', hidden=True)
 def log_sending_event(part, *args, **kwargs):

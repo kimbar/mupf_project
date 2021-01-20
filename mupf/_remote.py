@@ -5,6 +5,8 @@ from ._enhjson import IJsonEsc
 
 from .log import loggable
 
+from . import _srvthr
+
 class FinalClass(type):
 
     def __init__(cls, name, bases, dict_):
@@ -115,5 +117,6 @@ class CallbackTask:
     def run(self):
         mode, ccid, noun, pyld = self._client._decode_json(self._raw_data)
         func = self._client._callbacks_by_clbid[noun]
-        answer = func(*pyld['args'])
-        self._client._send([6, self._ccid, 0, answer])
+        answer = func(*pyld.get('args',[]), **pyld.get('kwargs',{}))
+        if mode == _srvthr._CrrcanMode.clb:
+            self._client._send([_srvthr._CrrcanMode.ans, self._ccid, 0, answer])

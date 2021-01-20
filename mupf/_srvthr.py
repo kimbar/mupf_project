@@ -16,7 +16,8 @@ import re
 import threading
 import abc
 from http import HTTPStatus
-from ._remote import CallbackTask
+from . import _remote
+from . import exceptions
 
 
 class _WSTT:
@@ -35,7 +36,7 @@ class _CrrcanMode:
     """
     cmd = 0; res = 1; run = 2; clb = 5; ans = 6; ntf = 7
 
-re_crrcan_start = re.compile(r'\s*\[\s*(\d+)\s*,\s*(\d+)\s*,')
+re_crrcan_start = re.compile(r'\s*\[\s*(\d+)\s*,\s*(-?\d+)\s*,')
 """ A regexp matching proper begining of the CRRCAN message
 
 The groups in the regexp allow for quick extracting of the `mode` and `ccid` of the message
@@ -96,7 +97,8 @@ class App_SrvThrItf(abc.ABC):
         """ Finds a matching client for incoming websocket
 
         After finding the client the control is given to appropriate client method. When the client is done with the
-        websocket some cleaning code can be done here (non so far).
+        websocket the exception object is set as a result for all pending commands. The exception object may be of
+        `exceptions.ClientClosedNormally` class. This is expected exception for the `*last*` command.
 
         """
         log_websocket_event('entering websocket request body', new_websocket, path=path)
@@ -104,7 +106,9 @@ class App_SrvThrItf(abc.ABC):
         log_websocket_event('websocket path information', new_websocket, cid=cid, url=url)
         if the_client := self._get_client_by_cid(cid):
             log_websocket_event('client found, passing websocket', new_websocket, cid=cid, client=the_client)
-            await the_client._websocket_communication(new_websocket)
+            exit_exception = await the_client._websocket_communication(new_websocket)
+            the_client._healthy_connection = False
+            the_client.command.set_all_resolved_with_exception_mupf(exit_exception)
             log_websocket_event('client done with websocket', new_websocket, client=the_client)
         else:
             # no such client!
@@ -214,6 +218,8 @@ class Client_SrvThrItf(abc.ABC):
         self.__add_websocket_task(_WSTT.consume_outqueue)
         log_websocket_event('websocket task pool initiated', client=self, out_queue_size=self._outqueue.qsize())
 
+        exit_exception = None
+
         while True:
             if not self.__pending_websocket_tasks:
                 log_websocket_event('websocket pending task set empty', client=self)
@@ -258,8 +264,15 @@ class Client_SrvThrItf(abc.ABC):
 
                 elif task_name == _WSTT.recieve_data:
                     if exception:
+                        for task in self.__pending_websocket_tasks:
+                            sucess = task.cancel()
+                            log_websocket_event('canceling task', client=self, task_name=task.get_name(), sucess=sucess)
                         if isinstance(exception, websockets.exceptions.ConnectionClosedOK):
-                            data = f'[1,{self.command._last_ccid},0,{{"result":null}}]'
+                            if exception.reason == '*last*':
+                                data = f'[1,{self.command._last_ccid},0,{{"result":null}}]'
+                            else:
+                                data = f'[7,-1,"*close*",{{"kwargs":{{"code":{exception.code}}}}}]'
+                                exit_exception = exceptions.ClientClosedUnexpectedly()
                         else:
                             log_websocket_event(f'EXCEPTION IN TASK `{task_name}`', client=self, exception=exception)
                             continue
@@ -273,22 +286,19 @@ class Client_SrvThrItf(abc.ABC):
 
                         if mode == _CrrcanMode.res:
                             self.command.set_resolved_mupf(ccid, data)
-                        elif mode == _CrrcanMode.clb:
-                            self._callback_queue.put(CallbackTask(self, ccid, data))
-                        elif mode == _CrrcanMode.ntf:
-                            pass
+                        elif mode == _CrrcanMode.clb or mode == _CrrcanMode.ntf:
+                            self._callback_queue.put(_remote.CallbackTask(self, ccid, data))
                         else:
                             # This really should schedule some kind of error callback
                             log_websocket_event(f'ILLEGAL CRRCAN MODE `{mode!r}`', client=self, data=data)
                     else:
                         log_websocket_event(f'BAD CRRCAN MESSAGE FORMAT', client=self, data=data)
 
-        log_websocket_event('exiting client websocket request body', client=self)
+        log_websocket_event('exiting client websocket request body', client=self, exit_exc=exit_exception)
+        if exit_exception is None:
+            return exceptions.ClientClosedNormally()
+        return exit_exception
 
-    def close(self):
-        for task in self.__pending_websocket_tasks:
-            sucess = task.cancel()
-            log_websocket_event('canceling task', client=self, task_name=task.get_name(), sucess=sucess)
 
     async def __consume_outqueue(self):
         """ Empty the outgoing queue
@@ -338,6 +348,16 @@ class MetaCommand_SrvThrItf:
             else:
                 raise RuntimeError(f'Response data `{raw_data!r}` from client, with no ccid={ccid} command waiting for resolution')
 
+    def set_all_resolved_with_exception_mupf(cls, exc):
+        unresolved = []
+        with cls._global_mutex:
+            for ccid, cmd in cls._unresolved.items():
+                cmd._resolve(exc)
+                unresolved.append(cmd)
+            cls._unresolved.clear()
+        for cmd in unresolved:
+            cmd._is_resolved.set()
+            log_websocket_event(f'resolving command with exception', cmd=cmd, cls=cls, exc=exc)
 
 @loggable('app.py/websocket_event', log_exit=False)
 def log_websocket_event(*args, **kwargs):

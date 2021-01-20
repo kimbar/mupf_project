@@ -43,4 +43,4 @@ with mupf.App(
     cprint('Thank you for your cooperation', color='red')
 
     client.command.sleep(1).wait
-    # FIXME: without this `wait` there is some serious error now, because server quits earlier than websocket coroutine
+    # FIXED: without this `wait` there was some serious error, because server quited earlier than websocket coroutine

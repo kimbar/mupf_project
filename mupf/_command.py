@@ -171,15 +171,14 @@ def create_command_class_for_client(client):
             self.wait
             if self._result is NoResult:
                 mode, ccid, noun, pyld = Command._client_wr()._decode_json(self._raw_result)
-                self._result = pyld['result']
-                if isinstance(self._result, RemoteObj):
-                    self._is_error = False
-                else:
-                    self._is_error = isinstance(self._result, Exception)
+                self._resolve(pyld['result'])
             if self._is_error:
                 raise self._result
             return self._result
 
+        def _resolve(self, value):
+            self._is_error = isinstance(value, Exception)
+            self._result = value
 
         @loggable()
         def is_in_bad_state(self):
