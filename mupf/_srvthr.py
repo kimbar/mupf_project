@@ -29,6 +29,7 @@ class _WSTT:
     consume_outqueue = 'consume_outqueue'
     send_data = 'send_data'
 
+
 class _CrrcanMode:
     """ CRRCAN mode
 
@@ -36,7 +37,15 @@ class _CrrcanMode:
     """
     cmd = 0; res = 1; run = 2; clb = 5; ans = 6; ntf = 7
 
+
+class BadCRRCANMessageError(Exception):
+    def __init__(self, reason):
+        super().__init__()
+        self.reason = reason
+
+
 re_crrcan_start = re.compile(r'\s*\[\s*(\d+)\s*,\s*(-?\d+)\s*,')
+re_crrcan_noun = re.compile(r'\s*(-?\d+|"(?:\\"|[^"])*")\s*,')
 """ A regexp matching proper begining of the CRRCAN message
 
 The groups in the regexp allow for quick extracting of the `mode` and `ccid` of the message
@@ -236,17 +245,22 @@ class Client_SrvThrItf(abc.ABC):
 
         """
         log_websocket_event('entering client websocket request body', client=self)
+        # Two tasks are added to the pending list: one to listen to incoming transmissions, and one to monitor the
+        # outgoing data queue. If the outgoing data queue is non-empty it is futher translated into separate sending
+        # tasks.
         self.__add_websocket_task(_WSTT.recieve_data, websocket=websocket)
         self.__add_websocket_task(_WSTT.consume_outqueue)
         log_websocket_event('websocket task pool initiated', client=self, out_queue_size=self._outqueue.qsize())
 
-        exit_exception = None
+        exit_exception = exceptions.UnknownConnectionError()
 
-        while True:
-            if not self.__pending_websocket_tasks:
-                log_websocket_event('websocket pending task set empty', client=self)
-                break
+        while self.__pending_websocket_tasks:
             log_websocket_event('websocket going to sleep', client=self)
+
+            # Here we wait for one on more tasks to be done. The tasks can be one of: data received, data to be send,
+            # and output queue non-empty. Each task can have normal result, be cancelled or raise an exception.
+            # Exceptions are always caused by some outside event - connection breakdown etc. Cancellation is done
+            # internally when this coro is finished.
             (done, self.__pending_websocket_tasks) = await asyncio.wait(
                 self.__pending_websocket_tasks,
                 return_when=asyncio.FIRST_COMPLETED,
@@ -259,36 +273,65 @@ class Client_SrvThrItf(abc.ABC):
                 pending_count=len(self.__pending_websocket_tasks),
                 out_queue_size=self._outqueue.qsize()
             )
+            # There may be more than one taks done, they are processed in sequence
             while done:
                 task: asyncio.Task = done.pop()
+                # The state of the task is gathered
                 task_name = task.get_name()
                 cancelled = task.cancelled()
                 exception = None
                 if not cancelled:
                     exception = task.exception()
                 log_websocket_event(f'[task] `{task_name}`', client=self, cancelled=cancelled, exception=exception)
+                # If the task is being cancelled nothing is done
                 if cancelled:
                     continue
 
+                # All exceptions in tasks end this coro, however the received exception is sometimes translated to some
+                # bengin exception, like `exceptions.ClientClosedNormally`.
                 if exception:
+                    # From now on, the connection is not healthy - this changes the way CRRCAN protocol operates: new
+                    # callbacks are not run; already running callbacks are finished, but their outgoing answer is
+                    # supressed, waiting notifications are run normally. The Py-side will fake some incoming
+                    # communications to finish running CRRCAN exchanges and unblock mutexed `Client`.
+                    self._healthy_connection = False
+                    # Preparing to finish this coro - all pending tasks are cancelled.
                     for task in self.__pending_websocket_tasks:
                         sucess = task.cancel()
                         log_websocket_event(f'       `{task_name}`: canceling task', client=self, task_name=task.get_name(), sucess=sucess)
+                    # Normal closing of the websocket on the JS-side
                     if isinstance(exception, websockets.exceptions.ConnectionClosedOK):
-                        self._healthy_connection = False
                         if exception.reason == '*last*':
-                            data = f'[{_CrrcanMode.res},{self.command._last_ccid},0,{{"result":null}}]'
+                            # This exception was caused by explicit command `*last*` send from the Py-side. However,
+                            # the response to this command cannot be send normally (because the very reason of this
+                            # exception is that the websocket was closed.) The response is faked here, as a normall
+                            # (non-exceptional) response. The `exit_exception` will be passed to results of any other
+                            # waiting commands.
+                            data = f'[{_CrrcanMode.res},{self.command._last_ccid},0,{{"result":{self.command._last_ccid}}}]'
+                            exit_exception = exceptions.ClientClosedNormally()
                         else:
                             # This notification is needed to assure last run of `Client.run_one_callback_blocking()` The
-                            # notification itself does nothing - it only unblocks the main thread.
+                            # notification itself does nothing - it only unblocks the main thread. The notofication has
+                            # also "faked" `ccid==-1` to avoid any collisions with real ccids which are bookkept by the
+                            # JS-side. The `exit_exception` will be passed to results of any waiting commands.
+                            # TODO: what if this occurs during `*last*`?
                             data = f'[{_CrrcanMode.ntf},-1,"*close*",{{"kwargs":{{"code":{exception.code}}}}}]'
                             exit_exception = exceptions.ClientClosedUnexpectedly()
-                        self.__crrcan_switchboard(data, task_name)
                     else:
+                        # TODO: what if this occurs during `*last*`?
+                        # The `exit_exception` is the default `UnknownConnectionError`.
                         log_websocket_event(f'       `{task_name}`: UNKNOWN EXCEPTION IN TASK', client=self, exception=exception)
+                        # TODO: this is the only notfication so far, that has non-`int` noun - maybe it should be `-1`?
+                        data = f'[{_CrrcanMode.ntf},-1,"*close*",{{"kwargs":{{"exc":{repr(exception)!r}}}}}]'
+                    # The fake response or notification is processsed in the main thread, this should ALWAYS be
+                    # propperly formated CRRCAN messages, because they are constructed right here, above. Therefore the
+                    # `BadCRRCANMessageError` exception is not catched.
+                    self.__crrcan_switchboard(data, task_name)
                     continue
 
+                # Normal operation of the tasks
                 if task_name == _WSTT.consume_outqueue:
+                    # One or more outgoing data to send was found on the queue
                     data_list = task.result()
                     log_websocket_event(f'       `{task_name}`', client=self, msg_count=len(data_list))
                     for data in data_list:
@@ -298,32 +341,60 @@ class Client_SrvThrItf(abc.ABC):
                     self.__add_websocket_task(_WSTT.consume_outqueue)
 
                 elif task_name == _WSTT.send_data:
+                    # Data was sent, nothing really to do.
                     pass
 
                 elif task_name == _WSTT.recieve_data:
+                    # Data received throug the websocket, passed for processing in the main thread.
                     self.__add_websocket_task(_WSTT.recieve_data, websocket=websocket)
                     data = task.result()
-                    self.__crrcan_switchboard(data, task_name)
+                    try:
+                        self.__crrcan_switchboard(data, task_name)
+                    except BadCRRCANMessageError as excp:
+                        # TODO: This really should schedule some kind of error callback?
+                        log_websocket_event(f'       `{task_name}`: BAD CRRCAN MESSAGE, {excp.reason}', client=self, data=data)
 
         log_websocket_event('exiting client websocket request body', client=self, exit_exc=exit_exception)
-        if exit_exception is None:
-            return exceptions.ClientClosedNormally()
         return exit_exception
 
     def __crrcan_switchboard(self, data, task_name):
+        """ Passing raw data to main thread
+
+        The raw data are "peeked" with regular expressions to extract control values of the CRRCAN protocol. On the
+        basis of these values apropriate action is sheduled to be done in the main thread. No additional data parsing is
+        done here - it is all deferred until the appropriate action is taken in the main thread.
+        """
         log_websocket_event(f'       `{task_name}`: crrcan', client=self, data=data)
-        if match := re_crrcan_start.match(data):
-            mode, ccid = map(int, match.groups())
+        if match_mode_ccid := re_crrcan_start.match(data):
+            mode, ccid = map(int, match_mode_ccid.groups())
             log_websocket_event(f'       `{task_name}`: crrcan', client=self, mode=mode, ccid=ccid)
             if mode == _CrrcanMode.res:
+                # The noun is not parsed here, because it contains the status of the response (normal/exception) and
+                # this will be delt with in the `Command.result`.
                 self.command.set_resolved_mupf(ccid, data)
             elif mode == _CrrcanMode.clb or mode == _CrrcanMode.ntf:
-                self._callback_queue.put(_remote.CallbackTask(self, mode, ccid, data))
+                if match_noun := re_crrcan_noun.match(data, match_mode_ccid.span()[1]):
+                    noun = match_noun.group(1)
+                    noun = self.__unesc_str(noun) if noun.startswith('"') else int(noun)
+                    # Now we know noun (which points directly to the callback function), so we can differentiate how
+                    # the calback will be run on the basis of the callback itself.
+                    self._callback_queue.put(_remote.CallbackTask(self, mode, ccid, noun, data))
+                    # TODO: reconsider if maybe only the payload should be passed unprocessed, and all control
+                    # values obtained here should be passed and not re-parsed again from raw data.
+                else:
+                    # TODO: reconsider usage of `str` as noun. It is now only used for `"*close*"` fake
+                    # notification, which already has a fake ccid. Is there another valid usage of `str` nouns?
+                    raise BadCRRCANMessageError("illegal noun for `clb` or `ntf` message (must be `int` or `str`)")
             else:
-                # This really should schedule some kind of error callback
-                log_websocket_event(f'       `{task_name}`: ILLEGAL CRRCAN MODE `{mode!r}`', client=self, data=data)
+                raise BadCRRCANMessageError(f'unknown mode={mode!r}')
         else:
-            log_websocket_event(f'       `{task_name}`: BAD CRRCAN MESSAGE FORMAT', client=self, data=data)
+            raise BadCRRCANMessageError('bad message start format (`[<mode>,<ccid>,...`)')
+
+    @staticmethod
+    def __unesc_str(s: str) -> str:
+        """ Strips quotation marks and unescapes `\\"` etc.
+        """
+        return s[1:-1].encode('utf-8').decode('unicode_escape')
 
     async def __consume_outqueue(self):
         """ Empty the outgoing queue

@@ -106,10 +106,11 @@ class RemoteObj(metaclass=FinalClass):
 class CallbackTask:
 
     @loggable()
-    def __init__(self, client, mode, ccid, raw_data):
+    def __init__(self, client, mode, ccid, noun, raw_data):
         self._client = client
         self._mode = mode
         self._ccid = ccid
+        self._noun = noun
         self._raw_data = raw_data
 
     @loggable()

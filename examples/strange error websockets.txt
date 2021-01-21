@@ -1,0 +1,8 @@
+This error occured in callback.py once - not replicated. May be an error in the websockets library!
+
+[asyncio] Task exception was never retrieved
+future: <Task finished name='Task-104' coro=<WebSocketCommonProtocol.close() done, defined at C:\pyprojects\mupf_project\tests\.nox\selenium_env\lib\site-packages\websockets\protocol.py:653> exception=AttributeError("'WebSocketServerProtocol' object has no attribute 'transfer_data_task'")>
+Traceback (most recent call last):
+  File "C:\pyprojects\mupf_project\tests\.nox\selenium_env\lib\site-packages\websockets\protocol.py", line 698, in close
+    self.transfer_data_task,
+AttributeError: 'WebSocketServerProtocol' object has no attribute 'transfer_data_task'

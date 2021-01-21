@@ -46,5 +46,4 @@ with mupf.App() as app:
     button.onclick = button_click
 
     # Process events
-    while client:
-        client.run_one_callback_blocking()
+    client.run_callbacks_blocking_until_closed()

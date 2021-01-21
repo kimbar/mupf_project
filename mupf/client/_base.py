@@ -128,11 +128,8 @@ class Client(Client_SrvThrItf):
     @loggable()
     def close(self, dont_wait=False, _dont_remove_from_app=False):   # TODO: dont_wait not implemented
         if self._healthy_connection:
-            try:
-                c = self.command('*last*')()
-                c.result
-            except exceptions.ClientClosedNormally:   # TODO: this exception change for a timeout
-                pass
+            # This command triggers the closing of the websocket connection in normal way.
+            last_cmd_ccid = self.command('*last*')().result
         if not _dont_remove_from_app:
             del self.app._clients_by_cid[self._cid]
 
@@ -194,6 +191,12 @@ class Client(Client_SrvThrItf):
             else:
                 callback_task.run(only_notifications = not self._healthy_connection)
                 count += 1
+
+    @loggable()
+    def run_callbacks_blocking_until_closed(self, silent_user_close=True):
+        # if silent_user_close try/except ClosedUnexpectedly etc...
+        while self:
+            self.run_one_callback_blocking()
 
 
     @property

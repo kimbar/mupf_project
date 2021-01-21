@@ -32,6 +32,10 @@ class ClientClosedNormally(MupfError):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+class UnknownConnectionError(MupfError):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
 
 class DOMAttributeError(MupfError):
     def __init__(self, *args, **kwargs):
