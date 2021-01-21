@@ -169,14 +169,24 @@ def create_command_class_for_client(client):
         @loggable('*.:')
         def result(self):
             self.wait
-            if self._result is NoResult:
-                mode, ccid, noun, pyld = Command._client_wr()._decode_crrcan_msg(self._raw_result)
-                self._resolve(pyld['result'])
+            self._resolve()
             if self._is_error:
                 raise self._result
             return self._result
 
-        def _resolve(self, value):
+        def __next__(self):
+            if self._is_resolved.is_set():
+                self._resolve()
+                if self._is_error:
+                    raise self._result
+                raise StopIteration(self._result)
+
+        def _resolve(self, value=NoResult):
+            if self._result is not NoResult:
+                return
+            if value is NoResult:
+                mode, ccid, noun, pyld = Command._client_wr()._decode_crrcan_msg(self._raw_result)
+                value = pyld['result']
             self._is_error = isinstance(value, Exception)
             self._result = value
 
@@ -187,5 +197,11 @@ def create_command_class_for_client(client):
             if self._is_error:
                 return self._result
             return False
+
+        def __await__(self):
+            return self
+
+        def __iter__(self):
+            return self
 
     return Command
